@@ -1,0 +1,41 @@
+package migrate
+
+import (
+	"deltaboard-server/migrate/migrations"
+
+	"github.com/go-gormigrate/gormigrate/v2"
+	"gorm.io/gorm"
+)
+
+var migrationList []*gormigrate.Migration
+
+func Migrate(dbi *gorm.DB) error {
+	m := gormigrate.New(dbi, gormigrate.DefaultOptions, migrationList)
+	return m.Migrate()
+}
+
+func Rollback(dbi *gorm.DB) error {
+	m := gormigrate.New(dbi, gormigrate.DefaultOptions, migrationList)
+	return m.RollbackLast()
+}
+
+func RegisterMigrations() {
+	migrationList = append(migrationList, migrations.M202102041640)
+	migrationList = append(migrationList, migrations.M202102041315)
+	migrationList = append(migrationList, migrations.M202102041550)
+	migrationList = append(migrationList, migrations.M202103021810)
+	migrationList = append(migrationList, migrations.M202103041610)
+	migrationList = append(migrationList, migrations.M202105141700)
+	migrationList = append(migrationList, migrations.M202105152000)
+	migrationList = append(migrationList, migrations.M202105201410)
+	migrationList = append(migrationList, migrations.M202105261700)
+	migrationList = append(migrationList, migrations.M202105211810)
+	migrationList = append(migrationList, migrations.M202105311502)
+	migrationList = append(migrationList, migrations.M202106101602)
+	migrationList = append(migrationList, migrations.M202106102002)
+<<<<<<< HEAD
+	migrationList = append(migrationList, migrations.M202106181537)
+=======
+	migrationList = append(migrationList, migrations.M202106181358)
+>>>>>>> c0bf5e98bab5c77bf05b997e8272f70c810a7619
+}

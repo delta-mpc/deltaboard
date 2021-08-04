@@ -1,0 +1,95 @@
+{% extends "page.html" %}
+{% if announcement_login %}
+  {% set announcement = announcement_login %}
+{% endif %}
+
+{% block login_widget %}
+{% endblock %}
+
+{% block main %}
+
+{% block login %}
+<div id="login-main" class="container">
+{% if custom_html %}
+{{ custom_html | safe }}
+{% else %}
+<div>
+</div>
+<form id="nativelogin" style="display:none" action="{{login_url}}?next={{next}}" method="post" role="form">
+  <div class="auth-form-header">
+    Sign in
+  </div>
+  <div class='auth-form-body'>
+
+    <p id='insecure-login-warning' class='hidden'>
+    Warning: JupyterHub seems to be served over an unsecured HTTP connection.
+    We strongly recommend enabling HTTPS for JupyterHub.
+    </p>
+
+    {% if login_error %}
+    <p class="login_error">
+      {{login_error}}
+    </p>
+    {% endif %}
+    <label for="username_input">Username:</label>
+    <input
+      id="username_input"
+      type="text"
+      autocapitalize="off"
+      autocorrect="off"
+      class="form-control"
+      name="username"
+      value="{{username}}"
+      tabindex="1"
+      autofocus="autofocus"
+    />
+    <label for='password_input'>Password:</label>
+    <input
+      type="password"
+      class="form-control"
+      name="password"
+      value="{{password}}"
+      id="password_input"
+      tabindex="2"
+    />
+	<input
+      type="text"
+      class="form-control"
+      name="localAuth"
+      value="1"
+      tabindex="3"
+      style="display:none"
+    />
+    <input
+      type="submit"
+      id="login_submit"
+      class='btn btn-jupyter'
+      value='Sign In'
+      tabindex="3"
+    />
+  </div>
+</form>
+{% endif %}
+</div>
+{% endblock login %}
+
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+if (window.location.protocol === "http:") {
+  // unhide http warning
+  var warning = document.getElementById('insecure-login-warning');
+  warning.className = warning.className.replace(/\bhidden\b/, '');
+}
+function nativelogin()
+{
+    document.getElementById('nativelogin').submit()
+}
+window.onload = function(){
+    nativelogin()
+}
+</script>
+
+{% endblock %}

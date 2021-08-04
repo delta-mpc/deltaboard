@@ -1,0 +1,27 @@
+.idea/
+*.iml
+server/data/mysql/db
+server/data/mysql/logs
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
+.idea
+.DS_Store
+.vendor
+vendor
+main
+main
+.idea
+.env
+p
+*.yml
