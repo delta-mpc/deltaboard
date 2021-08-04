@@ -23,5 +23,4 @@ main
 main
 .idea
 .env
-p
-*.yml
+server/deploy
