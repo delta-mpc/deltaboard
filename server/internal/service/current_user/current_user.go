@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"deltaboard-server/api/v1/response"
-	"deltaboard-server/config"
 	"deltaboard-server/config/db"
 	"deltaboard-server/config/session"
 	"deltaboard-server/models"
@@ -15,9 +14,6 @@ import (
 const (
 	UserSessionKey       = "user-token"
 	UserVerificationInfo = "user-verification-info"
-
-	VaultSessionKey       = "vault-token"
-	VaultVerificationInfo = "vault-verification-info"
 )
 
 type CurrentUser struct {
@@ -80,13 +76,6 @@ func (currentUser *CurrentUser) RemoveUserLoginSession(request *http.Request, re
 	return store.Save(request, response, userSession)
 }
 
-func (currentUser *CurrentUser) RemoveUserVaultSession(request *http.Request, response http.ResponseWriter) error {
-	store := session.GetSessionStore()
-	vaultSession := session.NewSession(store, VaultSessionKey) // 创建新session
-	vaultSession.Options.MaxAge = 0
-	return store.Save(request, response, vaultSession)
-}
-
 func (currentUser *CurrentUser) SaveUserLoginSession(request *http.Request, response http.ResponseWriter) error {
 
 	store := session.GetSessionStore()
@@ -99,31 +88,4 @@ func (currentUser *CurrentUser) SaveUserLoginSession(request *http.Request, resp
 
 	userSession.Values[UserVerificationInfo] = userVerificationBytes
 	return store.Save(request, response, userSession)
-}
-
-func (currentUser *CurrentUser) SaveUserVaultSession(request *http.Request, response http.ResponseWriter) error {
-
-	store := session.GetSessionStore()
-
-	userSession := session.NewSession(store, UserSessionKey)
-
-	userVerificationBytes, err := json.Marshal(currentUser.UserVerification)
-	if err != nil {
-		return err
-	}
-
-	userSession.Values[UserVerificationInfo] = userVerificationBytes
-	if err := store.Save(request, response, userSession); err != nil {
-		return err
-	}
-
-	vaultSession := session.NewSession(store, VaultSessionKey)
-	vaultVerificationBytes, err := json.Marshal(currentUser.VaultVerification)
-	if err != nil {
-		return err
-	}
-
-	vaultSession.Values[VaultVerificationInfo] = vaultVerificationBytes
-	vaultSession.Options.MaxAge = config.GetConfig().Session.VaultMaxAgeSeconds
-	return store.Save(request, response, vaultSession)
 }
