@@ -46,5 +46,5 @@ services:
       environment:
          AUTH_URL: http://api:8080/v1/users/auth
       volumes:
-         - "You local folder to store user's jupyter data":/home
+         - "Your local folder to store user's jupyter data":/home
 ```

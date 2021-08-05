@@ -240,6 +240,7 @@ c.NotebookApp.tornado_settings = {
       'Content-Security-Policy': "frame-ancestors https://localhost:8090"
    }
 }
+c.Spawner.http_timeout = 100
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Content-Security-Policy': "frame-ancestors https://localhost:8090",

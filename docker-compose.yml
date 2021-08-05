@@ -41,7 +41,7 @@ services:
          - ./server/config:/app/config
    migrate:
       build: ./server
-      container_name: go-service-migrate-a
+      container_name: go-service-migrate
       depends_on:
          db:
             condition: service_healthy
@@ -68,6 +68,16 @@ services:
          AUTH_URL: http://api:8080/v1/users/auth
       volumes:
          - ./home:/home
+   frontend:
+      build: ./front
+      container_name: deltaboard_frontend
+      ports:
+         - 8090:8090
+      depends_on:
+         - api
+      links:
+         - api
+      
 
       
         

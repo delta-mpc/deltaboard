@@ -1,0 +1,122 @@
+<template>
+  <el-menu ref="menu" class="sidebar" :default-active="barActiveIndex" @select="handleSelect">
+    <el-menu-item index="1" @click="sideItemClicked('playground')">
+      <el-tooltip popper-class="tool-item-2" :open-delay="500" :enterable="false" effect="dark" placement="bottom">
+        <div class="item-div"><i class="el-icon-wallet side-icon"></i><span>Play Ground</span></div>
+      </el-tooltip>
+    </el-menu-item>
+  </el-menu>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+export default {
+  name: "sideBar",
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState({
+      barActiveIndex: state => { return state.sidebar.sidebarActiveIndex },
+    }),
+    ...mapState(['user']),
+  },
+  mounted() {
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('sidebarActiveIndex', this.barActiveIndex)
+    })
+    if (this.barActiveIndex === null || this.barActiveIndex === undefined) {
+      let index = localStorage.getItem('sidebarActiveIndex')
+      let pageIndex = { sidebarActiveIndex: index }
+      this.$store.commit('sidebar/SET_PAGE_INDEX', pageIndex)
+    }
+    localStorage.removeItem('sidebarActiveIndex')
+  },
+  methods: {
+    sideItemClicked(name) {
+      this.$router.push({ name: name});
+    },
+    handleSelect(key, keyPath) {
+      if (this.user.name.length === 0 || this.company_name.length === 0) {
+        return;
+      }
+      let pageIndex = { sidebarActiveIndex: key }
+      this.$store.commit('sidebar/SET_PAGE_INDEX', pageIndex)
+    },
+  },
+};
+</script>
+
+<style lang="stylus" scoped>
+
+.el-menu {
+  border-right none
+  margin-top 30px
+}
+
+.el-menu-item {
+  padding-left 9px !important
+  padding-right 0px
+  height 50px
+  line-height 50px
+
+  border-right 1px solid #f5f8fa
+  .side-icon, {
+    margin-left 30px
+    margin-right 30px
+  }
+
+  .item-div {
+    border-left 3px solid white
+    height 50px
+  }
+
+  &:hover, &:focus {
+    background white
+    .item-div {
+      background page-bg-color
+      border-left 3px solid black
+
+      span {
+        color #053e5d
+      }
+    }
+  }
+}
+
+.el-menu-item.is-active {
+  .item-div {
+    background page-bg-color
+    border-left 3px solid black
+
+    span {
+      color #053e5d
+    }
+  }
+}
+
+span {
+  color #b6b7b9
+}
+
+</style>
+
+
+<style>
+
+.tool-item-1 {
+  padding: 5px 10px;
+  top: 120px !important;
+}
+
+.tool-item-2 {
+  padding: 5px 10px;
+  top: 170px !important;
+}
+
+.tool-item-3 {
+  padding: 5px 10px;
+  top: 270px !important;
+}
+
+</style>
