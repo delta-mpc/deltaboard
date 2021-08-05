@@ -1,7 +1,10 @@
 .idea/
+.vscode/
 *.iml
 server/data/mysql/db
 server/data/mysql/logs
+home
+server/config/config.yml
 # Binaries for programs and plugins
 *.exe
 *.dll

@@ -6,7 +6,8 @@ FROM jupyterhub/jupyterhub
 
 # Install oauthenticator from git
 RUN python3 -m pip install oauthenticator
-RUN python3 -m pip install notebook
+RUN python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+RUN python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 # Create oauthenticator directory and put necessary files in it
 RUN mkdir /srv/oauthenticator
 RUN mkdir /srv/ipython

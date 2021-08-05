@@ -24,22 +24,24 @@ services:
    api:
       build: ./server
       container_name: go-service-api
-      depends_on:
-         - migrate
       ports:
          - 8080:8080
       expose:
          - 8080
+      depends_on:
+         - migrate
       links:
          - db
       environment:
          WORK: server
          ENV: config
+         CONNECTOR: delta_user:delta_user@(db:3306)/delta_dashboard
+         FRONT_END_DOMAIN: http://localhost:8090
       volumes:
          - ./server/config:/app/config
    migrate:
       build: ./server
-      container_name: go-service-migrate
+      container_name: go-service-migrate-a
       depends_on:
          db:
             condition: service_healthy
@@ -48,6 +50,8 @@ services:
       environment:
          WORK: migrate
          ENV: config
+         CONNECTOR: "delta_user:delta_user@(db:3306)/delta_dashboard"
+         FRONT_END_DOMAIN: http://localhost:8090
       volumes:
          - ./server/config:/app/config
    jupyter:
@@ -62,6 +66,8 @@ services:
          - api
       environment:
          AUTH_URL: http://api:8080/v1/users/auth
+      volumes:
+         - ./home:/home
 
       
         

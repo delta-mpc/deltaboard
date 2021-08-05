@@ -247,6 +247,7 @@ c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'cookie_options': {'samesite':'None','Secure':True},
   'xsrf_cookie_kwargs': {'samesite':'None','Secure':True}
 }''']
+c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 c.MyAuthenticator.client_id = os.environ['CLIENT_ID']
 c.MyAuthenticator.client_secret = os.environ['CLIENT_SECRET']
