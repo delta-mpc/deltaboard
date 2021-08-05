@@ -5,6 +5,8 @@ docker-compose up -d
 
 
 ## Run in your own environment
+
+replace the docker-compose.yml with code as below
 ```
 version: '3'
 services:
