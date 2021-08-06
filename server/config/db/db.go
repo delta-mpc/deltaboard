@@ -26,6 +26,7 @@ import (
 	"deltaboard-server/config/log"
 
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -34,7 +35,18 @@ var db *gorm.DB
 
 func InitDB(appConfig *config.AppConfig) (err error) {
 
-	if appConfig.Environment == config.EnvTest && appConfig.Db.Driver == "" {
+	if appConfig.Db.ConnectionString == "" {
+		newLogger := logger.New(
+			glog.New(os.Stdout, "\r\n", glog.LstdFlags), // io writer
+			logger.Config{
+				SlowThreshold:             time.Second, // Slow SQL threshold
+				LogLevel:                  logger.Warn, // Log level
+				IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
+				Colorful:                  true,
+			},
+		)
+		db, err = gorm.Open(sqlite.Open("delta_dashboard.db"),
+			&gorm.Config{Logger: newLogger})
 		return nil
 	}
 	sqlDB, err := sql.Open(appConfig.Db.Driver, appConfig.Db.ConnectionString)

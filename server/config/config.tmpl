@@ -1,6 +1,6 @@
 environment: "debug"
 db:
-    driver: "mysql"
+    driver: "${DB_DRIVER}"
     connection: "${CONNECTOR}"
 log:
     level: "debug"
@@ -15,6 +15,7 @@ session:
     login_max_age_seconds: 36000
     vault_max_age_seconds: 3600
 allow_origins:
+    - https://localhost:8090
     - ${FRONT_END_DOMAIN}
 
 file_storage_type: 1

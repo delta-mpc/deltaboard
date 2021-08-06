@@ -37,12 +37,11 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         If self.create_system_users, the user will attempt to be created if it doesn't exist.
         """
         user_exists = await maybe_future(self.system_user_exists(user))
-
+        
         if not user_exists:
             if self.create_system_users:
                 await maybe_future(self.add_system_user(user))
                 dir = Path('/home/' + user.name + '/examples')
-                print('add user',user.name)
                 if not dir.exists():
                     print('adding user',user.name)
                     subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/home/' + user.name + '/examples'])
@@ -60,8 +59,8 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         #     return WrappedGitHubAuthenticator.authenticate(self, handler, data)
         user_email = data['username']
         password = data['password']
-        print('AUTH_URL',os.environ['AUTH_URL'])
-        url = os.environ['AUTH_URL'] + "?user_email=" + user_email + "&token=" + password
+        auth_url = os.getenv('AUTH_URL', 'http://localhost:8080/v1/users/auth') 
+        url = auth_url + "?user_email=" + user_email + "&token=" + password
         req = HTTPRequest(
             url,
             method="GET",
@@ -83,7 +82,7 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         if resp_data.get("message") and resp_data["message"] == "success":
             print(resp_data["data"]["id"])
             print('yes!!!')
-            return resp_data["data"]["id"]
+            return 'user_' + resp_data["data"]["id"][0:10]
         else:
             raise ValueError("Authenticate Failed")
 
@@ -248,15 +247,20 @@ c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'cookie_options': {'samesite':'None','Secure':True},
   'xsrf_cookie_kwargs': {'samesite':'None','Secure':True}
 }''']
+# c.Spawner.args = ['''--NotebookApp.tornado_settings={
+#   'headers':{
+#     'Content-Security-Policy': "frame-ancestors http://localhost:8090",
+#   }
+# }''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
-c.MyAuthenticator.client_id = os.environ['CLIENT_ID']
-c.MyAuthenticator.client_secret = os.environ['CLIENT_SECRET']
 # c.JupyterHub.tornado_settings = {'cookie_options': {'samesite': 'None'}}
 # ssl config
 ssl = join(root, 'ssl')
 keyfile = join(ssl, 'jupyter.key')
 certfile = join(ssl, 'jupyter.crt')
+print('keyfile',keyfile)
+print('certfile',certfile)
 if os.path.exists(keyfile):
     c.JupyterHub.ssl_key = keyfile
 if os.path.exists(certfile):
