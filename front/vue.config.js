@@ -1,13 +1,39 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const proxyConfig = require('./proxy.config.json')
+// const proxyConfig = require('./proxy.config.json')
 let publicPath = '/';
 
 if (process.env.VUE_APP_VERSION) {
     publicPath = `/${process.env.VUE_APP_VERSION}/`;
 }
-
+const proxyConfig = {
+   "/v1": {
+     "target":"http://localhost:8080"
+   },
+   "/v2": {
+      "target":"http://localhost:8080"
+    },
+   "^/hub":{
+      "target":"http://localhost:8000",
+      "headers":{
+         "Origin": "http://localhost:8000"
+      },
+      bypass: (req, res) => {
+         if (req.headers && req.headers.referer)
+            req.headers.referer = req.headers.referer.replace('localhost:8090', 'localhost:8000')
+      },
+   },
+   "^/user":{
+      "target":"http://localhost:8000",
+      "ws":true,
+      "changeOrigin":true,
+      "headers":{
+         "Origin": "http://localhost:8000"
+      },
+      
+   }
+}
 module.exports = {
     publicPath: publicPath,
     runtimeCompiler: true, 
