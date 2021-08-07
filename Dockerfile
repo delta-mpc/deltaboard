@@ -12,12 +12,12 @@ ENV PATH $PATH:/usr/lib/go/bin
 ENV GOPATH /root/go
 ENV PATH $GOPATH/bin/:$PATH
 # Install oauthenticator from git
-RUN python3 -m pip install oauthenticator
-RUN python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
-RUN python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+RUN python3 -m pip install oauthenticator && \
+    python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com && \
+    python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 
-RUN mkdir /app
-RUN mkdir /app/web
+RUN mkdir /app && \
+    mkdir /app/web
 WORKDIR /app/web
 
 ADD front/package.json package.json
@@ -32,10 +32,10 @@ RUN go env -w GOPROXY=https://goproxy.cn && go build -ldflags "-w -s" -o main
 
 
 # Create oauthenticator directory and put necessary files in it
-RUN mkdir /srv/oauthenticator
-RUN mkdir /srv/ipython
-RUN mkdir /srv/ipython/examples
-RUN mkdir /root/.jupyter
+RUN mkdir /srv/oauthenticator && \
+    mkdir /srv/ipython && \
+    mkdir /srv/ipython/examples && \
+    mkdir /root/.jupyter
 ADD ./jupyter/helloworld.ipynb /srv/ipython/examples/helloworld.ipynb
 ADD ./jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 WORKDIR /srv/oauthenticator
@@ -63,7 +63,6 @@ WORKDIR /app/web
 
 ADD front/public public
 ADD front/src src
-ADD front/.env .env
 ADD front/.env.development .env.development
 ADD front/babel.config.js babel.config.js
 ADD front/package.json package.json

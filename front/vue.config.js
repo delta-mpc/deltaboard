@@ -12,7 +12,6 @@ module.exports = {
     publicPath: publicPath,
     runtimeCompiler: true, 
     devServer:{
-      https:true,
       port:8090,
       proxy:proxyConfig
     },

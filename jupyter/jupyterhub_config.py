@@ -230,28 +230,31 @@ c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
 c.JupyterHub.tornado_settings = {
     'headers': {
         'Access-Control-Allow-Origin':'*',
-        'Content-Security-Policy': "frame-ancestors https://localhost:8090",
+        'Content-Security-Policy': "frame-ancestors http://localhost:8090",
     },
-    'cookie_options': {'samesite':'None'}
+   #  'cookie_options': {'samesite':'None'}
 }
 c.NotebookApp.tornado_settings = {
   'headers': {
-      'Content-Security-Policy': "frame-ancestors https://localhost:8090"
+     'Access-Control-Allow-Origin':'*',
+      'Content-Security-Policy': "frame-ancestors http://localhost:8090"
    }
 }
 c.Spawner.http_timeout = 100
-c.Spawner.args = ['''--NotebookApp.tornado_settings={
-  'headers':{
-    'Content-Security-Policy': "frame-ancestors https://localhost:8090",
-  },
-  'cookie_options': {'samesite':'None','Secure':True},
-  'xsrf_cookie_kwargs': {'samesite':'None','Secure':True}
-}''']
 # c.Spawner.args = ['''--NotebookApp.tornado_settings={
 #   'headers':{
-#     'Content-Security-Policy': "frame-ancestors http://localhost:8090",
-#   }
+#     'Access-Control-Allow-Origin':'*',
+#     'Content-Security-Policy': "frame-ancestors https://localhost:8090",
+#   },
+#   'cookie_options': {'samesite':'None','Secure':True},
+#   'xsrf_cookie_kwargs': {'samesite':'None','Secure':True},
 # }''']
+c.Spawner.args = ['''--NotebookApp.tornado_settings={
+  'headers':{
+    'Access-Control-Allow-Origin':'*',
+    'Content-Security-Policy': "frame-ancestors http://localhost:8090",
+  }
+}''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 # c.JupyterHub.tornado_settings = {'cookie_options': {'samesite': 'None'}}
@@ -261,7 +264,7 @@ keyfile = join(ssl, 'jupyter.key')
 certfile = join(ssl, 'jupyter.crt')
 print('keyfile',keyfile)
 print('certfile',certfile)
-if os.path.exists(keyfile):
-    c.JupyterHub.ssl_key = keyfile
-if os.path.exists(certfile):
-    c.JupyterHub.ssl_cert = certfile
+# if os.path.exists(keyfile):
+#     c.JupyterHub.ssl_key = keyfile
+# if os.path.exists(certfile):
+#     c.JupyterHub.ssl_cert = certfile

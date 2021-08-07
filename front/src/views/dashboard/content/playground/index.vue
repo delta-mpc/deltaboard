@@ -1,7 +1,7 @@
 <template>
   <div class="asset-page">
     <div class="content-bg">
-       <iframe style="width:100%;height:100%;border:none" :src="`https://localhost:8000/hub/external/login?next=/hub/&username=${user.email}&token=${user.user_token}`"></iframe>
+       <iframe style="width:100%;height:100%;border:none" :src="`http://localhost:8090/hub/external/login?next=/hub/&username=${user.email}&token=${user.user_token}`"></iframe>
     </div>
   </div>
 </template>
