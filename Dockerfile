@@ -1,11 +1,12 @@
 
 FROM jupyterhub/jupyterhub
 
-RUN  apt-get update -y
-RUN  apt-get install -y gettext
-RUN apt-get install sqlite3
+RUN  apt-get update -y 
+RUN  apt-get install -y gettext \
+                        sqlite3 \
+                        golang \
+                        nodejs
 RUN sqlite3 delta_dashboard.db
-RUN apt-get install golang -y
 ENV GOROOT /usr/lib/go
 ENV PATH $PATH:/usr/lib/go/bin
 ENV GOPATH /root/go
@@ -15,7 +16,6 @@ RUN python3 -m pip install oauthenticator
 RUN python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 RUN python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 
-RUN apt-get install nodejs
 RUN mkdir /app
 RUN mkdir /app/web
 WORKDIR /app/web
