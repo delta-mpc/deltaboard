@@ -15,7 +15,7 @@ session:
     login_max_age_seconds: 36000
     vault_max_age_seconds: 3600
 allow_origins:
-    - https://localhost:8090
-    - ${FRONT_END_DOMAIN}
+    - http://localhost:8090
+    - ${FRONT_END_DOMAIN}:${FRONT_END_PORT}
 
 file_storage_type: 1

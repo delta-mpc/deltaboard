@@ -213,51 +213,31 @@ def update_allowed_users():
 def check_allowed(username):
     update_allowed_users()
     return username in allowed_users
-# def pre_spawn_hook(spawner):
-#     username = spawner.user.name
-#     # if not username in allowed_users:
-#     #     raise ValueError('User Not Registed ')
-#     # else:
-#     #     dir = Path('/home/' + username + '/examples')
-#     #     if not dir.exists():
-#     #         subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/home/' + username + '/examples'])
-#     #         subprocess.check_call(['chown','-R',username,'/home/' + username + '/examples'])
-#     dir = Path('/home/' + username + '/examples')
-#     if not dir.exists():
-#         subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/home/' + username + '/examples'])
-#         subprocess.check_call(['chown','-R',username,'/home/' + username + '/examples'])
 c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
+frontEndDomain = os.environ.get('FRONT_END_DOMAIN','http://localhost:8090')
+frontEndPort = os.environ.get('FRONT_END_PORT','8090')
+frontEndUrl = frontEndDomain + ":" + frontEndPort
 c.JupyterHub.tornado_settings = {
     'headers': {
         'Access-Control-Allow-Origin':'*',
-        'Content-Security-Policy': "frame-ancestors http://localhost:8090",
+        'Content-Security-Policy': "frame-ancestors " + frontEndUrl,
     },
-   #  'cookie_options': {'samesite':'None'}
 }
 c.NotebookApp.tornado_settings = {
   'headers': {
      'Access-Control-Allow-Origin':'*',
-      'Content-Security-Policy': "frame-ancestors http://localhost:8090"
+      'Content-Security-Policy': "frame-ancestors " + frontEndUrl
    }
 }
 c.Spawner.http_timeout = 100
-# c.Spawner.args = ['''--NotebookApp.tornado_settings={
-#   'headers':{
-#     'Access-Control-Allow-Origin':'*',
-#     'Content-Security-Policy': "frame-ancestors https://localhost:8090",
-#   },
-#   'cookie_options': {'samesite':'None','Secure':True},
-#   'xsrf_cookie_kwargs': {'samesite':'None','Secure':True},
-# }''']
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors http://localhost:8090",
+    'Content-Security-Policy': "frame-ancestors ''' + frontEndUrl  + '''",
   }
 }''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
-# c.JupyterHub.tornado_settings = {'cookie_options': {'samesite': 'None'}}
 # ssl config
 ssl = join(root, 'ssl')
 keyfile = join(ssl, 'jupyter.key')
