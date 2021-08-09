@@ -2,7 +2,9 @@
 
 ## Run with provided mysql compose up
 1.docker-compose up -d
+
 2.visit http://localhost:8090
+
 ## Run with docker all in one 
 
 1.docker build -t dashboard_in_all .
