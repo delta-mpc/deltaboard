@@ -16,11 +16,11 @@ func init() {
 		Name     string            `json:"name" gorm:"type:varchar(127);not null"`
 		Password string            `json:"-" gorm:"type:varchar(64);not null"`
 		Salt     string            `json:"-" gorm:"type:varchar(32);not null"`
-		Email    string            `json:"email" gorm:"type:varchar(127);unique;not null"`
-		Status   models.UserStatus `json:"status" gorm:"type:tinyint(1);not null"`
-		RealName string            `json:"real_name" gorm:"type:varchar(32);not null"`
-		CardNo   string            `json:"card_no" gorm:"type:varchar(32);not null"`
-		Phone    string            `json:"phonenumber" gorm:"type:varchar(11);not null"`
+		Email    string            `json:"email" gorm:"type:varchar(127)"`
+		Status   models.UserStatus `json:"status" gorm:"type:tinyint(1)"`
+		RealName string            `json:"real_name" gorm:"type:varchar(32)"`
+		CardNo   string            `json:"card_no" gorm:"type:varchar(32)"`
+		Phone    string            `json:"phonenumber" gorm:"type:varchar(11)"`
 	}
 
 	M202108031056 = &gormigrate.Migration{

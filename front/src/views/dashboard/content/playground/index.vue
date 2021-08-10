@@ -1,7 +1,7 @@
 <template>
-  <div class="asset-page">
+  <div class="playground-page">
     <div class="content-bg">
-       <iframe style="width:100%;height:100%;border:none" :src="`http://localhost:8090/hub/external/login?next=/hub/&username=${user.email}&token=${user.user_token}`"></iframe>
+       <iframe style="width:100%;height:100%;border:none" :src="`http://localhost:8090/hub/external/login?next=/hub/&username=${user.name}&token=${user.user_token}`"></iframe>
     </div>
   </div>
 </template>
@@ -11,15 +11,7 @@ import store from '@/store'
 import { mapState } from 'vuex'
 
 export default {
-  name: "asset",
-  data() {
-    return {
-      cacheList: {},
-      assetList: [],
-      page: 1,
-      totalCount: 0,
-    };
-  },
+  name: "playground",
   mounted() {
   },
   computed:{
@@ -30,7 +22,7 @@ export default {
   methods: {
   },
   beforeRouteEnter(to, from, next) {
-    store.commit('sidebar/SET_ASSET_PAGE')
+    store.commit('sidebar/SET_PLAYGROUND_PAGE')
     next()
   },
 };
@@ -38,51 +30,10 @@ export default {
 
 <style lang="stylus" scoped>
 
-.asset-page {
-  padding page-padding-top
+.playground-page {
   background page-bg-color
   height 100%
   -webkit-overflow-scrolling touch
-}
-
-.asset-table {
-  /deep/.el-table__body {
-    // 使表格兼容safari，不错位
-    width: 100%;
-  }
-
-  /deep/ thead {      
-    font-size 16px
-    color #053e5d
-  }
-  /deep/th {
-    background #dfe5ec
-  }
-  th.is-leaf {
-    border-bottom 2px solid #053E5D
-  }
-
-  /deep/td {
-    border-top 1px solid #EBEEF5
-    border-bottom none
-    cursor pointer
-  }
-
-  /deep/.cell {
-    font-size 16px
-    color theme-color
-    padding-left 37px
-    white-space nowrap
-    text-overflow ellipsis
-  }
-}
-
-.asset-table::before {
-  height 0px
-}
-
-.header {
-  height 70px
 }
 
 .upload-button {
@@ -97,8 +48,5 @@ export default {
   border 1px #e4e4e4 solid
 }
 
-.el-pagination {
-  text-align center
-}
 
 </style>

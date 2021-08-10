@@ -94,7 +94,7 @@
 
 {% block nav_bar %}
   <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container-fluid" style="background:transparent">
       <!--<div class="navbar-header">-->
       <!---->
         <!--<img style="width:34px;height:34px" src="https://avatars.githubusercontent.com/u/84963271?s=200&v=4"/>-->
@@ -110,7 +110,7 @@
 
       <div class="collapse navbar-collapse" id="thenavbar">
         {% if user %}
-        <ul class="nav navbar-nav">
+        <!-- <ul class="nav navbar-nav">
           {% block nav_bar_left_items %}
             <li><a href="{{base_url}}home">Home</a></li>
             <li><a href="{{base_url}}token">Token</a></li>
@@ -118,7 +118,7 @@
             <li><a href="{{base_url}}admin">Admin</a></li>
             {% endif %}
           {% endblock %}
-        </ul>
+        </ul> -->
         {% endif %}
         <ul class="nav navbar-nav navbar-right">
           {% block nav_bar_right_items %}

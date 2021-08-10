@@ -28,7 +28,7 @@ func LoginAuth(ctx *gin.Context) {
 
 	currentUser, err := current_user.NewCurrentUserFromSession(ctx.Request)
 
-	if err != nil || currentUser.Email == "" {
+	if err != nil || currentUser.Name == "" {
 		r := response.NewValidationErrorResponseWithMessage("user_login", "user login status expired")
 		ctx.JSON(400, r)
 		ctx.Abort()

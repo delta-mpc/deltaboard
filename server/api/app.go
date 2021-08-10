@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
@@ -9,14 +10,32 @@ import (
 	"deltaboard-server/api/v1/middleware"
 	"deltaboard-server/api/v1/response"
 	"deltaboard-server/config"
+	"deltaboard-server/config/db"
 	"deltaboard-server/config/log"
+	"deltaboard-server/models"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/loopfz/gadgeto/tonic"
 	"github.com/wI2L/fizz"
 	"github.com/wI2L/fizz/openapi"
+	"gorm.io/gorm"
 )
+
+func CheckNCreateAdmin() error {
+	fmt.Println("CheckNCreateAdmin")
+	user := &models.User{
+		Name: "admin",
+	}
+	if err := db.GetDB().First(user, user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			user = models.NewUser("admin", "admin", "", "")
+			user.Create(user, db.GetDB())
+			fmt.Println("Creating admin User")
+		}
+	}
+	return nil
+}
 
 func GetHttpApplication(appConfig *config.AppConfig) *gin.Engine {
 
@@ -70,7 +89,7 @@ func GetHttpApplication(appConfig *config.AppConfig) *gin.Engine {
 
 		panic("fizz initialization error")
 	}
-
+	CheckNCreateAdmin()
 	return engine
 }
 

@@ -2,11 +2,11 @@
 import v1 from './v1';
 
 export default {
-   register(email, password) {
-      return v1.post('/users/tokens', {'user_email': email, 'password': password})
+   register(username, password) {
+      return v1.post('/users/tokens', {'user_name': username, 'password': password})
    },
-   login(email, password) {
-      return v1.post('/users', {'user_email': email, 'password': password})
+   login(username, password) {
+      return v1.post('/users', {'user_name': username, 'password': password})
    },
     resetLoginPass(token, password) {
         return v1.put('/users/password/' + token, { 'password': password})

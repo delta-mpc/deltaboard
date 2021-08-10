@@ -1,9 +1,13 @@
 <template>
   <el-menu ref="menu" class="sidebar" :default-active="barActiveIndex" @select="handleSelect">
     <el-menu-item index="1" @click="sideItemClicked('playground')">
-      <el-tooltip popper-class="tool-item-2" :open-delay="500" :enterable="false" effect="dark" placement="bottom">
-        <div class="item-div"><i class="el-icon-wallet side-icon"></i><span>Play Ground</span></div>
-      </el-tooltip>
+       <div class="item-div"><i class="el-icon-notebook-2 side-icon"></i><span>Playground</span></div>
+    </el-menu-item>
+    <el-menu-item index="2" v-if="user.name == 'admin'" @click="sideItemClicked('adduser')">
+      <div class="item-div"><i class="el-icon-user side-icon"></i><span>Add User</span></div>
+    </el-menu-item>
+    <el-menu-item index="3" @click="sideItemClicked('changepassword')">
+      <div class="item-div"><i class="el-icon-setting side-icon"></i><span>Change Password</span></div>
     </el-menu-item>
   </el-menu>
 </template>
@@ -37,7 +41,7 @@ export default {
       this.$router.push({ name: name});
     },
     handleSelect(key, keyPath) {
-      if (this.user.name.length === 0 || this.company_name.length === 0) {
+      if (this.user.name.length === 0) {
         return;
       }
       let pageIndex = { sidebarActiveIndex: key }

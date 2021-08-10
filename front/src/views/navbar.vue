@@ -1,14 +1,13 @@
 <template>
   <div class="header">
     <router-link :to="{ name: 'asset' }">
-      <div class="logo">Delta - Dashboard</div>
+      <div class="logo">Deltaboard</div>
     </router-link>
     <div class="right-menu">
       <router-link :to="{ name: 'login' }" v-if="showLogin">登录/注册</router-link>
       <el-dropdown class="dropdown-class" @command="handleCommand" v-else>
         <span class="user">{{ navUserInfo }}<i class="el-icon-arrow-down el-icon--right"></i></span>
         <el-dropdown-menu class="dropdown-class" slot="dropdown">
-          <el-dropdown-item command="change">个人中心</el-dropdown-item>
           <el-dropdown-item command="logout">退出账户</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

@@ -32,8 +32,8 @@ const (
 )
 
 type RegisterInput struct {
-	UserName    string `json:"user_name" form:"user_name" description:"The user's name"`
-	UserEmail   string `json:"user_email" form:"user_email" validate:"required,email" description:"The user's email"`
+	UserName    string `json:"user_name" form:"user_name" validate:"required" description:"The user's name"`
+	UserEmail   string `json:"user_email" form:"user_email" description:"The user's email"`
 	Password    string `json:"password" form:"password" validate:"required" description:"The user's encrypted password"`
 	PhoneNumber string `json:"phonenumber" form:"phonenumber" description:"The user's phonenumber"`
 }
@@ -50,7 +50,7 @@ type RegisterResponse struct {
 func Register(ctx *gin.Context, in *RegisterInput) (*RegisterResponse, error) {
 
 	user := &models.User{
-		Email: in.UserEmail,
+		Name: in.UserName,
 	}
 	//查重
 	if err := db.GetDB().First(user, user).Error; err != nil {

@@ -6,8 +6,8 @@
         <el-tab-pane label="账户登录" name="login">
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left" @submit.native.prevent>
-            <el-form-item prop="email">
-              <el-input ref="email" v-model="loginForm.email" placeholder="请输入邮箱" 
+            <el-form-item prop="username">
+              <el-input ref="email" v-model="loginForm.username" placeholder="请输入用户名" 
               name="phonenumber" type="text" tabindex="1" autocomplete="on" @keyup.enter.native="login"/>
             </el-form-item>
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
@@ -23,7 +23,7 @@
             </div>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="账户注册" name="register">
+        <el-tab-pane v-if="false" label="账户注册" name="register">
           <el-form ref="registForm" :model="registForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left">
            <el-form-item prop="email">
@@ -64,8 +64,8 @@ export default {
   data() {
     const self = this;
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 7) {
-        callback(new Error("密码不能小于7位"));
+      if (value.length < 5) {
+        callback(new Error("密码不能小于5位"));
       } else {
         callback();
       }
@@ -96,6 +96,7 @@ export default {
         password: "",
         passwordType: "password",
         phonenumber: "",
+        username:""
       },
       activateName: "login",
       registForm: {
@@ -143,9 +144,9 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          V1UserAPI.login(this.loginForm.email, this.loginForm.password).then((response) => {
+          V1UserAPI.login(this.loginForm.username, this.loginForm.password).then((response) => {
             this.$store.commit("user/SET_USER", response);
-            this.$store.commit("sidebar/SET_ASSET_PAGE");
+            this.$store.commit("sidebar/SET_PLAYGROUND_PAGE");
             this.$router.push({ name: "playground" });
             localStorage.setItem('visibilitychange', 'changed')
           }).finally(() => {

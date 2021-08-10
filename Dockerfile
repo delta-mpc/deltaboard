@@ -70,4 +70,7 @@ ADD front/proxy.config.json proxy.config.json
 ADD front/vue.config.js vue.config.js
 WORKDIR /app
 ADD run_node.sh run_node.sh 
+
+EXPOSE 8090
+
 CMD ["sh", "./run.sh"]

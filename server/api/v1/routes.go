@@ -41,6 +41,11 @@ func UserGroup(g *fizz.RouterGroup) {
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
 	}, middleware.LoginAuth, tonic.Handler(user.GetUser, 200))
 
+	userGroup.PUT("/password", []fizz.OperationOption{
+		fizz.Summary("用户重置密码"),
+		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
+	}, middleware.LoginAuth, tonic.Handler(user.ResetLoginPassword, 200))
+
 	userGroup.DELETE("/tokens", []fizz.OperationOption{
 		fizz.Summary("用户登出"),
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),

@@ -14,9 +14,9 @@ const { isNavigationFailure, NavigationFailureType } = VueRouter
 const index = () => import(/*webpackMode: "eager" */'@/views/index/index.vue')
 const login = () => import(/*webpackMode: "eager" */'@/views/index/login/index.vue')
 const dashboard = () => import(/* webpackChunkName: "dashboard", webpackPrefetch: true */ '@/views/dashboard/index.vue')
-const playground = () => import(/* webpackChunkName: "dashboard", webpackPrefetch: true */ '@/views/dashboard/content/playground/index.vue')
-
-
+const playground = () => import(/* webpackChunkName: "playground", webpackPrefetch: true */ '@/views/dashboard/content/playground/index.vue')
+const adduser = () => import(/* webpackChunkName: "adduser", webpackPrefetch: true */ '@/views/dashboard/content/adduser/index.vue')
+const changePassword = () => import(/* webpackChunkName: "changepwd", webpackPrefetch: true */ '@/views/dashboard/content/changepassword/index.vue')
 export const routes = [
     {
         path: '/', component: index, children: [
@@ -33,6 +33,16 @@ export const routes = [
                 path: 'playground',
                 component: playground,
                 name: 'playground'
+            },
+            {
+               path:'adduser',
+               component:adduser,
+               name:'adduser'
+            },
+            {
+               path:'changepassword',
+               component:changePassword,
+               name:'changepassword'
             }
         ]
     },

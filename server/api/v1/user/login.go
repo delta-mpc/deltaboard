@@ -29,13 +29,13 @@ import (
 )
 
 type LoginInput struct {
-	UserEmail string `json:"user_email" form:"user_email" validate:"required,email" description:"The user's email"`
-	Password  string `json:"password" form:"password" validate:"required,gt=6,lt=127" description:"The user's encrypted password"`
+	UserName string `json:"user_name" form:"user_name" validate:"required" description:"The user's Name"`
+	Password string `json:"password" form:"password" validate:"required,gt=4,lt=127" description:"The user's encrypted password"`
 }
 
 type AuthInput struct {
-	UserEmail string `json:"user_email" form:"user_email" validate:"required,email" description:"The user's email"`
-	Token     string `json:"token" form:"token" validate:"required" description:"The user's encrypted password"`
+	UserName string `json:"user_name" form:"user_name" validate:"required" description:"The user's name"`
+	Token    string `json:"token" form:"token" validate:"required" description:"The user's encrypted password"`
 }
 
 type LoginResponse struct {
@@ -45,7 +45,7 @@ type LoginResponse struct {
 
 func UserAuth(ctx *gin.Context, in *AuthInput) (*LoginResponse, error) {
 	user := &models.User{
-		Email: in.UserEmail,
+		Name: in.UserName,
 	}
 
 	//查重
@@ -67,9 +67,9 @@ func UserAuth(ctx *gin.Context, in *AuthInput) (*LoginResponse, error) {
 }
 
 func Login(ctx *gin.Context, in *LoginInput) (*LoginResponse, error) {
-
+	fmt.Println("user_name:" + in.UserName)
 	user := &models.User{
-		Email: in.UserEmail,
+		Name: in.UserName,
 	}
 
 	//查重

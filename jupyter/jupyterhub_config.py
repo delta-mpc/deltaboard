@@ -6,18 +6,11 @@ from jupyterhub.auth import PAMAuthenticator
 from jupyterhub.traitlets import Command
 from jupyterhub.apihandlers.base import APIHandler
 from jupyterhub.handlers.login import LogoutHandler
-import jupyterhub.orm as orm
-import json
 from jupyterhub.utils import maybe_future
 import asyncio
 
 from tornado.escape import url_escape
 from tornado.httputil import url_concat
-from tornado import web
-import pipes
-from subprocess import PIPE
-from subprocess import Popen
-from subprocess import STDOUT
 from tornado.httpclient import HTTPRequest
 from jupyterhub.handlers.base import BaseHandler
 from traitlets import Unicode
@@ -60,7 +53,7 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         user_email = data['username']
         password = data['password']
         auth_url = os.getenv('AUTH_URL', 'http://localhost:8080/v1/users/auth') 
-        url = auth_url + "?user_email=" + user_email + "&token=" + password
+        url = auth_url + "?user_name=" + user_email + "&token=" + password
         req = HTTPRequest(
             url,
             method="GET",
@@ -85,37 +78,6 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
             return 'user_' + resp_data["data"]["id"][0:10]
         else:
             raise ValueError("Authenticate Failed")
-
-class ExtUserAPIHandler(APIHandler):
-    def get(self):
-
-        data = [
-            self.user_model(u, include_servers=True, include_state=True)
-            for u in self.db.query(orm.User)
-        ]
-        self.write(json.dumps(data))
-    async def post(self):
-        data = self.get_json_body()
-        print(data)
-        user = self.find_user(data['name'])
-        if user is not None:
-            raise web.HTTPError(409, "User %s already exists" % data['name'])
-        user = self.user_from_username(data['name'])
-        if data:
-            self._check_user_model(data)
-            if 'admin' in data:
-                user.admin = data['admin']
-                self.db.commit()
-        try:
-            await maybe_future(self.authenticator.add_user(user))
-        except Exception:
-            self.log.error("Failed to create user: %s" % data['name'], exc_info=True)
-            # remove from registry
-            self.users.delete(user)
-            raise web.HTTPError(400, "Failed to create user: %s" % data['name'])
-
-        self.write(json.dumps(self.user_model(user)))
-        self.set_status(201)
 
 class ExtloginHandler(BaseHandler):
     """Render the login page."""
@@ -184,7 +146,7 @@ class ExtloginHandler(BaseHandler):
                 futures.append(maybe_future(self.stop_single_user(user, server_name)))
             await asyncio.gather(*futures)
 
-c.JupyterHub.extra_handlers = [("/external/users", ExtUserAPIHandler),("/external/login",ExtloginHandler)]
+c.JupyterHub.extra_handlers = [("/external/login",ExtloginHandler)]
 
 c.JupyterHub.authenticator_class = MyAuthenticator
 
@@ -214,7 +176,7 @@ def check_allowed(username):
     update_allowed_users()
     return username in allowed_users
 c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
-frontEndDomain = os.environ.get('FRONT_END_DOMAIN','http://localhost:8090')
+frontEndDomain = os.environ.get('FRONT_END_DOMAIN','http://localhost')
 frontEndPort = os.environ.get('FRONT_END_PORT','8090')
 frontEndUrl = frontEndDomain + ":" + frontEndPort
 c.JupyterHub.tornado_settings = {

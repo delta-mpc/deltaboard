@@ -27,8 +27,8 @@ import (
 )
 
 type ResetLoginPasswordInput struct {
-	OldPassword string `json:"old_password" form:"old_password" validate:"required,gt=6,lt=127" description:"旧密码"`
-	NewPassword string `json:"new_password" form:"new_password" validate:"required,gt=6,lt=127" description:"新密码"`
+	OldPassword string `json:"old_password" form:"old_password" validate:"required,gt=4,lt=127" description:"旧密码"`
+	NewPassword string `json:"new_password" form:"new_password" validate:"required,gt=4,lt=127" description:"新密码"`
 }
 
 func ResetLoginPassword(ctx *gin.Context, in *ResetLoginPasswordInput) (*response.Response, error) {
