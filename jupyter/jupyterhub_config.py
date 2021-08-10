@@ -8,7 +8,7 @@ from jupyterhub.apihandlers.base import APIHandler
 from jupyterhub.handlers.login import LogoutHandler
 from jupyterhub.utils import maybe_future
 import asyncio
-
+import yaml
 from tornado.escape import url_escape
 from tornado.httputil import url_concat
 from tornado.httpclient import HTTPRequest
@@ -22,7 +22,12 @@ class WrappedGitHubAuthenticator(GitHubOAuthenticator):
         result = await GitHubOAuthenticator.authenticate(self, handler, data)
         result['name'] = 'github_user_' + result['name']
         return result
-
+yamlconfig = {}
+with open("/app/config/config.yaml", "r") as f:
+    yamlconfig = yaml.full_load(f)
+frontend_url = yamlconfig['web_host'] + ":" + yamlconfig['web_port']
+auth_url = "http://localhost:" + yamlconfig['http']['port'] + "/v1/users/auth"
+backendhost = "localhost:" + yamlconfig['http']['port']
 class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
     async def add_user(self, user):
         """Hook called whenever a new user is added
@@ -50,22 +55,22 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         #     return result
         # else:
         #     return WrappedGitHubAuthenticator.authenticate(self, handler, data)
-        user_email = data['username']
+        username = data['username']
         password = data['password']
-        auth_url = os.getenv('AUTH_URL', 'http://localhost:8080/v1/users/auth') 
-        url = auth_url + "?user_name=" + user_email + "&token=" + password
+        url = auth_url + "?user_name=" + username + "&token=" + password
+        print('backendhost',backendhost)
         req = HTTPRequest(
             url,
             method="GET",
-            headers={"Host": "localhost:8081",
+            headers={"Host": backendhost,
                      "Pragma":"no-cache",
                      "Cache-Control":"no-cache",
                      "Content-Type":"application/json;charset=UTF-8",
-                     "Origin":"localhost:8081",
+                     "Origin":backendhost,
                      "Sec-Fetch-Site":"same-site",
                      "Sec-Fetch-Mode":"cors",
                      "Sec-Fetch-Dest":"empty",
-                     "Referer":"localhost:8081",
+                     "Referer":backendhost,
                      "Accept-Encoding":"gzip,deflate,br",
                      "Accept-Language":"zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-HK;q=0.6"
                      }
@@ -176,26 +181,23 @@ def check_allowed(username):
     update_allowed_users()
     return username in allowed_users
 c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
-frontEndDomain = os.environ.get('FRONT_END_DOMAIN','http://localhost')
-frontEndPort = os.environ.get('FRONT_END_PORT','8090')
-frontEndUrl = frontEndDomain + ":" + frontEndPort
 c.JupyterHub.tornado_settings = {
     'headers': {
         'Access-Control-Allow-Origin':'*',
-        'Content-Security-Policy': "frame-ancestors " + frontEndUrl,
+        'Content-Security-Policy': "frame-ancestors " + frontend_url,
     },
 }
 c.NotebookApp.tornado_settings = {
   'headers': {
      'Access-Control-Allow-Origin':'*',
-      'Content-Security-Policy': "frame-ancestors " + frontEndUrl
+      'Content-Security-Policy': "frame-ancestors " + frontend_url
    }
 }
 c.Spawner.http_timeout = 100
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors ''' + frontEndUrl  + '''",
+    'Content-Security-Policy': "frame-ancestors ''' + frontend_url  + '''",
   }
 }''']
 c.Spawner.cmd = ["jupyter-labhub"]

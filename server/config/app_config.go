@@ -23,9 +23,8 @@ type AppConfig struct {
 		Port string `mapstructure:"port"`
 	} `mapstructure:"http"`
 
-	Session         SessionConfig `mapstructure:"session"`
-	AllowOrigins    []string      `mapstructure:"allow_origins"`
-	FileStorageType int           `mapstructure:"file_storage_type"`
+	Session      SessionConfig `mapstructure:"session"`
+	AllowOrigins []string      `mapstructure:"allow_origins"`
 }
 
 type SessionConfig struct {

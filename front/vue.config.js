@@ -1,7 +1,7 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// const proxyConfig = require('./proxy.config.json')
+const jsonConfig = require('./config.json')
 let publicPath = '/';
 
 if (process.env.VUE_APP_VERSION) {
@@ -21,7 +21,7 @@ const proxyConfig = {
       },
       bypass: (req, res) => {
          if (req.headers && req.headers.referer)
-            req.headers.referer = req.headers.referer.replace('localhost:8090', 'localhost:8000')
+            req.headers.referer = req.headers.referer.replace('localhost:' + jsonConfig['port'], 'localhost:8000')
       },
    },
    "^/user":{
@@ -38,7 +38,7 @@ module.exports = {
     publicPath: publicPath,
     runtimeCompiler: true, 
     devServer:{
-      port:8090,
+      port:jsonConfig['port'],
       proxy:proxyConfig
     },
     configureWebpack: {

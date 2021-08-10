@@ -1,83 +1,88 @@
 version: '3'
 services:
-   db:
-      image: mysql:latest
-      container_name: 'mysql'
-      restart: always
-      volumes:
-         - ./server/data/mysql/db:/var/lib/mysql
-         - ./server/data/mysql/logs:/var/log/mysql
-      environment:
-         MYSQL_USER: delta_user
-         MYSQL_PASSWORD: delta_user
-         MYSQL_ROOT_PASSWORD: delta_user
-         MYSQL_DATABASE: delta_dashboard
-      healthcheck:
-         test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
-         interval: 10s
-         timeout: 200s
-         retries: 20
-      ports:
-         - 8888:3306
-      expose:
-         - 3306
-   api:
-      build: ./server
-      container_name: go-service-api
-      ports:
-         - 8080:8080
-      expose:
-         - 8080
-      depends_on:
-         - migrate
-      links:
-         - db
-      environment:
-         WORK: server
-         ENV: config
-         CONNECTOR: delta_user:delta_user@(db:3306)/delta_dashboard
-         FRONT_END_DOMAIN: http://localhost:8090
-      volumes:
-         - ./server/config:/app/config
-   migrate:
-      build: ./server
-      container_name: go-service-migrate
-      depends_on:
-         db:
-            condition: service_healthy
-      links:
-         - db
-      environment:
-         WORK: migrate
-         ENV: config
-         CONNECTOR: "delta_user:delta_user@(db:3306)/delta_dashboard"
-         FRONT_END_DOMAIN: http://localhost:8090
-      volumes:
-         - ./server/config:/app/config
-   jupyter:
-      build: ./jupyter
-      container_name: jupyterhub
+   dashboard_in_all:
+      build: .
+      container_name: dashboard_in_all
       ports:
          - 8000:8000
-      depends_on:
-         db:
-            condition: service_healthy
-      links:
-         - api
-      environment:
-         AUTH_URL: http://api:8080/v1/users/auth
+         - 8080:8080
       volumes:
-         - ./home:/home
-   frontend:
-      build: ./front
-      container_name: deltaboard_frontend
-      ports:
-         - 8090:8090
-      depends_on:
-         - api
-      links:
-         - api
-      
-
-      
+         - ./config:/app/app_config
+   # db:
+   #    image: mysql:latest
+   #    container_name: 'mysql'
+   #    restart: always
+   #    volumes:
+   #       - ./server/data/mysql/db:/var/lib/mysql
+   #       - ./server/data/mysql/logs:/var/log/mysql
+   #    environment:
+   #       MYSQL_USER: delta_user
+   #       MYSQL_PASSWORD: delta_user
+   #       MYSQL_ROOT_PASSWORD: delta_user
+   #       MYSQL_DATABASE: delta_dashboard
+   #    healthcheck:
+   #       test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+   #       interval: 10s
+   #       timeout: 200s
+   #       retries: 20
+   #    ports:
+   #       - 8888:3306
+   #    expose:
+   #       - 3306
+   # api:
+   #    build: ./server
+   #    container_name: go-service-api
+   #    ports:
+   #       - 8080:8080
+   #    expose:
+   #       - 8080
+   #    depends_on:
+   #       - migrate
+   #    links:
+   #       - db
+   #    environment:
+   #       WORK: server
+   #       ENV: config
+   #       CONNECTOR: delta_user:delta_user@(db:3306)/delta_dashboard
+   #       FRONT_END_DOMAIN: http://localhost:8090
+   #    volumes:
+   #       - ./server/config:/app/config
+   # migrate:
+   #    build: ./server
+   #    container_name: go-service-migrate
+   #    depends_on:
+   #       db:
+   #          condition: service_healthy
+   #    links:
+   #       - db
+   #    environment:
+   #       WORK: migrate
+   #       ENV: config
+   #       CONNECTOR: "delta_user:delta_user@(db:3306)/delta_dashboard"
+   #       FRONT_END_DOMAIN: http://localhost:8090
+   #    volumes:
+   #       - ./server/config:/app/config
+   # jupyter:
+   #    build: ./jupyter
+   #    container_name: jupyterhub
+   #    ports:
+   #       - 8000:8000
+   #    depends_on:
+   #       db:
+   #          condition: service_healthy
+   #    links:
+   #       - api
+   #    environment:
+   #       AUTH_URL: http://api:8080/v1/users/auth
+   #    volumes:
+   #       - ./home:/home
+   # frontend:
+   #    build: ./front
+   #    container_name: deltaboard_frontend
+   #    ports:
+   #       - 8090:8090
+   #    depends_on:
+   #       - api
+   #    links:
+   #       - api
         

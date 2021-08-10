@@ -1,7 +1,7 @@
 <template>
   <div class="playground-page">
     <div class="content-bg">
-       <iframe style="width:100%;height:100%;border:none" :src="`http://localhost:8090/hub/external/login?next=/hub/&username=${user.name}&token=${user.user_token}`"></iframe>
+       <iframe style="width:100%;height:100%;border:none" :src="`${localUrl}/hub/external/login?next=/hub/&username=${user.name}&token=${user.user_token}`"></iframe>
     </div>
   </div>
 </template>
@@ -18,6 +18,9 @@ export default {
      ...mapState({
         user:state => state.user
      }),
+     localUrl(){
+        return process.env.VUE_APP_BASE_API
+     }
   },
   methods: {
   },

@@ -23,10 +23,11 @@ WORKDIR /app/web
 ADD front/package.json package.json
 RUN npm install
 
+RUN python3 -m pip install pyyaml
+
 ADD ./server /app/
 WORKDIR /app
 RUN go env -w GOPROXY=https://goproxy.cn && go build -ldflags "-w -s" -o main
-
 
 #don't touch codes above this line or you'll waste ton's of time in installing things
 
@@ -69,8 +70,10 @@ ADD front/package.json package.json
 ADD front/proxy.config.json proxy.config.json
 ADD front/vue.config.js vue.config.js
 WORKDIR /app
+RUN mkdir app_config
 ADD run_node.sh run_node.sh 
-
+ADD gen_config.py gen_config.py
+ADD gen_web_config.py gen_web_config.py
 EXPOSE 8090
 
-CMD ["sh", "./run.sh"]
+ENTRYPOINT ["sh","./run.sh"]
