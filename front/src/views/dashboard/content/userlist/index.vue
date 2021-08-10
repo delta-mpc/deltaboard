@@ -1,7 +1,17 @@
 <template>
       <div class="container">
-      <el-tabs v-model="activateName" class="login-panel" type="border-card">
-        <el-tab-pane label="添加用户" name="register">
+      <div class="btn-ctn">
+         <el-button @click="showAddUser = true">添加用户</el-button>   
+      </div>
+      <div class="table-ctn">
+         <el-table :data="tableData">
+            <el-table-column label="用户名" prop="name"></el-table-column>
+            <el-table-column prop="created_at" label="日期">{{  }}
+              <template v-slot="{ row }">{{ row.created_at | second2Date }}</template>
+            </el-table-column>
+         </el-table>   
+      </div>   
+      <el-dialog :visible.sync="showAddUser" :title="'添加用户'">
           <el-form ref="registForm" :model="registForm" 
           class="login-form" autocomplete="on" label-position="left">
             <el-form-item prop="username">
@@ -23,8 +33,7 @@
             <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" 
                   @click.native.prevent="register">添加用户</el-button>
           </el-form>
-        </el-tab-pane>
-      </el-tabs>
+      </el-dialog>
     </div>
 </template>
 
@@ -36,8 +45,10 @@ export default {
   name: "asset",
   data() {
     return {
+      tableData:[],
       loading: false,
       capsTooltip: false,
+      showAddUser:false,
       activateName:'register',
       registForm: {
         password: "",
@@ -49,6 +60,7 @@ export default {
     };
   },
   mounted() {
+     this.load()
   },
   computed:{
      ...mapState({
@@ -56,6 +68,11 @@ export default {
      }),
   },
   methods: {
+     load(){
+        V1UserAPI.list(0,999).then((res)=>{
+            this.tableData = res.list
+        })
+     },
      register() {
       this.loading = true;
          V1UserAPI.register(
@@ -63,6 +80,8 @@ export default {
             this.registForm.password
           ).then((response) => {
              this.$message(`已添加用户`)
+             this.showAddUser = false
+             this.load()
           }).finally(() => {
             this.loading = false;
       });
@@ -77,67 +96,24 @@ export default {
 
 <style lang="stylus" scoped>
 .container {
-  padding-top 140px
+  padding-top 40px
+  padding-left 20px
+  .btn-ctn {
+     width 150px
+     height 50px
+     padding-left 20px
+  }
+  .table-ctn {
+     padding 20px
+  }
 }
-.login-panel {
-  width 450px
-  margin 0 auto
-  
-  background white
-  border 1px solid #DCDFE6
-  box-shadow 0px 0px 17px 3px rgba(176, 193, 213, 0.66)
-  border-radius border-radius
-
-  /deep/.el-tabs__header {
-    border none
-    border-top-left-radius border-radius
-    border-top-right-radius border-radius
-    overflow hidden
-  }
-
-  /deep/.el-tabs__content {
-    padding 60px
-  }
-
-  /deep/.el-tabs__nav {
-    width 100%
-    display flex
-  }
-  
-  /deep/.el-tabs__item {
-    text-align center
-    flex 1
-    height 50px
-    line-height 50px
-    border none
-    background #dcdfe6
-    color #606266
-    font-size 20px
-  }
-
-  ::v-deep .el-input {
-    input {
-      color black
-    }
-    textarea {
-      color black
-    }
-  }
-  /deep/.el-input__inner {
-    padding 0px
-    border none
-    border-bottom 1px solid #143654
-    border-radius 0px
-  }
-
-  .el-form-item {
-    margin-bottom 44px
-  }
+/deep/.el-dialog {
+   width 600px
 }
 
 .login-form {
   position relative
-  width 520px
+  width 320px
   max-width 100%
   padding 10px 0 35px 0
   margin 0 auto

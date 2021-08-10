@@ -15,7 +15,7 @@ const index = () => import(/*webpackMode: "eager" */'@/views/index/index.vue')
 const login = () => import(/*webpackMode: "eager" */'@/views/index/login/index.vue')
 const dashboard = () => import(/* webpackChunkName: "dashboard", webpackPrefetch: true */ '@/views/dashboard/index.vue')
 const playground = () => import(/* webpackChunkName: "playground", webpackPrefetch: true */ '@/views/dashboard/content/playground/index.vue')
-const adduser = () => import(/* webpackChunkName: "adduser", webpackPrefetch: true */ '@/views/dashboard/content/adduser/index.vue')
+const userlist = () => import(/* webpackChunkName: "userlist", webpackPrefetch: true */ '@/views/dashboard/content/userlist/index.vue')
 const changePassword = () => import(/* webpackChunkName: "changepwd", webpackPrefetch: true */ '@/views/dashboard/content/changepassword/index.vue')
 export const routes = [
     {
@@ -35,9 +35,9 @@ export const routes = [
                 name: 'playground'
             },
             {
-               path:'adduser',
-               component:adduser,
-               name:'adduser'
+               path:'userlist',
+               component:userlist,
+               name:'userlist'
             },
             {
                path:'changepassword',

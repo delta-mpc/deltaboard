@@ -3,6 +3,7 @@ package user
 import (
 	"crypto/sha256"
 	"deltaboard-server/api/v1/response"
+	"deltaboard-server/config/db"
 	"deltaboard-server/internal/service/current_user"
 	"deltaboard-server/models"
 	"fmt"
@@ -20,6 +21,19 @@ type GetUserResponse struct {
 	} `json:"data"`
 }
 
+type GetUsersInput struct {
+	PageID   int `query:"page_id" form:"page_id" description:"page index,begin 0" default:"0"`
+	PageSize int `query:"page_size" form:"page_size" description:"page size,default 10" default:"10"`
+}
+type GetUsersData struct {
+	Total int64          `json:"total"`
+	List  []*models.User `json:"list"`
+}
+type GetUserLstResponse struct {
+	response.Response
+	Data *GetUsersData `json:"data"`
+}
+
 func GetUser(ctx *gin.Context) (*GetUserResponse, error) {
 
 	currentUserInterface, _ := ctx.Get("CurrentUser")
@@ -29,4 +43,24 @@ func GetUser(ctx *gin.Context) (*GetUserResponse, error) {
 	res.Data.User = currentUser.User
 	res.Data.Token = fmt.Sprintf("%x", sha256.Sum256([]byte(currentUser.User.Password+currentUser.User.Salt)))
 	return res, nil
+}
+
+func GetUserList(ctx *gin.Context, in *GetUsersInput) (*GetUserLstResponse, error) {
+	var total int64
+	if err := db.GetDB().Model(&models.User{}).Count(&total).Error; err != nil {
+		return nil, err
+	}
+	fmt.Println("total ", total)
+	users := make([]*models.User, 0)
+	if err := db.GetDB().Model(&models.User{}).Offset(in.PageID * in.PageSize).Limit(in.PageSize).
+		Find(&users).Error; err != nil {
+		return nil, err
+	}
+	userData := &GetUsersData{
+		Total: total,
+		List:  users,
+	}
+	return &GetUserLstResponse{
+		Data: userData,
+	}, nil
 }

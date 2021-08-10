@@ -6,6 +6,5 @@ else
 python3 gen_web_config.py;
 jupyterhub &
 ./main migrate --conf config;
-./main server --conf config &
-sh run_node.sh;
+./main server --conf config;
 fi

@@ -19,7 +19,6 @@ package user
 import (
 	"deltaboard-server/api/v1/response"
 	"deltaboard-server/config/db"
-	"deltaboard-server/internal/service/current_user"
 	"deltaboard-server/models"
 
 	"github.com/gin-gonic/gin"
@@ -63,17 +62,6 @@ func Register(ctx *gin.Context, in *RegisterInput) (*RegisterResponse, error) {
 
 	user = models.NewUser(in.UserName, in.Password, in.UserEmail, in.PhoneNumber)
 	if err := user.Create(user, db.GetDB()); err != nil {
-		return nil, err
-	}
-
-	//设置cookie
-	currentUser := &current_user.CurrentUser{
-		User: user,
-		UserVerification: current_user.UserVerification{
-			UserId: user.Id,
-		},
-	}
-	if err := currentUser.SaveUserLoginSession(ctx.Request, ctx.Writer); err != nil {
 		return nil, err
 	}
 

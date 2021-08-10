@@ -3,7 +3,7 @@
     <el-menu-item index="1" @click="sideItemClicked('playground')">
        <div class="item-div"><i class="el-icon-notebook-2 side-icon"></i><span>Playground</span></div>
     </el-menu-item>
-    <el-menu-item index="2" v-if="user.name == 'admin'" @click="sideItemClicked('adduser')">
+    <el-menu-item index="2" v-if="user.name == 'admin'" @click="sideItemClicked('userlist')">
       <div class="item-div"><i class="el-icon-user side-icon"></i><span>Add User</span></div>
     </el-menu-item>
     <el-menu-item index="3" @click="sideItemClicked('changepassword')">

@@ -36,6 +36,11 @@ func UserGroup(g *fizz.RouterGroup) {
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
 	}, tonic.Handler(user.Login, 200))
 
+	userGroup.GET("/list", []fizz.OperationOption{
+		fizz.Summary("用户列表"),
+		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
+	}, tonic.Handler(user.GetUserList, 200))
+
 	userGroup.GET("", []fizz.OperationOption{
 		fizz.Summary("用户信息获取"),
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),

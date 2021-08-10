@@ -8,6 +8,9 @@ export default {
    login(username, password) {
       return v1.post('/users', {'user_name': username, 'password': password})
    },
+   list(pageID,pageSize){
+      return v1.get('/users/list', {params:{page_id: pageID, page_size: pageSize}})
+   },
     resetLoginPass(token, password) {
         return v1.put('/users/password/' + token, { 'password': password})
     },
