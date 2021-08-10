@@ -56,7 +56,6 @@ WORKDIR /app
 ADD ./run.sh /app
 COPY ./server/static /app/static
 COPY ./server/config/config.tmpl config/config.tmpl
-ADD ./run_jupyter.sh /app
 ADD ./jupyter/jupyterhub_config.py jupyterhub_config.py
 ADD ./jupyter/ssl /app/ssl
 
