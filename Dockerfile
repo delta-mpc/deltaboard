@@ -23,7 +23,7 @@ WORKDIR /app/web
 ADD front/package.json package.json
 RUN npm install
 
-RUN python3 -m pip install pyyaml
+RUN python3 -m pip install pyyaml -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 
 ADD ./server /app/
 WORKDIR /app
