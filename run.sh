@@ -1,6 +1,6 @@
 #!bin/bash
 echo $1;
-if [ $1 and $1 = "init" ];then
+if [ $1 = "init" ];then
 python3 gen_config.py;
 echo ".open /app/db/delta_dashboard.db" | sqlite3
 else
