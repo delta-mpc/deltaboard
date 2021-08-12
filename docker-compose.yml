@@ -7,7 +7,7 @@ services:
          - 8000:8000
          - 8080:8080
       volumes:
-         - ./:/app/app_config
+         - ./:/app
    # db:
    #    image: mysql:latest
    #    container_name: 'mysql'

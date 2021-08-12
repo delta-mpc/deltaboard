@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link :to="{ name: 'asset' }">
-      <div class="logo">Deltaboard</div>
+      <img class="logo" :src="require('@/assets/logo.svg')"/> 
     </router-link>
     <div class="right-menu">
       <router-link :to="{ name: 'login' }" v-if="showLogin">登录/注册</router-link>
@@ -135,10 +135,10 @@ export default {
   flex-shrink 0
 
   .logo {
-    text-align center
+    height 40px
     font-size 20px
-    color white
-    padding-left 56px
+    line-height 50px
+    color black
   }
   
   .right-menu {
@@ -151,7 +151,6 @@ export default {
   a,
   .user {
     font-size 16px
-    color white
     margin 0px 10px
     text-decoration none
   }

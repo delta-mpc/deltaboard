@@ -5,8 +5,8 @@ import { cacheAdapterEnhancer } from 'axios-extensions';
 import cache from './v1-cache.js';
 import {Message} from 'element-ui'
 let versionPrefix = "v1";
-let baseUrl = process.env.VUE_APP_BASE_API + "/" + versionPrefix;
-
+let baseUrl = window.location.protocol + "//" + window.location.host + '/' + versionPrefix;
+console.log(baseUrl)
 let httpClient = axios.create({
     baseURL: baseUrl,
     withCredentials: true,

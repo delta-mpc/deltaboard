@@ -21,7 +21,7 @@ export default {
         user:state => state.user
      }),
      localUrl(){
-        return process.env.VUE_APP_BASE_API
+        return window.location.protocol + "//" + window.location.host
      }
   },
   methods: {

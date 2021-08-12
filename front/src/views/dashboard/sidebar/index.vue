@@ -1,12 +1,12 @@
 <template>
   <el-menu ref="menu" class="sidebar" :default-active="barActiveIndex" @select="handleSelect">
-    <el-menu-item index="1" @click="sideItemClicked('playground')">
+    <el-menu-item ref="1" index="1" @click="sideItemClicked('playground')">
        <div class="item-div"><i class="el-icon-notebook-2 side-icon"></i><span>Playground</span></div>
     </el-menu-item>
-    <el-menu-item index="2" v-if="user.name == 'admin'" @click="sideItemClicked('userlist')">
+    <el-menu-item ref="2" index="2" v-if="user.name == 'admin'" @click="sideItemClicked('userlist')">
       <div class="item-div"><i class="el-icon-user side-icon"></i><span>Add User</span></div>
     </el-menu-item>
-    <el-menu-item index="3" @click="sideItemClicked('changepassword')">
+    <el-menu-item ref="3" index="3" @click="sideItemClicked('changepassword')">
       <div class="item-div"><i class="el-icon-setting side-icon"></i><span>Change Password</span></div>
     </el-menu-item>
   </el-menu>
@@ -24,6 +24,17 @@ export default {
       barActiveIndex: state => { return state.sidebar.sidebarActiveIndex },
     }),
     ...mapState(['user']),
+    maskCss(){
+       return {
+         width:'100%',
+         pointerEvents:'none',
+         height:'50px',
+         marginLeft:'9px',
+         position:'absolute',
+         left:'0px',
+         top:50 * (this.barActiveIndex - 1) + 'px'
+       }
+    }
   },
   mounted() {
     window.addEventListener('beforeunload', () => {
@@ -52,7 +63,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+.maskClz {
+   background page-bg-color
+}
 .el-menu {
   border-right none
   margin-top 30px

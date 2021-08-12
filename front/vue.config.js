@@ -20,8 +20,10 @@ const proxyConfig = {
          "Origin": "http://localhost:8000"
       },
       bypass: (req, res) => {
-         if (req.headers && req.headers.referer)
-            req.headers.referer = req.headers.referer.replace('localhost:' + jsonConfig['port'], 'localhost:8000')
+         if (req.headers && req.headers.referer) {
+            let regex = new RegExp("http://[^:]*:" + jsonConfig['port'])
+            req.headers.referer = req.headers.referer.replace(regex, 'localhost:8000')
+         }
       },
    },
    "^/user":{

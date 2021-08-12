@@ -76,7 +76,5 @@ func InitSessionStore(appConfig *config.AppConfig) error {
 func NewSession(store sessionStore, name string) *sessions.Session {
 	session := sessions.NewSession(store, name)
 	session.Options.Path = "/"
-	session.Options.SameSite = http.SameSiteNoneMode
-	session.Options.Secure = true
 	return session
 }

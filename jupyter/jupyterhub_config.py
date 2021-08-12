@@ -180,13 +180,13 @@ c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
 c.JupyterHub.tornado_settings = {
     'headers': {
         'Access-Control-Allow-Origin':'*',
-        'Content-Security-Policy': "frame-ancestors " + frontend_url,
+        'Content-Security-Policy': "frame-ancestors *" ,
     },
 }
 c.NotebookApp.tornado_settings = {
   'headers': {
      'Access-Control-Allow-Origin':'*',
-      'Content-Security-Policy': "frame-ancestors " + frontend_url
+      'Content-Security-Policy': "frame-ancestors *"
    }
 }
 c.Spawner.http_timeout = 100
@@ -194,7 +194,7 @@ c.Spawner.notebook_dir = '/app/app_config/notebook_dir/{username}'
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors ''' + frontend_url  + '''",
+    'Content-Security-Policy': "frame-ancestors ''' + '*'  + '''",
   }
 }''']
 c.Spawner.cmd = ["jupyter-labhub"]
