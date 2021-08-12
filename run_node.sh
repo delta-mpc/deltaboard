@@ -1,3 +1,3 @@
 #!bin/bash
-cd /app/web
+cd /application/web
 npm run serve

@@ -2,9 +2,10 @@
   <div class="login-page">
     <Navbar />
     <div class="container">
-      <el-tabs v-model="activateName" class="login-panel" type="border-card">
+      <transition appear name="slide-fade">
+         <el-tabs v-model="activateName" class="login-panel" type="border-card">
         <el-tab-pane label="账户登录" name="login">
-          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" 
+            <el-form ref="loginForm" :model="loginForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left" @submit.native.prevent>
             <el-form-item prop="username">
               <el-input ref="email" v-model="loginForm.username" placeholder="请输入用户名" 
@@ -17,14 +18,14 @@
                 tabindex="2" autocomplete="on" @keyup.enter.native="login"/>
               </el-form-item>
             </el-tooltip>
-            <el-button :loading="loading" type="primary" @click="login">登录</el-button>
+            <el-button v-show="showLogin" :loading="loading" type="primary" @click="login">登录</el-button>
             <div class="reset-password">
               <a href="/reset-pass" class="medium-secondary-text">忘记密码？</a>
             </div>
-          </el-form>
+            </el-form>
         </el-tab-pane>
         <el-tab-pane v-if="false" label="账户注册" name="register">
-          <el-form ref="registForm" :model="registForm" :rules="loginRules" 
+            <el-form ref="registForm" :model="registForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left">
            <el-form-item prop="email">
               <el-input ref="email" v-model="registForm.email" placeholder="请输入邮箱" name="email" type="text" tabindex="4" autocomplete="on"/>
@@ -44,9 +45,10 @@
             </el-tooltip>
             <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" 
             @click.native.prevent="register">注册用户</el-button>
-          </el-form>
+            </el-form>
         </el-tab-pane>
-      </el-tabs>
+         </el-tabs>
+      </transition>
     </div>
   </div>
 </template>
@@ -92,6 +94,7 @@ export default {
       }
     };
     return {
+      showLogin:true,
       loginForm: {
         password: "",
         passwordType: "password",

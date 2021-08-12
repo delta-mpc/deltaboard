@@ -14,9 +14,9 @@ func InitConfig(configPath string) error {
 	v.SetConfigType("yml")
 	v.SetConfigName("config")
 	if configPath != "" {
-		v.AddConfigPath("/app/config")
+		v.AddConfigPath("/application/config")
 	} else {
-		v.AddConfigPath("/app/config")
+		v.AddConfigPath(configPath)
 		v.AddConfigPath("config")
 	}
 

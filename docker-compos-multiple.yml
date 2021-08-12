@@ -1,0 +1,32 @@
+version: '3'
+services:
+   api:
+      build: ./server
+      container_name: go-service-api
+      ports:
+         - 8080:8080
+      expose:
+         - 8080
+      environment:
+         FRONT_END_DOMAIN: http://localhost:8090
+      volumes:
+         - ./server/config:/app/config
+   jupyter:
+      build: ./jupyter
+      container_name: jupyterhub
+      ports:
+         - 8000:8000
+      links:
+         - api
+      volumes:
+         - ./config:/app/app_config/
+   frontend:
+      build: ./front
+      container_name: deltaboard_frontend
+      ports:
+         - 8090:8090
+      depends_on:
+         - api
+      links:
+         - api
+        

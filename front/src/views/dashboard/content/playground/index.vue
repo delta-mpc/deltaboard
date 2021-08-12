@@ -1,8 +1,10 @@
 <template>
   <div class="playground-page">
+     <transition appear name="slide-fade">
     <div class="content-bg">
        <iframe style="width:100%;height:100%;border:none" :src="`${localUrl}/hub/external/login?next=/hub/&username=${user.name}&token=${user.user_token}`"></iframe>
     </div>
+    </transition>
   </div>
 </template>
 

@@ -3,6 +3,7 @@
       <div class="btn-ctn">
          <el-button @click="showAddUser = true">添加用户</el-button>   
       </div>
+      <transition appear name="slide-fade">
       <div class="table-ctn">
          <el-table :data="tableData">
             <el-table-column label="用户名" prop="name"></el-table-column>
@@ -11,6 +12,7 @@
             </el-table-column>
          </el-table>   
       </div>   
+      </transition>
       <el-dialog :visible.sync="showAddUser" :title="'添加用户'">
           <el-form ref="registForm" :model="registForm" 
           class="login-form" autocomplete="on" label-position="left">
@@ -34,6 +36,7 @@
                   @click.native.prevent="register">添加用户</el-button>
           </el-form>
       </el-dialog>
+
     </div>
 </template>
 

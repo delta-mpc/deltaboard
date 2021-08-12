@@ -23,9 +23,9 @@ class WrappedGitHubAuthenticator(GitHubOAuthenticator):
         result['name'] = 'github_user_' + result['name']
         return result
 yamlconfig = {}
-with open("/app/config/config.yaml", "r") as f:
+with open("/application/config/config.yaml", "r") as f:
     yamlconfig = yaml.full_load(f)
-frontend_url = yamlconfig['web_host'] + ":" + yamlconfig['web_port']
+frontend_url = yamlconfig['host'] + ":" + yamlconfig['port']
 auth_url = "http://localhost:" + yamlconfig['http']['port'] + "/v1/users/auth"
 backendhost = "localhost:" + yamlconfig['http']['port']
 class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
@@ -39,22 +39,18 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         if not user_exists:
             if self.create_system_users:
                 await maybe_future(self.add_system_user(user))
-                dir = Path('/home/' + user.name + '/examples')
+                dir = Path('/app/app_config/notebook_dir' + user.name + '/examples')
                 if not dir.exists():
                     print('adding user',user.name)
-                    subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/home/' + user.name + '/examples'])
-                    subprocess.check_call(['chown', '-R', user.name, '/home/' + user.name + '/examples'])
+                    os.makedirs('/app/app_config/notebook_dir/' + user.name,exist_ok=True)
+                    subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/app/app_config/notebook_dir/' + user.name + '/examples'])
+                    subprocess.check_call(['chown', '-R', user.name, '/app/app_config/notebook_dir/' + user.name + '/examples'])
             else:
                 raise KeyError("User %s does not exist." % user.name)
 
         await maybe_future(super().add_user(user))
 
     async def authenticate(self,handler,data):
-        # if data is not None and 'localAuth' in data:
-        #     result =  PAMAuthenticator.authenticate(self,handler,data)
-        #     return result
-        # else:
-        #     return WrappedGitHubAuthenticator.authenticate(self, handler, data)
         username = data['username']
         password = data['password']
         url = auth_url + "?user_name=" + username + "&token=" + password
@@ -194,6 +190,7 @@ c.NotebookApp.tornado_settings = {
    }
 }
 c.Spawner.http_timeout = 100
+c.Spawner.notebook_dir = '/app/app_config/notebook_dir/{username}'
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',

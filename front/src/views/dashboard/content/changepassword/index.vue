@@ -1,6 +1,7 @@
 <template>
       <div class="container">
-      <el-tabs v-model="activateName" class="login-panel" type="border-card">
+      <transition appear name="slide-fade">
+         <el-tabs v-model="activateName" class="login-panel" type="border-card">
         <el-tab-pane label="修改密码" name="changepassword">
           <el-form class="change-form" ref="passForm" :label-position="labelPosition" :rules="passRules" :model="passForm" @submit.native.prevent>
             <el-form-item class="form-item" prop="oldPass">
@@ -17,7 +18,8 @@
             </el-form-item>
         </el-form>
         </el-tab-pane>
-      </el-tabs>
+         </el-tabs>
+      </transition>
     </div>
 </template>
 
