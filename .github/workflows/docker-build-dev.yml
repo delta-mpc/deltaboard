@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: deltampc/delta-node:dev
+          tags: deltampc/deltaboard:dev
