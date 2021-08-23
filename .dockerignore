@@ -2,7 +2,6 @@ config/*.tmpl
 config/*.yml
 home
 front/cert
-front/dist
 front/node_modules
 .vscode
 configuration

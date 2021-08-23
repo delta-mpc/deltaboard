@@ -6,7 +6,9 @@ const state = {
     certificte: '',
     real_name: '',
     card_no: '',
-    phonenumber:''
+    phonenumber:'',
+    delta_token:'',
+    role:0
 }
 
 const mutations = {

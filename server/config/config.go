@@ -14,9 +14,10 @@ func InitConfig(configPath string) error {
 	v.SetConfigType("yml")
 	v.SetConfigName("config")
 	if configPath != "" {
-		v.AddConfigPath("/application/config")
-	} else {
 		v.AddConfigPath(configPath)
+		// v.AddConfigPath("E:/delta-board/delta-board-server")
+	} else {
+		// v.AddConfigPath(configPath)
 		v.AddConfigPath("config")
 	}
 

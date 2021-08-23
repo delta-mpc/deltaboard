@@ -3,9 +3,8 @@ import axios from 'axios';
 import {ApiPromise} from "@/api/api-promise";
 import { cacheAdapterEnhancer } from 'axios-extensions';
 import cache from './v1-cache.js';
-import {Message} from 'element-ui'
 let versionPrefix = "v1";
-let baseUrl = window.location.protocol + "//" + window.location.host + '/' + versionPrefix;
+let baseUrl = process.env.VUE_APP_BASE_API + '/' + versionPrefix;
 console.log(baseUrl)
 let httpClient = axios.create({
     baseURL: baseUrl,
@@ -15,11 +14,13 @@ let httpClient = axios.create({
 
 httpClient.interceptors.response.use(
     (response) => {
-        
         if(response.config.responseType === 'blob') {
             return Promise.resolve(response.data);
         } else if(response.status === 200) {
             // Normal response
+            if(response.data.message && response.data.message != 'success') {
+               return Promise.reject(response.data.message)
+            }
             return Promise.resolve(response.data.data);
 
         } else if (response.status === 400) {
@@ -31,9 +32,11 @@ httpClient.interceptors.response.use(
         }
     },
     (error) => {
+        if(error.response.data && error.response.data.message) {
+           return Promise.reject(error.response.data.message)
+        }
         return Promise.reject(error);
     });
-
 function post(url, data, config) {
     return new ApiPromise(httpClient.post(url, data, config));
 }

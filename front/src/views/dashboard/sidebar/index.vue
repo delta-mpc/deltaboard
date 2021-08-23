@@ -1,13 +1,27 @@
 <template>
-  <el-menu ref="menu" class="sidebar" :default-active="barActiveIndex" @select="handleSelect">
-    <el-menu-item ref="1" index="1" @click="sideItemClicked('playground')">
-       <div class="item-div"><i class="el-icon-notebook-2 side-icon"></i><span>Playground</span></div>
+  <el-menu ref="menu" class="sidebar-menu" :default-active="barActiveIndex" @select="handleSelect">
+    <el-menu-item class="sidebar-menu" ref="1" index="1" @click="sideItemClicked('playground')">
+       <div class="item-div">
+          <font-awesome-icon size="50px" icon="lightbulb" class="side-icon">
+          </font-awesome-icon><span>Playground</span></div>
     </el-menu-item>
-    <el-menu-item ref="2" index="2" v-if="user.name == 'admin'" @click="sideItemClicked('userlist')">
-      <div class="item-div"><i class="el-icon-user side-icon"></i><span>Add User</span></div>
+   <el-menu-item class="sidebar-menu" ref="2" index="2" @click="sideItemClicked('myTasks')">
+      <div class="item-div">
+         <font-awesome-icon size="50px" icon="tasks" class="side-icon">
+         </font-awesome-icon><span>任务列表</span></div>
     </el-menu-item>
-    <el-menu-item ref="3" index="3" @click="sideItemClicked('changepassword')">
-      <div class="item-div"><i class="el-icon-setting side-icon"></i><span>Change Password</span></div>
+    <el-menu-item class="sidebar-menu" ref="3" index="3" @click="sideItemClicked('listnodes')">
+      <div class="item-div">
+         <font-awesome-icon size="50px" icon="network-wired" class="side-icon">
+          </font-awesome-icon><span>节点列表</span></div>
+    </el-menu-item>
+    <el-menu-item class="sidebar-menu" ref="4" index="4" v-if="user.role == 1" @click="sideItemClicked('userlist')">
+      <div class="item-div"><font-awesome-icon size="50px" icon="user-friends" class="side-icon">
+          </font-awesome-icon><span>用户管理</span></div>
+    </el-menu-item>
+    <el-menu-item class="sidebar-menu" ref="5" index="5" @click="sideItemClicked('profile')">
+      <div class="item-div"><font-awesome-icon size="50px" icon="user-alt" class="side-icon">
+          </font-awesome-icon><span>个人中心</span></div>
     </el-menu-item>
   </el-menu>
 </template>
@@ -63,14 +77,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.sidebar-menu {
+   border-right none !important
+}
 .maskClz {
    background page-bg-color
 }
-.el-menu {
-  border-right none
-  margin-top 30px
-}
-
 .el-menu-item {
   padding-left 9px !important
   padding-right 0px
@@ -84,7 +96,6 @@ export default {
   }
 
   .item-div {
-    border-left 3px solid white
     height 50px
   }
 
@@ -92,7 +103,6 @@ export default {
     background white
     .item-div {
       background page-bg-color
-      border-left 3px solid black
 
       span {
         color #053e5d
@@ -104,7 +114,6 @@ export default {
 .el-menu-item.is-active {
   .item-div {
     background page-bg-color
-    border-left 3px solid black
 
     span {
       color #053e5d

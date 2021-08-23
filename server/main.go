@@ -1,8 +1,6 @@
 package main
 
-import (
-	"deltaboard-server/cmds"
-)
+import "deltaboard-server/cmds"
 
 func main() {
 	// Register commands
@@ -14,5 +12,4 @@ func main() {
 	if err := cmds.PrepareBaseCmd(rootCmd).Execute(); err != nil {
 		panic(err)
 	}
-
 }

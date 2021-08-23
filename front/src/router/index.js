@@ -16,7 +16,11 @@ const login = () => import(/*webpackMode: "eager" */'@/views/index/login/index.v
 const dashboard = () => import(/* webpackChunkName: "dashboard", webpackPrefetch: true */ '@/views/dashboard/index.vue')
 const playground = () => import(/* webpackChunkName: "playground", webpackPrefetch: true */ '@/views/dashboard/content/playground/index.vue')
 const userlist = () => import(/* webpackChunkName: "userlist", webpackPrefetch: true */ '@/views/dashboard/content/userlist/index.vue')
-const changePassword = () => import(/* webpackChunkName: "changepwd", webpackPrefetch: true */ '@/views/dashboard/content/changepassword/index.vue')
+const profile = () => import(/* webpackChunkName: "changepwd", webpackPrefetch: true */ '@/views/dashboard/content/profile/index.vue')
+const myTasks = () => import(/* webpackChunkName: "myTasks", webpackPrefetch: true */ '@/views/dashboard/content/myTasks/index.vue')
+const taskDetail = () => import(/* webpackChunkName: "taskDetail", webpackPrefetch: true */ '@/views/dashboard/content/taskdetail/index.vue')
+const node = () => import(/* webpackChunkName: "node", webpackPrefetch: true */ '@/views/dashboard/content/node/index.vue')
+const postRegist = () => import(/* webpackChunkName: "navbar", webpackPrefetch: true */ '@/views/dashboard/content/postRegist/index.vue')
 export const routes = [
     {
         path: '/', component: index, children: [
@@ -40,11 +44,31 @@ export const routes = [
                name:'userlist'
             },
             {
-               path:'changepassword',
-               component:changePassword,
-               name:'changepassword'
+               path:'profile',
+               component:profile,
+               name:'profile'
+            },
+            {
+               path:'myTasks',
+               component:myTasks,
+               name:'myTasks'
+            },
+            {
+               path:'task/:task_id',
+               component:taskDetail,
+               name:'taskDetail'
+            },
+            {
+               path:'listnodes',
+               component:node,
+               name:'listnodes'
             }
         ]
+    },
+    {
+      path: '/post-regist',
+      component:postRegist,
+      name:'post-regist'
     },
     {
         path: '*',

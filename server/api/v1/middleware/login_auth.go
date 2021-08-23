@@ -34,7 +34,6 @@ func LoginAuth(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-
 	ctx.Set("CurrentUser", currentUser)
 	ctx.Next()
 }

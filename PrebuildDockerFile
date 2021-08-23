@@ -1,0 +1,23 @@
+FROM jupyterhub/jupyterhub
+
+RUN  apt-get update -y 
+RUN  apt-get install -y gettext \
+                        sqlite3 \
+                        nginx
+#ENV GOROOT /usr/lib/go
+#ENV PATH $PATH:/usr/lib/go/bin
+#ENV GOPATH /root/go
+#ENV PATH $GOPATH/bin/:$PATH
+# Install oauthenticator from git
+
+RUN mkdir -p /application/installation
+
+ADD ./whls /application/installation/
+
+
+WORKDIR /application/installation
+
+RUN python3 -m pip install --no-cache-dir *.whl -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+
+RUN mkdir -p /application/web \
+          /application/config

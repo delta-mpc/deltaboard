@@ -1,0 +1,8 @@
+jupyter/ filter=lfs diff=lfs merge=lfs -text
+jupyter/torch-1.8.1+cpu-cp38-cp38-linux_x86_64.whl filter=lfs diff=lfs merge=lfs -text
+whls/PyYAML-5.4.1-cp38-cp38-manylinux1_x86_64.whl filter=lfs diff=lfs merge=lfs -text
+whls/torch-1.8.1+cpu-cp38-cp38-linux_x86_64.whl filter=lfs diff=lfs merge=lfs -text
+whls/delta_task-0.0.1-py3-none-any.whl filter=lfs diff=lfs merge=lfs -text
+whls/jupyterlab-3.1.6-py3-none-any.whl filter=lfs diff=lfs merge=lfs -text
+whls/notebook-6.4.3-py3-none-any.whl filter=lfs diff=lfs merge=lfs -text
+whls/oauthenticator-14.2.0-py3-none-any.whl filter=lfs diff=lfs merge=lfs -text

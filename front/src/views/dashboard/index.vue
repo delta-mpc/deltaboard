@@ -10,7 +10,8 @@
           <div class="side-blank"></div>
         </el-aside>
         <el-main>
-          <router-view />
+         <PlayGround :style="{visibility:$route.name == 'playground' ? 'visible':'hidden',position:'absolute',width: 'calc(100vw - 263px)'}"/>
+         <router-view v-if="$route.name != 'playground'"/>
         </el-main>
       </el-container> 
       <div class="side-shadow"></div>
@@ -22,8 +23,7 @@
 import SideBar from "./sidebar"
 import { mapState } from 'vuex'
 import UserModel from '@/model/user'
-import { ApiPromise } from "@/api/api-promise"
-import ErrorMessage from '@/model/errorMessage'
+import PlayGround from '@/views/dashboard/content/playground/index.vue'
 import { Message } from "element-ui"
 import Navbar from '@/views/navbar'
 import store from '@/store'
@@ -31,7 +31,8 @@ export default {
   name: "dashboard",
   components: {
     SideBar,
-    Navbar
+    Navbar,
+    PlayGround
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -153,6 +154,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     UserModel.getMyUserInfo().then((user) => {
+        if(user.approve_status != 2) {
+           next({name:'post-regist'})
+        }
         next()
     }).catch((err) => {
       next({ name: 'login' })
@@ -236,7 +240,6 @@ export default {
     background #E1E7EE
     border 2px solid theme-color
     border-radius 5px
-    color theme-color
   }
 
   /deep/.el-icon-connection,

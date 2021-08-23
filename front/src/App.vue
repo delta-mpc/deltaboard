@@ -3,7 +3,16 @@
     <router-view/>
   </div>
 </template>
-
+<script>
+import ConfigAPI from '@/api/v1/config'
+export default {
+   created(){
+      ConfigAPI.getConfig().then((res)=>{
+         this.$store.commit('config/SET_CONFIG',res)
+      })
+   }
+}
+</script>
 <style>
 
 #app {
