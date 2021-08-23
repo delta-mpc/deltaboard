@@ -68,7 +68,7 @@ export default {
    methods: {
       downloadWeights() {
          window.open(
-            `${window.location.protocol}//${window.location.host}/v1/tasks/result/${this.taskLogMetaData.id}`,
+            `${window.BASE_API}/v1/tasks/result/${this.taskLogMetaData.id}`,
             "_blank"
          );
       },

@@ -32,8 +32,8 @@ class WrappedGitHubAuthenticator(GitHubOAuthenticator):
 yamlconfig = {}
 with open("/application/config/config.yaml", "r") as f:
     yamlconfig = yaml.full_load(f)
-auth_url = "http://192.168.60.91:8080" + "/v1/users/auth"
-backendhost = "192.168.60.91:8080"
+auth_url = "http://localhost:8080" + "/v1/users/auth"
+backendhost = "localhost:8080"
 class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
     async def add_user(self, user):
         """Hook called whenever a new user is added

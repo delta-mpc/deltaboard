@@ -63,10 +63,7 @@ export default {
   computed:{
      ...mapState({
         user:state => state.user
-     }),
-     localUrl(){
-        return window.location.protocol + "//" + window.location.host
-     }
+     })
   },
   methods: {
      openDetail(row){
