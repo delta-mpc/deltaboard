@@ -3,16 +3,16 @@ import format from 'date-fns/format'
 import {zhCN} from 'date-fns/locale'
 const statusArr = ['', '待审核', '审核通过', '审核不通过', '存证中', '存证成功', '存证失败', '被更新']
 
-const modulesFiles = require.context('./modules', true, /\.js$/)
+// const modulesFiles = require.context('./modules', true, /\.js$/)
 
-const modules = modulesFiles.keys().reduce((modules, modulePath) => {
-    const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/,'$1')
-    const value = modulesFiles(modulePath)
-      Object.keys(value.default).forEach((itm)=>{
-         modules[`${moduleName}.${itm}`] = value.default[itm]
-      })
-      return modules
-}, {})
+// const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+//     const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/,'$1')
+//     const value = modulesFiles(modulePath)
+//       Object.keys(value.default).forEach((itm)=>{
+//          modules[`${moduleName}.${itm}`] = value.default[itm]
+//       })
+//       return modules
+// }, {})
 const filters = {
   fileStatus2Txt: (value) => {
     return statusArr[value]
@@ -31,5 +31,5 @@ const filters = {
     return num.replace(reg, "$1****$2");
   }
 }
-Object.assign(filters,modules)
+// Object.assign(filters,modules)
 export default filters
