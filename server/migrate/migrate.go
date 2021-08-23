@@ -21,4 +21,9 @@ func Rollback(dbi *gorm.DB) error {
 
 func RegisterMigrations() {
 	migrationList = append(migrationList, migrations.M202108031056)
+	migrationList = append(migrationList, migrations.M202108131837)
+	migrationList = append(migrationList, migrations.M202108132001)
+	migrationList = append(migrationList, migrations.M2021081161553)
+	migrationList = append(migrationList, migrations.M202108171046)
+	migrationList = append(migrationList, migrations.M202108181512)
 }

@@ -1,0 +1,22 @@
+allow_origins:
+- http://localhost:8090
+db:
+  connection: ''
+  driver: ''
+environment: debug
+host: localhost
+http:
+  host: 0.0.0.0
+  port: '8080'
+log:
+  level: debug
+node_address: http://192.168.62.149:6701
+port: '8090'
+post_registry_url: /post-regist.html
+public_registration: true
+session:
+  connection: ''
+  driver: memory
+  login_max_age_seconds: 36000
+  secret_key: secret_key
+  vault_max_age_seconds: 3600

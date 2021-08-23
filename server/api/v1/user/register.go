@@ -19,6 +19,7 @@ package user
 import (
 	"deltaboard-server/api/v1/response"
 	"deltaboard-server/config/db"
+	"deltaboard-server/internal/service/current_user"
 	"deltaboard-server/models"
 
 	"github.com/gin-gonic/gin"
@@ -46,8 +47,26 @@ type RegisterResponse struct {
 	Data *models.User `json:"data"`
 }
 
+type UserList struct {
+	List  []*models.User `json:"list"`
+	Total int64          `json:"total"`
+}
+
+type FetchUserInput struct {
+	ApproveStatus int8  `json:"approve_status" form:"approve_status"`
+	Page          int64 `json:"page" form:"page"`
+	PageSize      int64 `json:"page_size" form:"page_size"`
+}
+
+type FetchRegistedUserResponse struct {
+	response.Response
+	Data *UserList `json:"data"`
+}
+
 func Register(ctx *gin.Context, in *RegisterInput) (*RegisterResponse, error) {
 
+	ctxuser, exist := ctx.Get("CurrentUser")
+	isOperatedByAdmin := exist && ctxuser.(*current_user.CurrentUser).User.Role == models.ROLE_ADMIN
 	user := &models.User{
 		Name: in.UserName,
 	}
@@ -61,11 +80,97 @@ func Register(ctx *gin.Context, in *RegisterInput) (*RegisterResponse, error) {
 	}
 
 	user = models.NewUser(in.UserName, in.Password, in.UserEmail, in.PhoneNumber)
+	if isOperatedByAdmin {
+		user.ApprvStatus = models.USER_APPROV_STATUS_APPROVED
+	} else {
+		user.ApprvStatus = models.USER_APPROV_STATUS_REGISTED
+	}
 	if err := user.Create(user, db.GetDB()); err != nil {
 		return nil, err
 	}
-
 	return &RegisterResponse{
 		Data: user,
+	}, nil
+}
+
+func Approve(ctx *gin.Context) (*response.Response, error) {
+	ctxuser, exist := ctx.Get("CurrentUser")
+	isOperatedByAdmin := exist && ctxuser.(*current_user.CurrentUser).User.Role == models.ROLE_ADMIN
+	if !isOperatedByAdmin {
+		return nil, response.NewValidationErrorResponseWithMessage("user_approve", "unsufficient privilege")
+	}
+	userId := ctx.Param("userId")
+	user := &models.User{
+		BaseModel: models.BaseModel{
+			Id: userId,
+		},
+	}
+	if err := db.GetDB().First(user, user).Error; err != nil {
+		return nil, response.NewValidationErrorResponseWithMessage("user_register", "user_not_exist")
+	}
+	user.ApprvStatus = models.USER_APPROV_STATUS_APPROVED
+	db.GetDB().Save(user)
+	return &response.Response{Message: "success"}, nil
+}
+
+func Reject(ctx *gin.Context) (*response.Response, error) {
+	ctxuser, exist := ctx.Get("CurrentUser")
+	isOperatedByAdmin := exist && ctxuser.(*current_user.CurrentUser).User.Role == models.ROLE_ADMIN
+	if !isOperatedByAdmin {
+		return nil, response.NewValidationErrorResponseWithMessage("user_approve", "unsufficient privilege")
+	}
+	userId := ctx.Param("userId")
+	user := &models.User{
+		BaseModel: models.BaseModel{
+			Id: userId,
+		},
+	}
+	if err := db.GetDB().First(user, user).Error; err != nil {
+		return nil, response.NewValidationErrorResponseWithMessage("user_register", "user_not_exist")
+	}
+	user.ApprvStatus = models.USER_APPROV_STATUS_REJECTED
+	db.GetDB().Save(user)
+	return &response.Response{Message: "success"}, nil
+}
+
+func DelUser(ctx *gin.Context) (*response.Response, error) {
+	ctxuser, exists := ctx.Get("CurrentUser")
+	if !exists {
+		return nil, response.NewValidationErrorResponseWithMessage("user_delete", "unsufficient privilege")
+	}
+	if ctxuser.(*current_user.CurrentUser).Role != models.ROLE_ADMIN {
+		return nil, response.NewValidationErrorResponseWithMessage("user_delete", "unsufficient privilege")
+	}
+	user := &models.User{
+		BaseModel: models.BaseModel{
+			Id: ctx.Param("userId"),
+		},
+	}
+	if err := db.GetDB().First(user, user).Error; err != nil {
+		return nil, err
+	}
+	tx := db.GetDB().Begin()
+	db.GetDB().Delete(user)
+	tx.Commit()
+	return &response.Response{Message: "success"}, nil
+}
+
+func FetchUser(ctx *gin.Context, in *FetchUserInput) (*FetchRegistedUserResponse, error) {
+	var total int64
+	if err := db.GetDB().Model(&models.User{}).Where(" apprv_status = ? ", in.ApproveStatus).Count(&total).Error; err != nil {
+		return nil, err
+	}
+	users := make([]*models.User, 0)
+	if total > 0 {
+		if err := db.GetDB().Model(&models.User{}).Where("apprv_status = ? ", in.ApproveStatus).
+			Limit(int(in.PageSize)).Offset(int((in.Page - 1) * in.PageSize)).Find(&users).Error; err != nil {
+			return nil, err
+		}
+	}
+	return &FetchRegistedUserResponse{
+		Data: &UserList{
+			List:  users,
+			Total: total,
+		},
 	}, nil
 }

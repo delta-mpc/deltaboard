@@ -1,16 +1,24 @@
 <template>
   <div class="header">
-    <router-link :to="{ name: 'asset' }">
+    <router-link :to="{ name: 'playground' }">
       <img class="logo" :src="require('@/assets/logo.svg')"/> 
     </router-link>
     <div class="right-menu">
       <router-link :to="{ name: 'login' }" v-if="showLogin">登录/注册</router-link>
-      <el-dropdown class="dropdown-class" @command="handleCommand" v-else>
-        <span class="user">{{ navUserInfo }}<i class="el-icon-arrow-down el-icon--right"></i></span>
-        <el-dropdown-menu class="dropdown-class" slot="dropdown">
-          <el-dropdown-item command="logout">退出账户</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-menu v-else :default-active="1" class="menu" mode="horizontal" @select="handleSelect">
+         <el-submenu index="1">
+            <template slot="title"><span class="user">{{ navUserInfo }}</span></template>
+               <el-menu-item index="profile">
+                  <font-awesome-icon size="lg" icon="user-alt" style="margin-left:30px"></font-awesome-icon>
+                  <span style="margin-left:20px">个人中心</span>
+               </el-menu-item>
+               <div class="divider"></div>
+               <el-menu-item index="logout">
+                  <font-awesome-icon size="lg" icon="sign-out-alt" style="margin-left:30px"></font-awesome-icon>
+                  <span style="margin-left:20px">退出账户</span>
+               </el-menu-item>
+         </el-submenu>
+      </el-menu>
     </div>
   </div>
 </template>
@@ -21,7 +29,6 @@ import UserAPI from '@/api/v1/users'
 import { mapState } from 'vuex'
 import ErrorMessage from '@/model/errorMessage'
 import { Message } from "element-ui"
-import axios from 'axios';
 export default {
   name: "",
   props: {
@@ -39,7 +46,7 @@ export default {
     ...mapState({
       phoneNum: state => state.user.phonenumber,
       name: state => state.user.name,
-
+      user: state => state.user
     }),
     ...mapState(['company']),
     navUserInfo() {
@@ -64,6 +71,16 @@ export default {
     }
   },
   methods: {
+    handleSelect(key,keyPath) {
+       switch (key) {
+          case 'logout':
+             this.logout()
+             break;
+          case 'profile':
+             this.$router.push({name:'profile'})
+             break;
+       }
+    },
     handleCommand(command) {
       if (command === 'change') {
         this.change()
@@ -94,7 +111,7 @@ export default {
     logout() {
       if (!confirm('是否确认退出？')) return;
       let iframe = document.createElement('iframe');
-      iframe.src = 'https://192.168.1.46:8000/hub/logout'
+      iframe.src = window.location.protocol + '//' + window.location.host + '/hub/logout'
       iframe.style.width = '0px'
       iframe.style.height = '0px'
       document.body.appendChild(iframe)
@@ -123,21 +140,29 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+.divider {
+   margin 10px 30px
+   height 1px 
+   background black
+   opacity 0.1
+}
+.menu {
+   background transparent
+   border none
+}
 .header {
   height 60px
   font-size 22px
-  background theme-color
-
   display flex
   justify-content space-between
   align-items center
   flex-shrink 0
-
+  background page-bg-color
   .logo {
     height 40px
     font-size 20px
     line-height 50px
+    margin-left 30px
     color black
   }
   
@@ -161,15 +186,5 @@ export default {
 
 }
 
-.el-dropdown-menu__item.is-disabled  {
-  color #606266
-  background #dde6ed
-}
-
-.dropdown-class {
-  padding-top 0px
-  padding-left 0px
-  padding-bottom 0px
-}
 
 </style>

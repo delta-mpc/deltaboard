@@ -19,6 +19,10 @@ server/config/config.yml
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .idea
+front/join_group.jpg
+front/src/join_group.jpg
+front/src/post-regist.html
+**/.vscode/
 .DS_Store
 .vendor
 vendor

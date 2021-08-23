@@ -5,6 +5,21 @@ export default {
    register(username, password) {
       return v1.post('/users/tokens', {'user_name': username, 'password': password})
    },
+   fetchUser(apprv_status,pageID,pageSize) {
+      return v1.get('/users/approve_status', {params:{approve_status:apprv_status,page: pageID, page_size: pageSize}})
+   },
+   approveUser(userId) {
+      return v1.post(`/users/approve/${userId}`)
+   },
+   rejectUser(userId) {
+      return v1.post(`/users/reject/${userId}`)
+   },
+   delUser(userId) {
+      return v1.del(`/users/del/${userId}`)
+   },
+   renewDeltaToken(userId) {
+      return v1.post(`/users/delta_token/renew`)
+   },
    login(username, password) {
       return v1.post('/users', {'user_name': username, 'password': password})
    },

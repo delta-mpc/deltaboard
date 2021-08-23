@@ -35,7 +35,7 @@ func NewValidationErrorResponseWithMessage(fieldName, message string) *Validatio
 	r := NewValidationErrorResponse()
 	r.SetFieldName(fieldName)
 	r.SetFieldMessage(message)
-
+	r.SetMessage(message)
 	return r
 }
 

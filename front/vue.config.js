@@ -1,6 +1,6 @@
 const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const jsonConfig = require('./config.json')
 let publicPath = '/';
 
@@ -13,7 +13,7 @@ const proxyConfig = {
    },
    "/v2": {
       "target":"http://localhost:8080"
-    },
+   },
    "^/hub":{
       "target":"http://localhost:8000",
       "headers":{
@@ -33,7 +33,6 @@ const proxyConfig = {
       "headers":{
          "Origin": "http://localhost:8000"
       },
-      
    }
 }
 module.exports = {
@@ -61,6 +60,12 @@ module.exports = {
         },
         plugins: [
          new CleanWebpackPlugin(),
+         new CopyWebpackPlugin(
+            [
+               {from: 'src/post-regist.html', to:'post-regist.html'},
+               {from:'src/join_group.jpg',to:'join_group.jpg'}
+            ]
+         ) 
         ]
     },
     pluginOptions: {

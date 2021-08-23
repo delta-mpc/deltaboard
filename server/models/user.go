@@ -26,23 +26,27 @@ import (
 type UserStatus int
 
 const (
-	UserNormal        UserStatus = iota + 1 // 正常
-	UserDeleted                             // 已删除
-	UserApproving                           // 正在生成数字身份
-	UserApproveFailed                       // 生成数字身份失败
-	UserApproved                            // 已生成数字身份
+	USER_APPROV_STATUS_REGISTED = 1
+	USER_APPROV_STATUS_APPROVED = 2
+	USER_APPROV_STATUS_REJECTED = 3
+)
+
+const (
+	ROLE_ADMIN = 1
 )
 
 type User struct {
 	BaseModel
-	Name     string     `json:"name" gorm:"type:varchar(127);not null"`
-	Password string     `json:"-" gorm:"type:varchar(64);not null"`
-	Salt     string     `json:"-" gorm:"type:varchar(32);not null"`
-	Email    string     `json:"email" gorm:"type:varchar(127);unique;not null"`
-	Status   UserStatus `json:"status" gorm:"type:tinyint(1);not null"`
-	RealName string     `json:"real_name" gorm:"type:varchar(32);not null"`
-	CardNo   string     `json:"card_no" gorm:"type:varchar(32);not null"`
-	Phone    string     `json:"phonenumber" gorm:"type:varchar(11);not null"`
+	Name        string `json:"name" gorm:"type:varchar(127);not null"`
+	Password    string `json:"-" gorm:"type:varchar(64);not null"`
+	Salt        string `json:"-" gorm:"type:varchar(32);not null"`
+	Email       string `json:"email" gorm:"type:varchar(127);not null"`
+	RealName    string `json:"real_name" gorm:"type:varchar(32);not null"`
+	CardNo      string `json:"card_no" gorm:"type:varchar(32);not null"`
+	Phone       string `json:"phonenumber" gorm:"type:varchar(11);not null"`
+	Role        int64  `json:"role" gorm:"type:tinyint(8)"`
+	DeltaToken  string `json:"delta_token" gorm:"type:varchar(191);" description:"auth token"`
+	ApprvStatus int8   `json:"approve_status" gorm:"type:tinyint(8)"`
 }
 
 func NewUser(name, password, email, phonenumber string) *User {
@@ -52,11 +56,13 @@ func NewUser(name, password, email, phonenumber string) *User {
 	password = fmt.Sprintf("%x", sha256.Sum256([]byte(passwordHash+salt)))
 
 	return &User{
-		Name:     name,
-		Password: password,
-		Salt:     salt,
-		Email:    email,
-		Status:   UserNormal,
-		Phone:    phonenumber,
+		Name:        name,
+		Password:    password,
+		Salt:        salt,
+		Email:       email,
+		Phone:       phonenumber,
+		Role:        0,
+		DeltaToken:  random.GenerateRandomString(32),
+		ApprvStatus: USER_APPROV_STATUS_REGISTED,
 	}
 }

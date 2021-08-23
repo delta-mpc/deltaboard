@@ -1,42 +1,22 @@
 
-FROM jupyterhub/jupyterhub
-
-RUN  apt-get update -y 
-RUN  apt-get install -y gettext \
-                        sqlite3 \
-                        golang \
-                        nodejs
-ENV GOROOT /usr/lib/go
-ENV PATH $PATH:/usr/lib/go/bin
-ENV GOPATH /root/go
-ENV PATH $GOPATH/bin/:$PATH
-# Install oauthenticator from git
-RUN python3 -m pip install oauthenticator && \
-    python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com && \
-    python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
-
-RUN mkdir -p /application/web \
-          /application/config
-WORKDIR /application/web
-
-ADD front/package.json package.json
-RUN npm install
-
-RUN python3 -m pip install pyyaml -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+FROM golang:1.16 as builder
 
 ADD ./server /application/
+
 WORKDIR /application
 RUN go env -w GOPROXY=https://goproxy.cn && go build -ldflags "-w -s" -o main
 
-#don't touch codes above this line or you'll waste ton's of time in installing things
 
-
+FROM deltampc/detlaboard-base:dev
 # Create oauthenticator directory and put necessary files in it
+WORKDIR /application
+COPY --from=builder /application/main /application/main
+
 RUN mkdir /srv/oauthenticator && \
     mkdir /srv/ipython && \
     mkdir /srv/ipython/examples && \
     mkdir /root/.jupyter
-ADD ./jupyter/helloworld.ipynb /srv/ipython/examples/helloworld.ipynb
+ADD ./jupyter/delta_example.ipynb /srv/ipython/examples/delta_example.ipynb
 ADD ./jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 WORKDIR /srv/oauthenticator
 ENV OAUTHENTICATOR_DIR /srv/oauthenticator
@@ -46,7 +26,7 @@ ADD ./jupyter/base.py /usr/local/lib/python3.8/dist-packages/jupyterhub/handlers
 ADD ./jupyter/pages.py /usr/local/lib/python3.8/dist-packages/jupyterhub/handlers/pages.py
 ADD ./jupyter/login.py /usr/local/lib/python3.8/dist-packages/jupyterhub/handlers/login.py
 ADD ./jupyter/custom.js /usr/local/lib/python3.8/dist-packages/notebook/static/custom/custom.js
-ADD ./jupyter/ssl /srv/oauthenticator/ssl
+
 RUN chmod 700 /srv/oauthenticator
 
 WORKDIR /application
@@ -57,15 +37,19 @@ COPY ./server/config/config.tmpl /application/config/config.tmpl
 ADD ./jupyter/jupyterhub_config.py jupyterhub_config.py
 ADD ./jupyter/ssl /application/ssl
 
-WORKDIR /application/web
+ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-ADD front/public public
-ADD front/src src
-ADD front/.env.development .env.development
-ADD front/babel.config.js babel.config.js
-ADD front/package.json package.json
-ADD front/proxy.config.json proxy.config.json
-ADD front/vue.config.js vue.config.js
+WORKDIR /application/web
+ADD ./front/dist /application/web/
+# ADD front/public public
+# ADD front/src src
+# ADD front/.env.development .env.development
+# ADD front/babel.config.js babel.config.js
+# ADD front/package.json package.json
+# ADD front/proxy.config.json proxy.config.json
+# ADD front/vue.config.js vue.config.js
+
+
 WORKDIR /app
 RUN mkdir /app/app_config
 WORKDIR /application

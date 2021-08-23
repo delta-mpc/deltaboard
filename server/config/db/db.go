@@ -47,6 +47,9 @@ func InitDB(appConfig *config.AppConfig) (err error) {
 		)
 		db, err = gorm.Open(sqlite.Open("/app/db/delta_dashboard.db"),
 			&gorm.Config{Logger: newLogger})
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 	sqlDB, err := sql.Open(appConfig.Db.Driver, appConfig.Db.ConnectionString)

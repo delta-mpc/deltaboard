@@ -3,32 +3,29 @@
     <Navbar />
     <div class="container">
       <transition appear name="slide-fade">
-         <el-tabs v-model="activateName" class="login-panel" type="border-card">
+       <el-tabs v-model="activateName" type="border-card" class="login-panel">
         <el-tab-pane label="账户登录" name="login">
             <el-form ref="loginForm" :model="loginForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left" @submit.native.prevent>
             <el-form-item prop="username">
-              <el-input ref="email" v-model="loginForm.username" placeholder="请输入用户名" 
+              <el-input ref="email" value="" v-model="loginForm.username" placeholder="请输入用户名" 
               name="phonenumber" type="text" tabindex="1" autocomplete="on" @keyup.enter.native="login"/>
             </el-form-item>
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
               <el-form-item prop="password">
                 <el-input :key="loginForm.passwordType" ref="loginpassword" v-model="loginForm.password" 
                 :type="loginForm.passwordType" placeholder="请输入登录密码" name="password" 
-                tabindex="2" autocomplete="on" @keyup.enter.native="login"/>
+                tabindex="2" autocomplete="off" @keyup.enter.native="login"/>
               </el-form-item>
             </el-tooltip>
             <el-button v-show="showLogin" :loading="loading" type="primary" @click="login">登录</el-button>
-            <div class="reset-password">
-              <a href="/reset-pass" class="medium-secondary-text">忘记密码？</a>
-            </div>
             </el-form>
         </el-tab-pane>
-        <el-tab-pane v-if="false" label="账户注册" name="register">
+        <el-tab-pane v-if="config.public_registration" label="账户注册" name="register">
             <el-form ref="registForm" :model="registForm" :rules="loginRules" 
           class="login-form" autocomplete="on" label-position="left">
-           <el-form-item prop="email">
-              <el-input ref="email" v-model="registForm.email" placeholder="请输入邮箱" name="email" type="text" tabindex="4" autocomplete="on"/>
+           <el-form-item prop="username">
+              <el-input ref="username" v-model="registForm.username" placeholder="请输入用户名" name="username" type="text" tabindex="4" autocomplete="on"/>
             </el-form-item>
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
               <el-form-item prop="password">
@@ -43,8 +40,7 @@
                 placeholder="请再次输入密码" name="repeatpassword" tabindex="2" autocomplete="on"/>
               </el-form-item>
             </el-tooltip>
-            <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" 
-            @click.native.prevent="register">注册用户</el-button>
+            <el-button :loading="loading" type="primary" @click.native.prevent="register">注册用户</el-button>
             </el-form>
         </el-tab-pane>
          </el-tabs>
@@ -58,10 +54,14 @@
 import V1UserAPI from "@/api/v1/users"
 import UserModel from '@/model/user'
 import Navbar from '../../navbar.vue'
+import {mapState} from 'vuex'
 export default {
   name: "login",
   components: {
     Navbar
+  },
+  computed:{
+     ...mapState({config:(state)=> state.config.config})
   },
   data() {
     const self = this;
@@ -132,11 +132,10 @@ export default {
         if (valid) {
           this.loading = true;
           V1UserAPI.register(
-            this.registForm.email,
+            this.registForm.username,
             this.registForm.password
           ).then((response) => {
-            this.$store.commit("user/SET_USER", response);
-            this.$router.push({ name: "playground" });
+            this.$router.push({ name: "post-regist",query:{user:this.registForm.username}});
           }).finally(() => {
             this.loading = false;
           });
@@ -148,10 +147,14 @@ export default {
         if (valid) {
           this.loading = true;
           V1UserAPI.login(this.loginForm.username, this.loginForm.password).then((response) => {
-            this.$store.commit("user/SET_USER", response);
-            this.$store.commit("sidebar/SET_PLAYGROUND_PAGE");
-            this.$router.push({ name: "playground" });
-            localStorage.setItem('visibilitychange', 'changed')
+            if(response.approve_status == this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED) {
+                this.$router.push({ name: "post-regist" });
+            } else {
+               this.$store.commit("user/SET_USER", response);
+               this.$store.commit("sidebar/SET_PLAYGROUND_PAGE");
+               this.$router.push({ name: "playground" });
+               localStorage.setItem('visibilitychange', 'changed')
+            }
           }).finally(() => {
             this.loading = false;
           });
@@ -177,7 +180,11 @@ export default {
         next({ name: 'playground' })
       }
     }).catch((error) => {
-      next()
+      if(error == 'user not approved') {
+         next({name:'post-regist'})
+      } else {
+         next()
+      }
     })
   },
 };
@@ -192,8 +199,6 @@ export default {
   position relative
   width 100%
   height 100%
-  
-  background url("../login/image/loginin-bg.png") center bottom no-repeat
 }
 
 .container {
@@ -203,76 +208,11 @@ export default {
 .login-panel {
   width 450px
   margin 0 auto
-  
-  background white
-  border 1px solid #DCDFE6
-  box-shadow 0px 0px 17px 3px rgba(176, 193, 213, 0.66)
   border-radius border-radius
-
-  /deep/.el-tabs__header {
-    border none
-    border-top-left-radius border-radius
-    border-top-right-radius border-radius
-    overflow hidden
-  }
-
-  /deep/.el-tabs__content {
-    padding 60px
-  }
-
-  /deep/.el-tabs__nav {
-    width 100%
-    display flex
-  }
-  
-  /deep/.el-tabs__item {
-    text-align center
-    flex 1
-    height 50px
-    line-height 50px
-    border none
-    background #dcdfe6
-    color #606266
-    font-size 20px
-  }
-
-  ::v-deep .el-input {
-    input {
-      color black
-    }
-    textarea {
-      color black
-    }
-  }
-  /deep/.el-input__inner {
-    padding 0px
-    border none
-    border-bottom 1px solid #143654
-    border-radius 0px
-  }
-
-  .el-form-item {
-    margin-bottom 44px
-  }
-}
-
-.login-form {
-  position relative
-  width 520px
-  max-width 100%
-  padding 10px 0 35px 0
-  margin 0 auto
-  overflow hidden
 }
 
 .reset-password {
   text-align right
-}
-
-.el-button {
-  width 100%
-  margin-bottom 20px
-  font-size 18px  
 }
 
 a {

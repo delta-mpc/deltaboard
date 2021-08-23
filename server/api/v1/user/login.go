@@ -47,7 +47,6 @@ func UserAuth(ctx *gin.Context, in *AuthInput) (*LoginResponse, error) {
 	user := &models.User{
 		Name: in.UserName,
 	}
-
 	//查重
 	if err := db.GetDB().First(user, user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -55,12 +54,14 @@ func UserAuth(ctx *gin.Context, in *AuthInput) (*LoginResponse, error) {
 		}
 		return nil, err
 	}
+
+	if user.ApprvStatus != models.USER_APPROV_STATUS_APPROVED {
+		return nil, response.NewValidationErrorResponseWithMessage("user_login", "user_not_approved")
+	}
+
 	if in.Token != fmt.Sprintf("%x", sha256.Sum256([]byte(user.Password+user.Salt))) {
 		return nil, response.NewValidationErrorResponseWithMessage("user_auth", "invalid_token")
 	}
-	// if user.Password != fmt.Sprintf("%x", sha256.Sum256([]byte(passwordHash+user.Salt))) {
-	// 	return nil, response.NewValidationErrorResponseWithMessage("user_login", "invalid_password")
-	// }
 	return &LoginResponse{
 		Data: *user,
 	}, nil
@@ -81,6 +82,7 @@ func Login(ctx *gin.Context, in *LoginInput) (*LoginResponse, error) {
 	}
 
 	passwordHash := fmt.Sprintf("%x", sha256.Sum256([]byte(in.Password)))
+
 	if user.Password != fmt.Sprintf("%x", sha256.Sum256([]byte(passwordHash+user.Salt))) {
 		return nil, response.NewValidationErrorResponseWithMessage("user_login", "invalid_password")
 	}
@@ -92,6 +94,7 @@ func Login(ctx *gin.Context, in *LoginInput) (*LoginResponse, error) {
 			UserId: user.Id,
 		},
 	}
+
 	if err := currentUser.SaveUserLoginSession(ctx.Request, ctx.Writer); err != nil {
 		return nil, err
 	}

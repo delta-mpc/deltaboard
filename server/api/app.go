@@ -30,9 +30,16 @@ func CheckNCreateAdmin() error {
 	if err := db.GetDB().First(user, user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			user = models.NewUser("admin", "admin", "", "")
+			user.Role = models.ROLE_ADMIN
+			user.ApprvStatus = models.USER_APPROV_STATUS_APPROVED
 			user.Create(user, db.GetDB())
 			fmt.Println("Creating admin User")
+			return nil
 		}
+	}
+	if user.ApprvStatus != models.USER_APPROV_STATUS_APPROVED {
+		user.ApprvStatus = models.USER_APPROV_STATUS_APPROVED
+		db.GetDB().Save(user)
 	}
 	return nil
 }
@@ -70,7 +77,6 @@ func GetHttpApplication(appConfig *config.AppConfig) *gin.Engine {
 
 	// v1 api
 	v1.InitRoutes(fizzEngine)
-
 	// Serve OpenAPI specifications
 	infos := &openapi.Info{
 		Title:       "Go service",

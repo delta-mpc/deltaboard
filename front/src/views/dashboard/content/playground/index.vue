@@ -21,7 +21,8 @@ export default {
         user:state => state.user
      }),
      localUrl(){
-        return window.location.protocol + "//" + window.location.host
+        return "https://api.board.deltampc.com"
+         // return window.location.protocol + "//" + window.location.host;
      }
   },
   methods: {

@@ -8,6 +8,10 @@ import '@/styles/abstracts/index.styl'
 import {ApiPromise} from "@/api/api-promise";
 import filters from '@/filters/index.js'
 import ErrorMessage from '@/model/errorMessage'
+import VueClipboard from 'vue-clipboard2'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSignOutAlt,faLightbulb,faTasks,faNetworkWired,faUserFriends,faUserAlt} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 (function () {
    File.prototype.arrayBuffer = File.prototype.arrayBuffer || myArrayBuffer;
    Blob.prototype.arrayBuffer = Blob.prototype.arrayBuffer || myArrayBuffer;
@@ -22,6 +26,11 @@ import ErrorMessage from '@/model/errorMessage'
      })
    }
  })();
+Vue.use(VueClipboard)
+
+library.add(faSignOutAlt,faLightbulb,faTasks,faNetworkWired,faUserFriends,faUserAlt)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 console.log('initializing')
 Vue.config.productionTip = false
 
@@ -45,6 +54,12 @@ ApiPromise.defaultOnReject = (err) => {
 };
 Vue.prototype.$message = ElementUI.Message
 Vue.prototype.$appGlobal = {
+   constants:{
+      TASK_STATUS_PENDING:'INIT',
+      TASK_STATUS_RUNNING:'RUNNING',
+      TASK_STATUS_FINISHED:'FINISHED',
+      USER_APPROVE_STATUS_REGISTED:1
+   }
 }
 Vue.prototype.$errorMessage = (error,cb)=>{
    try {

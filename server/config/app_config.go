@@ -23,8 +23,11 @@ type AppConfig struct {
 		Port string `mapstructure:"port"`
 	} `mapstructure:"http"`
 
-	Session      SessionConfig `mapstructure:"session"`
-	AllowOrigins []string      `mapstructure:"allow_origins"`
+	Session             SessionConfig `mapstructure:"session"`
+	AllowOrigins        []string      `mapstructure:"allow_origins"`
+	Delta_Node_Addr     string        `mapstructure:"node_address"`
+	Public_Registration bool          `json:"public_registration" mapstructure:"public_registration"`
+	Post_Registry_Url   string        `json:"post_registry_url" mapstructure:"post_registry_url"`
 }
 
 type SessionConfig struct {

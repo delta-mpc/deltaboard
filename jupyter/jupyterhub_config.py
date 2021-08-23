@@ -17,6 +17,13 @@ from traitlets import Unicode
 SESSION_COOKIE_NAME = 'jupyterhub-session-id'
 c = get_config()
 c.JupyterHub.log_level = 10
+try:
+    from http.cookies import Morsel
+except ImportError:
+    from Cookie import Morsel
+
+Morsel._reserved[str('samesite')] = str('SameSite')
+
 class WrappedGitHubAuthenticator(GitHubOAuthenticator):
     async def authenticate(self,handler,data):
         result = await GitHubOAuthenticator.authenticate(self, handler, data)
@@ -25,9 +32,8 @@ class WrappedGitHubAuthenticator(GitHubOAuthenticator):
 yamlconfig = {}
 with open("/application/config/config.yaml", "r") as f:
     yamlconfig = yaml.full_load(f)
-frontend_url = yamlconfig['host'] + ":" + yamlconfig['port']
-auth_url = "http://localhost:" + yamlconfig['http']['port'] + "/v1/users/auth"
-backendhost = "localhost:" + yamlconfig['http']['port']
+auth_url = "http://192.168.60.91:8080" + "/v1/users/auth"
+backendhost = "192.168.60.91:8080"
 class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
     async def add_user(self, user):
         """Hook called whenever a new user is added
@@ -39,12 +45,12 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         if not user_exists:
             if self.create_system_users:
                 await maybe_future(self.add_system_user(user))
-                dir = Path('/app/app_config/notebook_dir' + user.name + '/examples')
+                dir = Path('/app/db/notebook_dir/' + user.name)
                 if not dir.exists():
                     print('adding user',user.name)
-                    os.makedirs('/app/app_config/notebook_dir/' + user.name,exist_ok=True)
-                    subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/app/app_config/notebook_dir/' + user.name + '/examples'])
-                    subprocess.check_call(['chown', '-R', user.name, '/app/app_config/notebook_dir/' + user.name + '/examples'])
+                    os.makedirs('/app/db/notebook_dir/' + user.name,exist_ok=True)
+                    subprocess.check_call(['cp', '-f', '/srv/ipython/examples/delta_example.ipynb', '/app/db/notebook_dir/' + user.name + "/delta_example.ipynb"])
+                    subprocess.check_call(['chown', '-R', user.name, '/app/db/notebook_dir/' + user.name ])
             else:
                 raise KeyError("User %s does not exist." % user.name)
 
@@ -76,7 +82,9 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
         if resp_data.get("message") and resp_data["message"] == "success":
             print(resp_data["data"]["id"])
             print('yes!!!')
-            return 'user_' + resp_data["data"]["id"][0:10]
+            theUserName = 'user_' + resp_data["data"]["id"][0:10]
+            print(theUserName)
+            return theUserName
         else:
             raise ValueError("Authenticate Failed")
 
@@ -180,27 +188,28 @@ c.JupyterHub.template_paths = [os.environ['OAUTHENTICATOR_DIR'] + '/templates']
 c.JupyterHub.tornado_settings = {
     'headers': {
         'Access-Control-Allow-Origin':'*',
-        'Content-Security-Policy': "frame-ancestors *" ,
+        'Content-Security-Policy': "frame-ancestors * " ,
     },
 }
 c.NotebookApp.tornado_settings = {
   'headers': {
      'Access-Control-Allow-Origin':'*',
-      'Content-Security-Policy': "frame-ancestors *"
+      'Content-Security-Policy': "frame-ancestors * ",
    }
 }
 c.Spawner.http_timeout = 100
-c.Spawner.notebook_dir = '/app/app_config/notebook_dir/{username}'
+c.Spawner.notebook_dir = '/app/db/notebook_dir/{username}'
 c.Spawner.args = ['''--NotebookApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors ''' + '*'  + '''",
+    'Content-Security-Policy': "frame-ancestors * ",
+    'cookie_options': {'samesite':'None','Secure':True},
   }
 }''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 # ssl config
-ssl = join(root, 'ssl')
+ssl = "/application/ssl"
 keyfile = join(ssl, 'jupyter.key')
 certfile = join(ssl, 'jupyter.crt')
 print('keyfile',keyfile)

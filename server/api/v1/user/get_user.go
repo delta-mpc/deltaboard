@@ -52,7 +52,7 @@ func GetUserList(ctx *gin.Context, in *GetUsersInput) (*GetUserLstResponse, erro
 	}
 	fmt.Println("total ", total)
 	users := make([]*models.User, 0)
-	if err := db.GetDB().Model(&models.User{}).Offset(in.PageID * in.PageSize).Limit(in.PageSize).
+	if err := db.GetDB().Model(&models.User{}).Offset((in.PageID - 1) * in.PageSize).Limit(in.PageSize).
 		Find(&users).Error; err != nil {
 		return nil, err
 	}

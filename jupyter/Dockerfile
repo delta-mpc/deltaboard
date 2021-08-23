@@ -8,6 +8,10 @@ FROM jupyterhub/jupyterhub
 RUN python3 -m pip install oauthenticator
 RUN python3 -m pip install jupyterlab -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 RUN python3 -m pip install notebook -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+RUN mkdir -p /application/installation
+WORKDIR /application/installation
+ADD torch-1.8.1+cpu-cp38-cp38-linux_x86_64.whl torch-1.8.1+cpu-cp38-cp38-linux_x86_64.whl
+RUN python3 -m pip install torch-1.8.1+cpu-cp38-cp38-linux_x86_64.whl
 # Create oauthenticator directory and put necessary files in it
 RUN mkdir /srv/oauthenticator
 RUN mkdir /srv/ipython
