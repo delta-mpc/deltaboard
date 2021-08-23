@@ -61,7 +61,6 @@ ADD ./jupyter/ssl /application/ssl
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /application/web
-ADD ./front/dist /application/web/
 # ADD front/public public
 # ADD front/src src
 # ADD front/.env.development .env.development
