@@ -21,7 +21,6 @@ ADD front/public public
 ADD front/src src
 ADD front/.env .env
 ADD front/babel.config.js babel.config.js
-ADD front/proxy.config.json proxy.config.json
 ADD front/vue.config.js vue.config.js
 
 RUN npm run build 
