@@ -10,7 +10,7 @@
           <div class="side-blank"></div>
         </el-aside>
         <el-main>
-         <PlayGround :style="{visibility:$route.name == 'playground' ? 'visible':'hidden',position:'absolute',width: 'calc(100vw - 263px)'}"/>
+         <PlayGround :style="{visibility:$route.name == 'playground' ? 'visible':'hidden',overflow:'hidden',position:'absolute',width: 'calc(100vw - 263px)',height: 'calc(100vh - 60px)'}"/>
          <router-view v-if="$route.name != 'playground'"/>
         </el-main>
       </el-container> 

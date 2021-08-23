@@ -6,11 +6,32 @@ ADD ./server /application/
 WORKDIR /application
 RUN go env -w GOPROXY=https://goproxy.cn && go build -ldflags "-w -s" -o main
 
+FROM node:12-alpine3.14 as webbuilder
+
+RUN mkdir -p /application/web
+
+WORKDIR /application/web
+ADD front/package.json package.json
+
+RUN npm install 
+RUN npm audit fix
+
+ADD front/config.json config.json
+ADD front/public public
+ADD front/src src
+ADD front/.env .env
+ADD front/babel.config.js babel.config.js
+ADD front/proxy.config.json proxy.config.json
+ADD front/vue.config.js vue.config.js
+
+RUN npm run build 
 
 FROM deltampc/detlaboard-base:dev
 # Create oauthenticator directory and put necessary files in it
+
 WORKDIR /application
 COPY --from=builder /application/main /application/main
+COPY --from=webbuilder /application/web/dist /application/web
 
 RUN mkdir /srv/oauthenticator && \
     mkdir /srv/ipython && \
