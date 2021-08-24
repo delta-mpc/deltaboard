@@ -181,6 +181,8 @@ export default {
 
    .table-ctn {
       padding: 20px;
+      max-width 700px;
+      overflow:auto
    }
 }
 
