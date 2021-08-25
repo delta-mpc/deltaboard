@@ -1,23 +1,27 @@
 <template>
   <div class="header">
     <router-link :to="{ name: 'playground' }">
-      <img class="logo" :src="require('@/assets/logo.svg')"/> 
+      <img class="logo" :src="require('@/assets/logo.svg')"/>
     </router-link>
     <div class="right-menu">
-      <router-link :to="{ name: 'login' }" v-if="showLogin">登录/注册</router-link>
-      <el-menu v-else :default-active="1" class="menu" mode="horizontal" @select="handleSelect">
-         <el-submenu index="1">
-            <template slot="title"><span class="user">{{ navUserInfo }}</span></template>
-               <el-menu-item index="profile">
-                  <font-awesome-icon size="lg" icon="user-alt" style="margin-left:30px"></font-awesome-icon>
-                  <span style="margin-left:20px">个人中心</span>
-               </el-menu-item>
-               <div class="divider"></div>
-               <el-menu-item index="logout">
-                  <font-awesome-icon size="lg" icon="sign-out-alt" style="margin-left:30px"></font-awesome-icon>
-                  <span style="margin-left:20px">退出账户</span>
-               </el-menu-item>
+      <el-menu :default-active="1" class="menu" mode="horizontal" @select="handleSelect">
+         <el-submenu index="1" v-if="!showLogin">
+            <template slot="title">
+                <span class="user">{{ navUserInfo }}</span>
+            </template>
+           <el-menu-item index="profile">
+              <font-awesome-icon size="lg" icon="user-alt" style="margin-left:30px"></font-awesome-icon>
+              <span style="margin-left:20px">个人中心</span>
+           </el-menu-item>
+           <div class="divider"></div>
+           <el-menu-item index="logout">
+              <font-awesome-icon size="lg" icon="sign-out-alt" style="margin-left:30px"></font-awesome-icon>
+              <span style="margin-left:20px">退出账户</span>
+           </el-menu-item>
          </el-submenu>
+         <el-menu-item index="login" v-else>
+             登录/注册
+         </el-menu-item>
       </el-menu>
     </div>
   </div>
@@ -142,7 +146,7 @@ export default {
 <style lang="stylus" scoped>
 .divider {
    margin 10px 30px
-   height 1px 
+   height 1px
    background black
    opacity 0.1
 }
@@ -159,13 +163,13 @@ export default {
   flex-shrink 0
   background page-bg-color
   .logo {
-    height 40px
+    height 34px
     font-size 20px
     line-height 50px
     margin-left 30px
     color black
   }
-  
+
   .right-menu {
     padding-right 93px
     .el-dropdown {
