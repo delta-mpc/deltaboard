@@ -37,7 +37,8 @@ module.exports = {
     runtimeCompiler: true,
     devServer:{
       port:jsonConfig['port'],
-      proxy:proxyConfig
+      proxy:proxyConfig,
+        https: true
     },
     configureWebpack: {
         devtool: 'source-map',
