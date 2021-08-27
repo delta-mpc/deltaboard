@@ -107,7 +107,9 @@ export default {
       'activeName':function(newV,oldV){
          if(newV != oldV) {
             this.management.page = 1
+            this.management.tableData = []
             this.approval.page = 1
+            this.approval.tableData = []
             this.load()
          }
       }
