@@ -7,6 +7,11 @@
                <el-table-column label="任务名" prop="name"></el-table-column>
                <el-table-column label="任务类型" prop="type"></el-table-column>
                <el-table-column label="创建Node" prop="creator"></el-table-column>
+               <el-table-column label="创建账号" prop="creator_name">
+                     <template v-slot="{ row }">
+                          {{row.creator_name || "--" }}
+                     </template>
+               </el-table-column>
                <el-table-column label="状态" prop="status">
                   <template v-slot="{ row }">
                      <el-tag type="warning" v-if="row.status == $appGlobal.constants.TASK_STATUS_PENDING">
@@ -87,6 +92,13 @@ export default {
             })
         } else {
             V1TaskAPI.getAllTasks(this.currentPage,this.taskPageSize).then((res)=>{
+               (res.user_tasks ||[]).forEach((itm)=>{
+                  res.tasks.forEach((tItm)=>{
+                     if(tItm.id == itm.nodeTaskId) {
+                        tItm.creator_name = itm.name
+                     }
+                  })
+               })
                this.tableData = res.tasks
                this.totalCount = res.total_pages * this.taskPageSize
             })

@@ -16,3 +16,5 @@ WORKDIR /application/installation
 COPY --from=pybuilder /app/whls /application/installation/whls
 
 RUN python3 -m pip install --no-cache-dir whls/*.whl -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com &&  rm -rf whls 
+
+RUN python3 -m pip install pandas  pillow -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
