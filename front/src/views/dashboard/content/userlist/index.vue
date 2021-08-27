@@ -6,7 +6,7 @@
                <div class="btn-ctn">
                   <el-button size="medium" type="primary" @click="showAddUser = true">添加用户</el-button>
                </div>
-               <div class="table-ctn">
+               <div class="table-ctn" v-infinite-scroll="load">
                   <el-table :data="management.tableData">
                      <el-table-column label="用户名" prop="name"></el-table-column>
                      <el-table-column prop="created_at" label="日期">
@@ -21,7 +21,7 @@
                </div>
             </el-tab-pane>
             <el-tab-pane v-if="config.public_registration" label="审核" name="approval">
-               <div class="table-ctn">
+               <div class="table-ctn" v-infinite-scroll="load">
                   <el-table :data="approval.tableData">
                      <el-table-column label="用户名" prop="name"></el-table-column>
                      <el-table-column prop="created_at" label="日期">
@@ -81,10 +81,14 @@ export default {
    data() {
       return {
          management:{
-            tableData:[]
+            tableData:[],
+            page_size:12,
+            page:1
          },
          approval:{
-            tableData:[]
+            tableData:[],
+            page_size:12,
+            page:1
          },
          capsTooltip: false,
          loading: false,
@@ -100,10 +104,13 @@ export default {
       };
    },
    watch:{
-      'activeName':'load'
-   },
-   mounted() {
-      this.load();
+      'activeName':function(newV,oldV){
+         if(newV != oldV) {
+            this.management.page = 1
+            this.approval.page = 1
+            this.load()
+         }
+      }
    },
    computed: {
       ...mapState({
@@ -137,14 +144,16 @@ export default {
          });
       },
       load() {
-         if(this.activeName == 'management') {
-            V1UserAPI.list(1, 999).then((res) => {
-               this['management']['tableData'] = res.list;
+        if(this.activeName == 'management') {
+            V1UserAPI.list(this.approval.page,this.approval.page_size).then((res) => {
+               this['management']['tableData'].push(...res.list);
+               this.approval.page += 1
             });
          }
          if(this.activeName == 'approval') {
-            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,1,999).then((res) => {
-               this['approval']['tableData'] = res.list;
+            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.management.page,this.management.page_size).then((res) => {
+               this['approval']['tableData'].push(...res.list);
+               this.management.page += 1
             });
          }
       },
@@ -167,7 +176,12 @@ export default {
    },
 };
 </script>
-
+<style>
+.header-class{
+   position: absolute;
+   top :0px
+}
+</style>
 <style lang="stylus" scoped>
 .container {
    padding-top: 40px;
@@ -181,8 +195,12 @@ export default {
 
    .table-ctn {
       padding: 20px;
-      max-width 700px;
+      max-height 600px
       overflow:auto
+      &::-webkit-scrollbar {
+        width: 0px;
+        background-color: #e5e5e5;
+      }
    }
 }
 
