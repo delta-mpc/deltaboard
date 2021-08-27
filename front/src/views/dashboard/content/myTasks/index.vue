@@ -88,7 +88,8 @@ export default {
         if(this.user.role != 1) {
             V1TaskAPI.getUserTasks(this.user.id).then((res)=>{
                this.tableData = res.tasks
-               this.totalCount = res.total_pages * this.taskPageSize
+               // total_pages is total_count
+               this.totalCount = res.total_pages
             })
         } else {
             V1TaskAPI.getAllTasks(this.currentPage,this.taskPageSize).then((res)=>{
