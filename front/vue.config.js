@@ -9,15 +9,12 @@ if (process.env.VUE_APP_VERSION) {
 }
 const proxyConfig = {
    "/v1": {
-     "target":"http://localhost:8080"
-   },
-   "/v2": {
-      "target":"http://localhost:8080"
+     "target":"https://api.board.deltampc.com"
    },
    "^/hub":{
-      "target":"http://localhost:8000",
+      "target":"https://api.board.deltampc.com",
       "headers":{
-         "Origin": "http://localhost:8000"
+         "Origin": "https://api.board.deltampc.com"
       },
       bypass: (req, res) => {
          if (req.headers && req.headers.referer) {
@@ -37,10 +34,11 @@ const proxyConfig = {
 }
 module.exports = {
     publicPath: publicPath,
-    runtimeCompiler: true, 
+    runtimeCompiler: true,
     devServer:{
       port:jsonConfig['port'],
-      proxy:proxyConfig
+      proxy:proxyConfig,
+        https: true
     },
     pwa:{
       name: 'Deltaboard',
@@ -71,7 +69,7 @@ module.exports = {
                {from: 'src/post-regist.html', to:'post-regist.html'},
                {from:'src/join_group.jpg',to:'join_group.jpg'}
             ]
-         ) 
+         )
         ]
     },
     pluginOptions: {

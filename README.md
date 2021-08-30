@@ -1,14 +1,12 @@
-# delta-board-server
+# Deltaboard
 
-## Run with provided mysql compose up
-1.docker-compose up -d
+Deltaboard is the user interface for Delta Node.
+It contains functions such as multi-user access control,
+node configuration and node status monitoring. JupyterLab is included for online
+editing and submitting of calculation tasks. Task related APIs of Delta Node are
+decorated with multi-user authentication and isolation features.
 
-2.visit http://localhost:8090
+# Documentation
 
-## Run with docker all in one 
-
-1.docker build -t dashboard_in_all .
-
-2.docker run -it -p 8090:8090 dashboard_in_all
-
-3.visit http://localhost:8090
+Visit [the docs](https://docs.deltampc.com/v/en/system-deployment/start-deltaboard)
+for the details about Deltaboard.
