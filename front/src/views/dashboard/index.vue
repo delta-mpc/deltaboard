@@ -24,9 +24,7 @@ import SideBar from "./sidebar"
 import { mapState } from 'vuex'
 import UserModel from '@/model/user'
 import PlayGround from '@/views/dashboard/content/playground/index.vue'
-import { Message } from "element-ui"
 import Navbar from '@/views/navbar'
-import store from '@/store'
 export default {
   name: "dashboard",
   components: {

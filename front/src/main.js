@@ -61,7 +61,8 @@ Vue.prototype.$appGlobal = {
       TASK_STATUS_PENDING:'INIT',
       TASK_STATUS_RUNNING:'RUNNING',
       TASK_STATUS_FINISHED:'FINISHED',
-      USER_APPROVE_STATUS_REGISTED:1
+      USER_APPROVE_STATUS_REGISTED:1,
+      USER_APPROV_STATUS_APPROVED:2
    }
 }
 Vue.prototype.$errorMessage = (error,cb)=>{

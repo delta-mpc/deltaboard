@@ -7,7 +7,7 @@
                   <el-button size="medium" type="primary" @click="showAddUser = true">添加用户</el-button>
                </div>
                <div class="table-ctn" v-infinite-scroll="load">
-                  <el-table :data="management.tableData">
+                  <el-table :data="management.tableData" header-row-class-name='header-row'>
                      <el-table-column label="用户名" prop="name"></el-table-column>
                      <el-table-column prop="created_at" label="日期">
                         <template v-slot="{ row }">{{ row.created_at | second2Date }}</template>
@@ -22,7 +22,7 @@
             </el-tab-pane>
             <el-tab-pane v-if="config.public_registration" label="审核" name="approval">
                <div class="table-ctn" v-infinite-scroll="load">
-                  <el-table :data="approval.tableData">
+                  <el-table :data="approval.tableData" header-row-class-name='header-row'>
                      <el-table-column label="用户名" prop="name"></el-table-column>
                      <el-table-column prop="created_at" label="日期">
                         <template v-slot="{ row }">{{ row.created_at | second2Date }}</template>
@@ -125,7 +125,8 @@ export default {
          this.$confirm(`确认删除用户${user.name} ? `).then((res) => {
             V1UserAPI.delUser(user.id).then((res) => {
                this.$message(`用户已删除`);
-               this.load();
+               this.management.tableData = this.management.tableData.filter((itm)=>itm.id != user.id)
+               // this.load();
             });
          });
       },
@@ -133,7 +134,8 @@ export default {
          this.$confirm(`确认通过用户${user.name}申请 ? `).then((res) => {
             V1UserAPI.approveUser(user.id).then((res) => {
                this.$message(`用户申请已通过`);
-               this.load();
+                this.approval.tableData = this.approval.tableData.filter((itm)=>itm.id != user.id)
+               // this.load();
             });
          });
       },
@@ -141,15 +143,16 @@ export default {
          this.$confirm(`确认拒绝用户${user.name}申请 ? `).then((res) => {
             V1UserAPI.rejectUser(user.id).then((res) => {
                this.$message(`用户申请已拒绝`);
-               this.load();
+               this.approval.tableData = this.approval.tableData.filter((itm)=>itm.id != user.id)
+               // this.load();
             });
          });
       },
       load() {
         if(this.activeName == 'management') {
-            V1UserAPI.list(this.approval.page,this.approval.page_size).then((res) => {
+           V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROV_STATUS_APPROVED,this.management.page,this.management.page_size).then((res) => {
                this['management']['tableData'].push(...res.list);
-               this.approval.page += 1
+               this.management.page += 1
             });
          }
          if(this.activeName == 'approval') {
@@ -188,16 +191,19 @@ export default {
 .container {
    padding-top: 40px;
    padding-left: 20px;
-
+   height calc(100vh - 105px)
+   overflow hidden
    .btn-ctn {
       width: 150px;
       height: 50px;
       padding-left: 20px;
    }
-
+   .header-row {
+      background #ccc
+   }
    .table-ctn {
       padding: 20px;
-      max-height 600px
+      max-height calc(100vh - 240px)
       overflow:auto
       &::-webkit-scrollbar {
         width: 0px;
