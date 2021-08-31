@@ -151,13 +151,15 @@ export default {
       load() {
         if(this.activeName == 'management') {
            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROV_STATUS_APPROVED,this.management.page,this.management.page_size).then((res) => {
-               this['management']['tableData'].push(...res.list);
+               let lst = res.list.filter((itm)=>this['management']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
+               this['management']['tableData'].push(...lst);
                this.management.page += 1
             });
          }
          if(this.activeName == 'approval') {
             V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.management.page,this.management.page_size).then((res) => {
-               this['approval']['tableData'].push(...res.list);
+               let lst = res.list.filter((itm)=>this['approval']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
+               this['approval']['tableData'].push(...lst);
                this.management.page += 1
             });
          }
