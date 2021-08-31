@@ -50,7 +50,7 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
                     print('adding user',user.name)
                     os.makedirs('/app/db/notebook_dir/' + user.name,exist_ok=True)
                     subprocess.check_call(['cp', '-f', '/srv/ipython/examples/delta_example.ipynb', '/app/db/notebook_dir/' + user.name + "/delta_example.ipynb"])
-                    subprocess.check_call(['chown', '-R', user.name, '/app/db/notebook_dir/' + user.name ])
+                subprocess.check_call(['chown', '-R', user.name, '/app/db/notebook_dir/' + user.name ])
             else:
                 raise KeyError("User %s does not exist." % user.name)
 
@@ -205,7 +205,7 @@ c.Spawner.args = ['''--NotebookApp.tornado_settings={
     'Content-Security-Policy': "frame-ancestors * ",
     'cookie_options': {'samesite':'None','Secure':True},
   }
-}''']
+} --NotebookApp.allow_remote_access=True''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 # ssl config
