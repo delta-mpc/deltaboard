@@ -29,6 +29,7 @@ import UserAPI from '@/api/v1/users'
 import { mapState } from 'vuex'
 import ErrorMessage from '@/model/errorMessage'
 import { Message } from "element-ui"
+import freezable from '@/mixins/freezable'
 export default {
   name: "",
   props: {
@@ -42,6 +43,7 @@ export default {
   data() {
     return {};
   },
+  mixins:[freezable],
   computed: {
     ...mapState({
       phoneNum: state => state.user.phonenumber,
@@ -68,6 +70,9 @@ export default {
     hiddenPhone() {
       var reg = /^(\d{3})\d{4}(\d{4})$/
       return this.phoneNum.replace(reg, "$1****$2");
+    },
+    localUrl(){
+        return window.BASE_API
     }
   },
   methods: {
@@ -111,12 +116,15 @@ export default {
     logout() {
       if (!confirm('是否确认退出？')) return;
       let iframe = document.createElement('iframe');
-      iframe.src = window.location.protocol + '//' + window.location.host + '/hub/logout'
+      iframe.src = this.localUrl + '/hub/logout'
       iframe.style.width = '0px'
       iframe.style.height = '0px'
+      this.freezeMessage = '正在退出...'
+      this.freezed = true
       document.body.appendChild(iframe)
       setTimeout(()=>{
          iframe.remove()
+         this.freezed = false
          UserAPI.logout().then(() => {
         window.confidentialNotified = false
         this.$router.push({ name: "login" });
