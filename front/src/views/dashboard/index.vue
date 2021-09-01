@@ -5,15 +5,12 @@
         <Navbar :showLogin="false"/>
       </el-header>
       <el-container class="main-container">
-        <el-aside width="263px">
           <SideBar/>
-          <div class="side-blank"></div>
-        </el-aside>
         <el-main>
-         <PlayGround :style="{visibility:$route.name == 'playground' ? 'visible':'hidden',overflow:'hidden',position:'absolute',width: 'calc(100vw - 263px)',height: 'calc(100vh - 60px)'}"/>
-         <router-view v-if="$route.name != 'playground'"/>
+         <PlayGround v-show="$route.name === 'playground'" />
+         <router-view v-if="$route.name !== 'playground'"/>
         </el-main>
-      </el-container> 
+      </el-container>
       <div class="side-shadow"></div>
     </el-container>
   </div>
@@ -41,7 +38,7 @@ export default {
         callback()
       }
     };
-    
+
     const validateIDNum = (rule, value, callback) => {
       var str = value.trim()
 			var regex = /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/
@@ -145,7 +142,7 @@ export default {
         window.location.reload()
       }
       localStorage.removeItem('visibilitychange')
-      } 
+      }
     })
   },
   methods: {
@@ -200,7 +197,7 @@ export default {
   }
   .el-form {
     width 386px
-    margin 24px auto 
+    margin 24px auto
   }
   /deep/.el-dialog__header {
     height 32px
@@ -210,34 +207,6 @@ export default {
   }
   .form-item-btn {
     text-align center
-  }
-  .first-step {
-    margin-bottom 105px
-  }
-    
-  .second-step,
-  .third-step {
-    margin 30px auto
-    margin-bottom 105px
-    display flex
-    justify-content center
-  }
-
-  .second-step-select {
-    display flex
-    justify-content center
-  }
-  
-  .bind-operation {
-    display flex
-    flex-direction column
-    width 116px
-    height 96px
-    justify-content center
-    align-items center
-    background #E1E7EE
-    border 2px solid theme-color
-    border-radius 5px
   }
 
   /deep/.el-icon-connection,

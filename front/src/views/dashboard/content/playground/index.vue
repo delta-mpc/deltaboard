@@ -53,6 +53,4 @@ export default {
   background white
   border 1px #e4e4e4 solid
 }
-
-
 </style>
