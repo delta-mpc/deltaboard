@@ -6,7 +6,11 @@
             <el-table :data="tableData" @row-click="openDetail" row-class-name="clickable">
                <el-table-column label="任务名" prop="name"></el-table-column>
                <el-table-column label="任务类型" prop="type"></el-table-column>
-               <el-table-column label="创建Node" prop="creator"></el-table-column>
+               <el-table-column label="创建Node" prop="creator">
+                  <template v-slot="{ row }">
+                        {{row.creator}}({{nodes[row.creator]}})
+                  </template>
+               </el-table-column>
                <el-table-column label="创建账号" prop="creator_name">
                      <template v-slot="{ row }">
                           {{row.creator_name || "--" }}
@@ -44,6 +48,7 @@
 import store from '@/store'
 import { mapState } from 'vuex'
 import V1TaskAPI from "@/api/v1/tasks"
+import V1NodeAPI from "@/api/v1/node";
 export default {
   name: "asset",
   data() {
@@ -53,6 +58,7 @@ export default {
       currentPage:1,
       taskPageSize:10,
       totalCount:0,
+      nodes:{},
       taskLogPage:{
          taskLogMetaData:{},
          taskLogData:[],
@@ -63,7 +69,13 @@ export default {
     };
   },
   mounted() {
-     this.load()
+   V1NodeAPI.listNodes(1,999).then((res)=>{
+      this.nodes = (res.list || []).reduce((pre,cur)=>{
+         pre[cur.id] = cur.name
+         return pre
+      },{})
+      this.load()
+   })
   },
   computed:{
      ...mapState({
