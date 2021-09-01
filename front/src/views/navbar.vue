@@ -4,7 +4,11 @@
       <img class="logo" :src="require('@/assets/logo.svg')"/>
     </router-link>
     <div class="right-menu">
-      <el-menu :default-active="1" class="menu" mode="horizontal" @select="handleSelect">
+      <el-menu
+          default-active="1"
+          class="menu"
+          mode="horizontal"
+          @select="handleSelect">
          <el-submenu index="1" v-if="!showLogin">
             <template slot="title">
                 <span class="user">{{ navUserInfo }}</span>
@@ -19,7 +23,7 @@
               <span style="margin-left:20px">退出账户</span>
            </el-menu-item>
          </el-submenu>
-         <el-menu-item index="login" v-else>
+         <el-menu-item index="1" v-else>
              登录/注册
          </el-menu-item>
       </el-menu>
@@ -90,31 +94,12 @@ export default {
              break;
        }
     },
-    handleCommand(command) {
-      if (command === 'change') {
-        this.change()
-      }
-      else if (command === 'logout') {
-        this.logout()
-      }
-      else if (command === 'digitalID') {
-        this.digitalID()
-      }
-    },
     change() {
       if (this.name.length === 0 || this.company.name.length === 0) {
         this.$store.commit('dashboard/SET_SHOW_AUTH')
         return;
       }
       this.$store.commit('setting/SET_CHANGEPASS_ACTIVE')
-      this.$router.push({ name: 'setting' })
-    },
-    digitalID() {
-      if (this.name.length === 0 || this.company.name.length === 0) {
-        this.$store.commit('dashboard/SET_SHOW_AUTH')
-        return;
-      }
-      this.$store.commit('setting/SET_DIGITAL_ACTIVE')
       this.$router.push({ name: 'setting' })
     },
     logout() {
@@ -169,9 +154,10 @@ export default {
   justify-content space-between
   align-items center
   flex-shrink 0
-  background page-bg-color
+  background-color white
+  border-bottom 1px solid #EBEEF5
   .logo {
-    height 34px
+    height 28px
     font-size 20px
     line-height 50px
     margin-left 30px
@@ -195,8 +181,10 @@ export default {
   .menu-link {
     margin-right 30px
   }
+}
+</style>
+<style lang="stylus">
+.el-header {
 
 }
-
-
 </style>

@@ -1,29 +1,39 @@
 <template>
-  <el-menu ref="menu" class="sidebar-menu" :default-active="barActiveIndex" @select="handleSelect">
-    <el-menu-item class="sidebar-menu" ref="1" index="1" @click="sideItemClicked('playground')">
-       <div class="item-div">
-          <font-awesome-icon size="50px" icon="lightbulb" class="side-icon">
-          </font-awesome-icon><span>Playground</span></div>
+  <el-aside :width="isCollapse?'64px':'220px'">
+  <el-menu
+      ref="menu"
+      class="sidebar-menu"
+      :default-active="barActiveIndex"
+      background-color="#f5f8fa"
+      text-color="#606266"
+      active-text-color="#7DD0D7"
+      @select="handleSelect"
+      :collapse="isCollapse"
+    >
+    <el-menu-item class="sidebar-menu-item" ref="1" index="1" @click="sideItemClicked('playground')">
+      <font-awesome-icon size="50px" icon="lightbulb" class="side-icon"></font-awesome-icon>
+      <span slot="title">Playground</span>
     </el-menu-item>
-   <el-menu-item class="sidebar-menu" ref="2" index="2" @click="sideItemClicked('myTasks')">
+   <el-menu-item class="sidebar-menu-item" ref="2" index="2" @click="sideItemClicked('myTasks')">
       <div class="item-div">
          <font-awesome-icon size="50px" icon="tasks" class="side-icon">
          </font-awesome-icon><span>任务列表</span></div>
     </el-menu-item>
-    <el-menu-item class="sidebar-menu" ref="3" index="3" @click="sideItemClicked('listnodes')">
+    <el-menu-item class="sidebar-menu-item" ref="3" index="3" @click="sideItemClicked('listnodes')">
       <div class="item-div">
          <font-awesome-icon size="50px" icon="network-wired" class="side-icon">
           </font-awesome-icon><span>节点列表</span></div>
     </el-menu-item>
-    <el-menu-item class="sidebar-menu" ref="4" index="4" v-if="user.role == 1" @click="sideItemClicked('userlist')">
+    <el-menu-item class="sidebar-menu-item" ref="4" index="4" v-if="user.role == 1" @click="sideItemClicked('userlist')">
       <div class="item-div"><font-awesome-icon size="50px" icon="user-friends" class="side-icon">
           </font-awesome-icon><span>用户管理</span></div>
     </el-menu-item>
-    <el-menu-item class="sidebar-menu" ref="5" index="5" @click="sideItemClicked('profile')">
+    <el-menu-item class="sidebar-menu-item" ref="5" index="5" @click="sideItemClicked('profile')">
       <div class="item-div"><font-awesome-icon size="50px" icon="user-alt" class="side-icon">
           </font-awesome-icon><span>个人中心</span></div>
     </el-menu-item>
   </el-menu>
+  </el-aside>
 </template>
 
 <script>
@@ -31,24 +41,15 @@ import { mapState } from 'vuex'
 export default {
   name: "sideBar",
   data() {
-    return {};
+    return {
+      isCollapse: false
+    };
   },
   computed: {
     ...mapState({
       barActiveIndex: state => { return state.sidebar.sidebarActiveIndex },
     }),
-    ...mapState(['user']),
-    maskCss(){
-       return {
-         width:'100%',
-         pointerEvents:'none',
-         height:'50px',
-         marginLeft:'9px',
-         position:'absolute',
-         left:'0px',
-         top:50 * (this.barActiveIndex - 1) + 'px'
-       }
-    }
+    ...mapState(['user'])
   },
   mounted() {
     window.addEventListener('beforeunload', () => {
@@ -75,74 +76,21 @@ export default {
   },
 };
 </script>
-
-<style lang="stylus" scoped>
+<style lang="stylus">
 .sidebar-menu {
-   border-right none !important
-}
-.maskClz {
-   background page-bg-color
-}
-.el-menu-item {
-  padding-left 9px !important
-  padding-right 0px
-  height 50px
-  line-height 50px
+  height 100%
+  padding-top 24px
+  box-sizing border-box
+  border-right 0
 
-  border-right 1px solid #f5f8fa
-  .side-icon, {
-    margin-left 30px
-    margin-right 30px
+  .sidebar-menu-item:hover,
+    .sidebar-menu-item.is-active {
+    background-color: #ffffff !important
   }
 
-  .item-div {
-    height 50px
+  .side-icon {
+    margin-right 12px
   }
-
-  &:hover, &:focus {
-    background white
-    .item-div {
-      background page-bg-color
-
-      span {
-        color #053e5d
-      }
-    }
-  }
-}
-
-.el-menu-item.is-active {
-  .item-div {
-    background page-bg-color
-
-    span {
-      color #053e5d
-    }
-  }
-}
-
-span {
-  color #b6b7b9
-}
-
-</style>
-
-
-<style>
-
-.tool-item-1 {
-  padding: 5px 10px;
-  top: 120px !important;
-}
-
-.tool-item-2 {
-  padding: 5px 10px;
-  top: 170px !important;
-}
-
-.tool-item-3 {
-  padding: 5px 10px;
-  top: 270px !important;
 }
 
 </style>

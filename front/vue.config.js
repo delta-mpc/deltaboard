@@ -24,11 +24,11 @@ const proxyConfig = {
       },
    },
    "^/user":{
-      "target":"http://localhost:8000",
+      "target":"https://api.board.deltampc.com",
       "ws":true,
       "changeOrigin":true,
       "headers":{
-         "Origin": "http://localhost:8000"
+         "Origin": "https://localhost:8000"
       },
    }
 }
