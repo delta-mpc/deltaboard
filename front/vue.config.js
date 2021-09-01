@@ -40,6 +40,12 @@ module.exports = {
       proxy:proxyConfig,
         https: true
     },
+    pwa:{
+      name: 'Deltaboard',
+      iconPaths:{
+         favicon32:'img/icons/favicon.ico',favicon16:'img/icons/favicon.ico',maskIcon:'img/icons/favicon.ico'
+      }
+    },
     configureWebpack: {
         devtool: 'source-map',
         module: {
@@ -57,13 +63,7 @@ module.exports = {
          ]
         },
         plugins: [
-         new CleanWebpackPlugin(),
-         new CopyWebpackPlugin(
-            [
-               {from: 'src/post-regist.html', to:'post-regist.html'},
-               {from:'src/join_group.jpg',to:'join_group.jpg'}
-            ]
-         )
+         new CleanWebpackPlugin()
         ]
     },
     pluginOptions: {

@@ -1,7 +1,7 @@
 db:
   connection: ''
   driver: ''
-node_address: "http://192.168.62.149:6701"
+node_address: "http://192.168.62.75:6701"
 port: '8090'
 public_registration: true
 post_registry_url: "/post-regist.html"

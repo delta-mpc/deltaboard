@@ -36,7 +36,7 @@ func NodeGroup(g *fizz.RouterGroup) {
 
 func TaskGroup(g *fizz.RouterGroup) {
 	taskGroup := g.Group("tasks", "task", "Account APIs")
-	taskGroup.POST("/:token/task", []fizz.OperationOption{
+	taskGroup.POST("/:token/v1/task", []fizz.OperationOption{
 		fizz.Summary("上传任务"),
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
 	}, tonic.Handler(task.Submit, 200))

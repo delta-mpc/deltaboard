@@ -6,7 +6,16 @@
             <el-table :data="tableData" @row-click="openDetail" row-class-name="clickable">
                <el-table-column label="任务名" prop="name"></el-table-column>
                <el-table-column label="任务类型" prop="type"></el-table-column>
-               <el-table-column label="创建Node" prop="creator"></el-table-column>
+               <el-table-column label="创建Node" prop="creator">
+                  <template v-slot="{ row }">
+                        {{row.creator}}({{nodes[row.creator]}})
+                  </template>
+               </el-table-column>
+               <el-table-column label="创建账号" prop="creator_name">
+                     <template v-slot="{ row }">
+                          {{row.creator_name || "--" }}
+                     </template>
+               </el-table-column>
                <el-table-column label="状态" prop="status">
                   <template v-slot="{ row }">
                      <el-tag type="warning" v-if="row.status == $appGlobal.constants.TASK_STATUS_PENDING">
@@ -39,6 +48,7 @@
 import store from '@/store'
 import { mapState } from 'vuex'
 import V1TaskAPI from "@/api/v1/tasks"
+import V1NodeAPI from "@/api/v1/node";
 export default {
   name: "asset",
   data() {
@@ -48,6 +58,7 @@ export default {
       currentPage:1,
       taskPageSize:10,
       totalCount:0,
+      nodes:{},
       taskLogPage:{
          taskLogMetaData:{},
          taskLogData:[],
@@ -58,7 +69,13 @@ export default {
     };
   },
   mounted() {
-     this.load()
+   V1NodeAPI.listNodes(1,999).then((res)=>{
+      this.nodes = (res.list || []).reduce((pre,cur)=>{
+         pre[cur.id] = cur.name
+         return pre
+      },{})
+      this.load()
+   })
   },
   computed:{
      ...mapState({
@@ -83,10 +100,18 @@ export default {
         if(this.user.role != 1) {
             V1TaskAPI.getUserTasks(this.user.id).then((res)=>{
                this.tableData = res.tasks
-               this.totalCount = res.total_pages * this.taskPageSize
+               // total_pages is total_count
+               this.totalCount = res.total_pages
             })
         } else {
             V1TaskAPI.getAllTasks(this.currentPage,this.taskPageSize).then((res)=>{
+               (res.user_tasks ||[]).forEach((itm)=>{
+                  res.tasks.forEach((tItm)=>{
+                     if(tItm.id == itm.nodeTaskId) {
+                        tItm.creator_name = itm.name
+                     }
+                  })
+               })
                this.tableData = res.tasks
                this.totalCount = res.total_pages * this.taskPageSize
             })

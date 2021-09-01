@@ -10,7 +10,7 @@ http:
   port: '8080'
 log:
   level: debug
-node_address: http://192.168.62.149:6701
+node_address: http://192.168.62.75:6701
 port: '8090'
 post_registry_url: /post-regist.html
 public_registration: true

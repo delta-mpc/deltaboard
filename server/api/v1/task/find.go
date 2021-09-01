@@ -41,8 +41,9 @@ type UserTask struct {
 }
 
 type AllTasks struct {
-	Tasks []*UserTask `json:"tasks"`
-	Total int         `json:"total_pages"`
+	Tasks     []*UserTask    `json:"tasks"`
+	UserTasks []*models.Task `json:"user_tasks"`
+	Total     int            `json:"total_pages"`
 }
 
 type GetAllTaskInput struct {
@@ -118,5 +119,14 @@ func FindAllTasks(ctx *gin.Context, in *GetAllTaskInput) (*FindTaskResponse, err
 	if err != nil {
 		return nil, err
 	}
+	respTaskIds := make([]int64, 0)
+	for _, task := range respTasks.Tasks {
+		respTaskIds = append(respTaskIds, task.ID)
+	}
+	userTasks := make([]*models.Task, 0)
+	if err := db.GetDB().Where(" node_task_id IN ?", respTaskIds).Find(&userTasks).Error; err != nil {
+		return nil, err
+	}
+	respTasks.UserTasks = userTasks
 	return &FindTaskResponse{Data: respTasks}, nil
 }
