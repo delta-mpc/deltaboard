@@ -63,13 +63,7 @@ module.exports = {
          ]
         },
         plugins: [
-         new CleanWebpackPlugin(),
-         new CopyWebpackPlugin(
-            [
-               {from: 'src/post-regist.html', to:'post-regist.html'},
-               {from:'src/join_group.jpg',to:'join_group.jpg'}
-            ]
-         )
+         new CleanWebpackPlugin()
         ]
     },
     pluginOptions: {
