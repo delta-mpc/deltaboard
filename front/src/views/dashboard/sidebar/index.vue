@@ -15,23 +15,25 @@
       <span slot="title">Playground</span>
     </el-menu-item>
    <el-menu-item class="sidebar-menu-item" ref="2" index="2" @click="sideItemClicked('myTasks')">
-      <div class="item-div">
-         <font-awesome-icon size="50px" icon="tasks" class="side-icon">
-         </font-awesome-icon><span>任务列表</span></div>
+     <font-awesome-icon size="50px" icon="tasks" class="side-icon"></font-awesome-icon>
+     <span>任务列表</span>
     </el-menu-item>
     <el-menu-item class="sidebar-menu-item" ref="3" index="3" @click="sideItemClicked('listnodes')">
-      <div class="item-div">
-         <font-awesome-icon size="50px" icon="network-wired" class="side-icon">
-          </font-awesome-icon><span>节点列表</span></div>
+      <font-awesome-icon size="50px" icon="network-wired" class="side-icon"></font-awesome-icon>
+      <span>节点列表</span>
     </el-menu-item>
     <el-menu-item class="sidebar-menu-item" ref="4" index="4" v-if="user.role == 1" @click="sideItemClicked('userlist')">
-      <div class="item-div"><font-awesome-icon size="50px" icon="user-friends" class="side-icon">
-          </font-awesome-icon><span>用户管理</span></div>
+      <font-awesome-icon size="50px" icon="user-friends" class="side-icon"></font-awesome-icon>
+      <span>用户管理</span>
     </el-menu-item>
     <el-menu-item class="sidebar-menu-item" ref="5" index="5" @click="sideItemClicked('profile')">
-      <div class="item-div"><font-awesome-icon size="50px" icon="user-alt" class="side-icon">
-          </font-awesome-icon><span>个人中心</span></div>
+      <font-awesome-icon size="50px" icon="user-alt" class="side-icon"></font-awesome-icon>
+      <span>个人中心</span>
     </el-menu-item>
+    <div class="collapse-toggle" @click="isCollapse = !isCollapse">
+      <font-awesome-icon v-if="!isCollapse" size="50px" icon="angle-double-left" class="side-icon"></font-awesome-icon>
+      <font-awesome-icon v-if="isCollapse" size="50px" icon="angle-double-right" class="side-icon"></font-awesome-icon>
+    </div>
   </el-menu>
   </el-aside>
 </template>
@@ -90,6 +92,25 @@ export default {
 
   .side-icon {
     margin-right 12px
+  }
+
+  .collapse-toggle {
+    position absolute
+    right 8px
+    bottom 5px
+    width 38px
+    height 44px
+    line-height 44px
+    text-align center
+    color #606266
+    cursor pointer
+    border-radius 5px
+    padding-left 10px
+    padding-top 4px
+
+    &:hover {
+      background-color white
+    }
   }
 }
 
