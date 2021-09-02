@@ -10,13 +10,21 @@ import filters from '@/filters/index.js'
 import ErrorMessage from '@/model/errorMessage'
 import VueClipboard from 'vue-clipboard2'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt,faLightbulb,faTasks,faNetworkWired,faUserFriends,faUserAlt} from '@fortawesome/free-solid-svg-icons'
+import {
+    faSignOutAlt,
+    faLightbulb,
+    faTasks,
+    faNetworkWired,
+    faUserFriends,
+    faUserAlt,
+    faAngleDoubleLeft, faAngleDoubleRight
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 (function () {
    File.prototype.arrayBuffer = File.prototype.arrayBuffer || myArrayBuffer;
    Blob.prototype.arrayBuffer = Blob.prototype.arrayBuffer || myArrayBuffer;
- 
+
    function myArrayBuffer() {
      return new Promise((resolve) => {
        let fr = new FileReader();
@@ -27,11 +35,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
      })
    }
  })();
-window.BASE_API = (process.env.VUE_APP_BASE_API && process.env.VUE_APP_BASE_API != '') ? 
+window.BASE_API = (process.env.VUE_APP_BASE_API && process.env.VUE_APP_BASE_API != '') ?
                   process.env.VUE_APP_BASE_API : window.location.protocol + '//' + window.location.host
 Vue.use(VueClipboard)
 
-library.add(faSignOutAlt,faLightbulb,faTasks,faNetworkWired,faUserFriends,faUserAlt)
+library.add(faSignOutAlt,faLightbulb,faTasks,faNetworkWired,faUserFriends,faUserAlt,faAngleDoubleLeft, faAngleDoubleRight)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 console.log('initializing')
