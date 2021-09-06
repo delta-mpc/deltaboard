@@ -7,8 +7,8 @@
       <el-container class="main-container">
           <SideBar/>
         <el-main>
-         <PlayGround v-show="$route.name === 'playground'" />
          <router-view v-if="$route.name !== 'playground'"/>
+         <PlayGround :visible="$route.name === 'playground'" />
         </el-main>
       </el-container>
       <div class="side-shadow"></div>
