@@ -1,7 +1,7 @@
 <template>
-  <div class="playground-page">
+  <div class="playground-page" v-if="visible">
      <transition appear name="slide-fade">
-    <div class="content-bg">
+    <div class="content-bg" ref="content">
        <iframe style="width:100%;height:100%;border:none" :src="`${localUrl}/hub/external/login?next=/hub/&username=${user.name}&token=${user.user_token}`"></iframe>
     </div>
     </transition>
@@ -14,7 +14,24 @@ import { mapState } from 'vuex'
 
 export default {
   name: "playground",
-  mounted() {
+  props:{
+     visible:{
+        type:Boolean,
+        default:false
+     }
+  },
+  watch:{
+     'visible':function(nV,oV){
+        if(nV) {
+           this.$refs['content'].append(window.iframe)
+        }
+     }
+  },
+  mounted(){
+     if(!window.jupyterFrame) {
+        window.jupyterFrame = document.createElement('iframe')
+        window.jupyterFrame.src = `${this.localUrl}/hub/external/login?next=/hub/&username=${this.user.name}&token=${this.user.user_token}`
+     }
   },
   computed:{
      ...mapState({
