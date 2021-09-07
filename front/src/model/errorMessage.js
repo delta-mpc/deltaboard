@@ -25,7 +25,7 @@ export const errorMessages = [
     local: '用户已存在'
 },{
    server:'user login status expired',
-   local:'登陆状态已过期'
+   local:'登录状态已过期'
 }
 ]
 
