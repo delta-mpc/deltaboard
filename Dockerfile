@@ -37,6 +37,7 @@ RUN mkdir /srv/oauthenticator && \
     mkdir /srv/ipython/examples && \
     mkdir /root/.jupyter
 ADD ./jupyter/delta_example.ipynb /srv/ipython/examples/delta_example.ipynb
+COPY ./jupyter/examples  /srv/ipython/examples
 ADD ./jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 WORKDIR /srv/oauthenticator
 ENV OAUTHENTICATOR_DIR /srv/oauthenticator

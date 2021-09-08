@@ -42,6 +42,7 @@ export default {
    background: page-bg-color;
    height: 100%;
    width:100%
+   position absolute
    -webkit-overflow-scrolling: touch;
    iframe {
       width:100%

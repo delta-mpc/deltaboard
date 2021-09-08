@@ -51,6 +51,11 @@ type GetAllTaskInput struct {
 	Page_size int64 `json:"page_size" form:"page_size" description:"The task page size"`
 }
 
+type GetUserTaskInput struct {
+	GetAllTaskInput
+	UserId string `json:"userId" form:"userId" path:"userId" description:"The task page size"`
+}
+
 type FindTaskResponse struct {
 	response.Response
 	Data *AllTasks `json:"data"`
@@ -68,10 +73,15 @@ func fillUserTasks(usertasks []*UserTask) {
 	}
 }
 
-func FindUserTasks(ctx *gin.Context) (*FindTaskResponse, error) {
-	username := ctx.Param("userId")
+func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, error) {
+	username := in.UserId
+	var total int64
+	if err := db.GetDB().Model(&models.Task{}).Where(" user_id = ?", username).Count(&total).Error; err != nil {
+		return nil, err
+	}
 	tasks := make([]*models.Task, 0)
-	if err := db.GetDB().Where(" user_id = ?", username).Find(&tasks).Error; err != nil {
+	if err := db.GetDB().Model(&models.Task{}).Offset((int(in.Page) - 1) * int(in.Page_size)).Limit(int(in.Page_size)).
+		Find(&tasks).Error; err != nil {
 		return nil, err
 	}
 	node_addr := config.GetConfig().Delta_Node_Addr
@@ -100,7 +110,7 @@ func FindUserTasks(ctx *gin.Context) (*FindTaskResponse, error) {
 	fillUserTasks(respTasks)
 	AllTasks := &AllTasks{
 		Tasks: respTasks,
-		Total: len(respTasks),
+		Total: int(total),
 	}
 	return &FindTaskResponse{Data: AllTasks}, nil
 }

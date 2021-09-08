@@ -164,6 +164,7 @@ export default {
 
 .app-wrapper {
   height: 100%;
+  overflow:hidden
 }
 
 .dashboard {
@@ -180,6 +181,7 @@ export default {
   padding 0px
   margin-bottom 2px
   overflow hidden
+  position relative
 }
 .userauth-dilaog {
    /deep/&.el-dialog__wrapper {
