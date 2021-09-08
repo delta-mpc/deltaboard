@@ -1,7 +1,5 @@
 # Configuration file for jupyter-notebook.
 
-import os
-c = get_config()
 #------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
 #------------------------------------------------------------------------------
@@ -120,7 +118,12 @@ c = get_config()
 #  with hostnames configured in local_hostnames.
 #  Default: False
 c.NotebookApp.allow_remote_access = True
-
+c.NotebookApp.tornado_settings = {
+  'headers': {
+     'Access-Control-Allow-Origin':'*',
+      'Content-Security-Policy': "frame-ancestors * ",
+   }
+}
 ## Whether to allow the user to run the notebook as root.
 #  Default: False
 # c.NotebookApp.allow_root = False

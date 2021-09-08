@@ -211,13 +211,14 @@ def generateExampleHook(spawner):
 c.Spawner.pre_spawn_hook = generateExampleHook
 c.Spawner.http_timeout = 100
 c.Spawner.notebook_dir = '/app/db/notebook_dir/{username}'
-c.Spawner.args = ['''--NotebookApp.tornado_settings={
+c.Spawner.args = ['''--ServerApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors * ",
+    'Content-Security-Policy': "frame-ancestors 'self' * ",
     'cookie_options': {'samesite':'None','Secure':True},
   }
-} --NotebookApp.allow_remote_access=True''']
+} --ServerApp.allow_remote_access=True''']
+c.Spawner.args = ['''--config=/application/jupyter_jupyterlab_server_config.py''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 # ssl config
