@@ -161,7 +161,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+.main-container {
+   height 100%
+}
 .app-wrapper {
   height: 100%;
   overflow:hidden

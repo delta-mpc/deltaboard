@@ -158,7 +158,7 @@ export default {
      padding 20px
      height 100%
      .tbl-wrapper {
-         height calc(100% - 150px)
+         height calc(100% - 200px)
      }
   }
 }
