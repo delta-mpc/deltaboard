@@ -107,12 +107,6 @@ export default {
    font-size: 18px;
 }
 
-.playground-page {
-   background: page-bg-color;
-   height: 100%;
-   -webkit-overflow-scrolling: touch;
-}
-
 .upload-button {
    color: #607185;
    background: #dfe5ec;
