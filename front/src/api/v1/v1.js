@@ -3,9 +3,11 @@ import axios from 'axios';
 import {ApiPromise} from "@/api/api-promise";
 import { cacheAdapterEnhancer } from 'axios-extensions';
 import cache from './v1-cache.js';
+import {$errorMessage} from '@/model/errorMessage.js'
 let versionPrefix = "v1";
 let baseUrl = process.env.VUE_APP_BASE_API + '/' + versionPrefix;
 console.log(baseUrl)
+
 let httpClient = axios.create({
     baseURL: baseUrl,
     withCredentials: true,
@@ -22,9 +24,8 @@ httpClient.interceptors.response.use(
                return Promise.reject(response.data.message)
             }
             return Promise.resolve(response.data.data);
-
+            
         } else if (response.status === 400) {
-           
             return Promise.reject(response.data);
         } else {
             // Exceptions
@@ -33,6 +34,7 @@ httpClient.interceptors.response.use(
     },
     (error) => {
         if(error.response.data && error.response.data.message) {
+           $errorMessage(error)
            return Promise.reject(error.response.data.message)
         }
         return Promise.reject(error);

@@ -28,12 +28,10 @@
             下载权重</el-button>
          <div class="el-descriptions__title task-log-title">任务日志</div>
          <div class="task-logs" v-infinite-scroll="loadTaskLog" style="overflow:auto">
-            <ul>
-               <li v-for="itm,index in taskLogData" :key="index">
+             <div v-for="itm,index in taskLogData" :key="index">
                   <span class="date">{{itm.created_at / 1000 | second2Date}}</span>
                   <span>{{itm.message}}</span>
-               </li>
-            </ul>
+               </div>
          </div>
       </div>
    </div>
@@ -135,9 +133,12 @@ export default {
 .task-logs {
    height: 600px;
    background: rgb(24, 48, 85);
-
+   overflow auto
+   padding 20px
+   box-sizing border-box
    &::-webkit-scrollbar {
       width: 6px;
+      height: 6px
       background-color: #e5e5e5;
    }
 
@@ -146,11 +147,10 @@ export default {
       border-radius: 3px;
    }
 
-   li {
+   div {
       list-style: none;
       line-height: 22px;
       color: rgb(230, 236, 241);
-      overflow: auto;
       tab-size: 2;
       direction: ltr;
       font-size: 14px;
@@ -161,7 +161,6 @@ export default {
       white-space: pre;
       word-spacing: normal;
       border-radius: 3px;
-
       .date {
          width: 100px;
          margin-right: 10px;

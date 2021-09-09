@@ -1,5 +1,5 @@
 <template>
-      <div class="container">
+   <div class="container">
       <transition appear name="slide-fade">
       <div class="table-ctn">
          <div class="tbl-wrapper">
@@ -148,6 +148,7 @@ export default {
 .container {
   padding-top 40px
   padding-left 20px
+  height 100%
   .btn-ctn {
      width 150px
      height 50px
@@ -155,8 +156,9 @@ export default {
   }
   .table-ctn {
      padding 20px
+     height 100%
      .tbl-wrapper {
-         height 680px
+         height calc(100% - 150px)
      }
   }
 }

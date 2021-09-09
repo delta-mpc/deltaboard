@@ -17,6 +17,7 @@ from traitlets import Unicode
 SESSION_COOKIE_NAME = 'jupyterhub-session-id'
 c = get_config()
 c.JupyterHub.log_level = 10
+c.JupyterHub.shutdown_on_logout = True
 try:
     from http.cookies import Morsel
 except ImportError:
@@ -48,8 +49,8 @@ class MyAuthenticator(WrappedGitHubAuthenticator,PAMAuthenticator):
                 dir = Path('/app/db/notebook_dir/' + user.name)
                 if not dir.exists():
                     print('adding user',user.name)
-                    os.makedirs('/app/db/notebook_dir/' + user.name,exist_ok=True)
-                    subprocess.check_call(['cp', '-f', '/srv/ipython/examples/delta_example.ipynb', '/app/db/notebook_dir/' + user.name + "/delta_example.ipynb"])
+                    os.makedirs(f'/app/db/notebook_dir/{user.name}/examples',exist_ok=True)
+                    subprocess.check_call(['cp', '-r', '/srv/ipython/examples', '/app/db/notebook_dir/' + user.name + "/examples"])
                 subprocess.check_call(['chown', '-R', user.name, '/app/db/notebook_dir/' + user.name ])
             else:
                 raise KeyError("User %s does not exist." % user.name)
@@ -197,15 +198,27 @@ c.NotebookApp.tornado_settings = {
       'Content-Security-Policy': "frame-ancestors * ",
    }
 }
+def generateExampleHook(spawner):
+    username = spawner.user.name
+    print(f'/app/db/notebook_dir/{username}/examples/en-horizontal-learning-task.ipynb')
+    os.makedirs(f'/app/db/notebook_dir/{username}/examples',exist_ok=True)
+    enFile = Path(f'/app/db/notebook_dir/{username}/examples/en-horizontal-learning-task.ipynb')
+    if not enFile.exists():
+      subprocess.check_call(['cp', '-f', '/srv/ipython/examples/en-horizontal-learning-task.ipynb', f'/app/db/notebook_dir/{username}/examples/en-horizontal-learning-task.ipynb'])
+    zhFile = Path(f'/app/db/notebook_dir/{username}/examples/zh-horizontal-learning-task.ipynb')
+    if not zhFile.exists():
+      subprocess.check_call(['cp', '-f', '/srv/ipython/examples/zh-horizontal-learning-task.ipynb', f'/app/db/notebook_dir/{username}/examples/zh-horizontal-learning-task.ipynb'])
+c.Spawner.pre_spawn_hook = generateExampleHook
 c.Spawner.http_timeout = 100
 c.Spawner.notebook_dir = '/app/db/notebook_dir/{username}'
-c.Spawner.args = ['''--NotebookApp.tornado_settings={
+c.Spawner.args = ['''--ServerApp.tornado_settings={
   'headers':{
     'Access-Control-Allow-Origin':'*',
-    'Content-Security-Policy': "frame-ancestors * ",
+    'Content-Security-Policy': "frame-ancestors 'self' * ",
     'cookie_options': {'samesite':'None','Secure':True},
   }
-} --NotebookApp.allow_remote_access=True''']
+} --ServerApp.allow_remote_access=True''']
+c.Spawner.args = ['''--config=/application/jupyter_jupyterlab_server_config.py''']
 c.Spawner.cmd = ["jupyter-labhub"]
 c.MyAuthenticator.create_system_users = True
 # ssl config

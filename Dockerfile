@@ -37,7 +37,8 @@ RUN mkdir /srv/oauthenticator && \
     mkdir /srv/ipython/examples && \
     mkdir /root/.jupyter
 ADD ./jupyter/delta_example.ipynb /srv/ipython/examples/delta_example.ipynb
-ADD ./jupyter/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+COPY ./jupyter/examples  /srv/ipython/examples
+ADD ./jupyter/jupyter_jupyterlab_server_config.py /application/jupyter_jupyterlab_server_config.py
 WORKDIR /srv/oauthenticator
 ENV OAUTHENTICATOR_DIR /srv/oauthenticator
 ADD ./jupyter/templates templates
