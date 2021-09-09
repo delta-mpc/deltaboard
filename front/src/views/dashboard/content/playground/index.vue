@@ -26,8 +26,8 @@ export default {
          user: (state) => state.user,
       }),
       localUrl() {
-         // return window.BASE_API;
-         return 'https://localhost:8090'
+         return window.BASE_API;
+         // return 'https://localhost:8090'
          // return window.location.protocol + "//" + window.location.host;
       },
    },
