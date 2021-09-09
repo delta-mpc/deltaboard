@@ -159,6 +159,7 @@ export default {
      height 100%
      .tbl-wrapper {
          height calc(100% - 200px)
+         overflow hidden
      }
   }
 }
