@@ -483,7 +483,7 @@ class BaseHandler(RequestHandler):
         if self.subdomain_host:
             kwargs['domain'] = self.domain
         user = self.get_current_user_cookie()
-        print('clearing_login_cookie')
+        self.log.info('clearing_login_cookie')
         session_id = self.get_session_cookie()
         if session_id:
             # clear session id
@@ -530,7 +530,7 @@ class BaseHandler(RequestHandler):
         # tornado <4.2 have a bug that consider secure==True as soon as
         # 'secure' kwarg is passed to set_secure_cookie
         kwargs = {'httponly': True}
-        print('set-cookie',key)
+        self.log.info(f'set-cookie{key}')
         if self.request.protocol == 'https':
             kwargs['secure'] = True
         if self.subdomain_host:
@@ -615,7 +615,7 @@ class BaseHandler(RequestHandler):
         - if redirect_to_server (default): send to user's own server
         - else: /hub/home
         """
-        print('next__URL!!',user)
+        self.log.info('next__URL!! %s',user)
         next_url = self.get_argument('next', default='')
         # protect against some browsers' buggy handling of backslash as slash
         next_url = next_url.replace('\\', '%5C')
@@ -633,7 +633,6 @@ class BaseHandler(RequestHandler):
         ):
             # treat absolute URLs for our host as absolute paths:
             # below, redirects that aren't strictly paths
-            print('if-1')
             parsed = urlparse(next_url)
             next_url = parsed.path
             if parsed.query:
@@ -647,7 +646,6 @@ class BaseHandler(RequestHandler):
             or next_url.startswith('//')
             or not next_url.startswith('/')
         ):
-            print('if-2')
             self.log.warning("Disallowing redirect outside JupyterHub: %r", next_url)
             next_url = ''
 
@@ -655,7 +653,6 @@ class BaseHandler(RequestHandler):
             # add /hub/ prefix, to ensure we redirect to the right user's server.
             # The next request will be handled by SpawnHandler,
             # ultimately redirecting to the logged-in user's server.
-            print('if-3')
             without_prefix = next_url[len(self.base_url) :]
             next_url = url_path_join(self.hub.base_url, without_prefix)
             self.log.warning(
@@ -666,13 +663,11 @@ class BaseHandler(RequestHandler):
 
         # this is where we know if next_url is coming from ?next= param or we are using a default url
         if next_url:
-            print('if-4')
             next_url_from_param = True
         else:
             next_url_from_param = False
 
         if not next_url:
-            print('if-5')
             # custom default URL, usually passed because user landed on that page but was not logged in
             if default:
                 next_url = default
@@ -684,7 +679,6 @@ class BaseHandler(RequestHandler):
                     next_url = self.default_url
 
         if not next_url:
-            print('if-6')
             # default URL after login
             # if self.redirect_to_server, default login URL initiates spawn,
             # otherwise send to Hub home page (control panel)
@@ -699,7 +693,6 @@ class BaseHandler(RequestHandler):
                 next_url = url_path_join(self.hub.base_url, 'home')
 
         if not next_url_from_param:
-            print('if-7')
             # when a request made with ?next=... assume all the params have already been encoded
             # otherwise, preserve params from the current request across the redirect
             next_url = self.append_query_parameters(next_url, exclude=['next'])
