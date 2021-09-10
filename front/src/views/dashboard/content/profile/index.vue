@@ -48,7 +48,7 @@
 
                               <el-row gutter="15" type="flex" align="middle">
                                  <el-col span="12">
-                                    <el-input :value="`http://localhost:8080/v1/tasks/${user.delta_token}}`" readonly
+                                    <el-input :value="`https://${localUrl}/v1/tasks/${user.delta_token}}`" readonly
                                        disabled></el-input>
                                  </el-col>
                                  <el-col span="6">
@@ -137,11 +137,16 @@ export default {
       ...mapState({
          user: (state) => state.user,
       }),
+      localUrl() {
+         return window.BASE_API;
+         // return 'https://localhost:8090'
+         // return window.location.protocol + "//" + window.location.host;
+      },
    },
    methods: {
       copyLink() {
          this.$copyText(
-            `http://localhost:8080/v1/tasks/${this.user.delta_token}`
+            `https://${this.localUrl}/v1/tasks/${this.user.delta_token}`
          ).then((res) => {
             this.$message("链接已复制");
          });

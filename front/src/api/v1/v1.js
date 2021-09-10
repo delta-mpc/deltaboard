@@ -20,7 +20,7 @@ httpClient.interceptors.response.use(
             return Promise.resolve(response.data);
         } else if(response.status === 200) {
             // Normal response
-            if(response.data.message && response.data.message != 'success') {
+            if(response.data && response.data.message && response.data.message != 'success') {
                return Promise.reject(response.data.message)
             }
             return Promise.resolve(response.data.data);
