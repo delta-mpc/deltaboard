@@ -28,7 +28,7 @@ RUN npm run build
 FROM deltampc/detlaboard-base:dev
 # Create oauthenticator directory and put necessary files in it
 WORKDIR /application/installation
-RUN python3 -m pip install delta-task==0.1.1
+RUN python3 -m pip install delta-task==0.1.2
 WORKDIR /application
 COPY --from=builder /application/main /application/main
 COPY --from=webbuilder /application/web/dist /application/web
