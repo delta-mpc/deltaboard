@@ -27,6 +27,7 @@ export default {
       }),
       localUrl() {
          return window.BASE_API;
+         // return 'https://localhost:8090'
          // return window.location.protocol + "//" + window.location.host;
       },
    },
@@ -43,6 +44,8 @@ export default {
    height: 100%;
    width:100%
    position absolute
+   overflow hidden
+   top 0px
    -webkit-overflow-scrolling: touch;
    iframe {
       width:100%

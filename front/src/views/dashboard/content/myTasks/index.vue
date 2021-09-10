@@ -98,7 +98,7 @@ export default {
      },  
      load(){
         if(this.user.role != 1) {
-            V1TaskAPI.getUserTasks(this.user.id).then((res)=>{
+            V1TaskAPI.getUserTasks(this.user.id,this.currentPage,this.taskPageSize).then((res)=>{
                this.tableData = res.tasks
                // total_pages is total_count
                this.totalCount = res.total_pages
@@ -158,7 +158,8 @@ export default {
      padding 20px
      height 100%
      .tbl-wrapper {
-         height calc(100% - 150px)
+         height calc(100% - 200px)
+         overflow hidden
      }
   }
 }

@@ -7,8 +7,8 @@
       <el-container class="main-container">
           <SideBar/>
         <el-main>
-         <router-view v-if="$route.name !== 'playground'"/>
-         <PlayGround :visible="$route.name === 'playground'" />
+         <PlayGround :key="'playground'" :visible="$route.name === 'playground'"  />
+         <router-view :key="'otherpage'" v-if="$route.name !== 'playground'"/>
         </el-main>
       </el-container>
       <div class="side-shadow"></div>
@@ -161,7 +161,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+.main-container {
+   height 100%
+}
 .app-wrapper {
   height: 100%;
   overflow:hidden

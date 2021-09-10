@@ -162,7 +162,6 @@ export default {
       });
     },
     logout() {
-      window.confidentialNotified = false
       this.$router.push({ name: "login" });
     },
   },

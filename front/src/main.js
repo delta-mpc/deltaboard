@@ -51,7 +51,6 @@ Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
 
-window.confidentialNotified = false
 // Set the default API error handler to use element ui message
 ApiPromise.defaultOnReject = (err) => {
    let errorMessage = err.response.data.message

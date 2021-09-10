@@ -115,7 +115,6 @@ export default {
          iframe.remove()
          this.freezed = false
          UserAPI.logout().then(() => {
-        window.confidentialNotified = false
         this.$router.push({ name: "login" });
       }).catch((error) => {
         this.$errorMessage(error,(error)=>{
@@ -129,6 +128,7 @@ export default {
                Message({ message: showMessage, type: 'error', duration: 3 * 1000})
            }
         })
+        this.$router.push({ name: "login" });
       })
       },3000)
     },
