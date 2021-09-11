@@ -48,7 +48,7 @@
 
                               <el-row gutter="15" type="flex" align="middle">
                                  <el-col span="12">
-                                    <el-input :value="`${localUrl}/v1/tasks/${user.delta_token}}`" readonly
+                                    <el-input :value="`${localUrl}/submit/${user.delta_token}}`" readonly
                                        disabled></el-input>
                                  </el-col>
                                  <el-col span="6">
@@ -146,7 +146,7 @@ export default {
    methods: {
       copyLink() {
          this.$copyText(
-            `${this.localUrl}/v1/tasks/${this.user.delta_token}`
+            `${this.localUrl}/submit/${this.user.delta_token}`
          ).then((res) => {
             this.$message("链接已复制");
          });
