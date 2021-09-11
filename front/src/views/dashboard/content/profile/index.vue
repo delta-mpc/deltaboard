@@ -48,7 +48,7 @@
 
                               <el-row gutter="15" type="flex" align="middle">
                                  <el-col span="12">
-                                    <el-input :value="`https://${localUrl}/v1/tasks/${user.delta_token}}`" readonly
+                                    <el-input :value="`${localUrl}/v1/tasks/${user.delta_token}}`" readonly
                                        disabled></el-input>
                                  </el-col>
                                  <el-col span="6">
