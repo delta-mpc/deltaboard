@@ -146,7 +146,7 @@ export default {
    methods: {
       copyLink() {
          this.$copyText(
-            `https://${this.localUrl}/v1/tasks/${this.user.delta_token}`
+            `${this.localUrl}/v1/tasks/${this.user.delta_token}`
          ).then((res) => {
             this.$message("链接已复制");
          });
