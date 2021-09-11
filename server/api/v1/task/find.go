@@ -79,11 +79,11 @@ func fillUserTasks(usertasks []*UserTask) {
 func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, error) {
 	username := in.UserId
 	var total int64
-	if err := db.GetDB().Model(&models.Task{}).Where(" user_id = ?", username).Count(&total).Error; err != nil {
+	if err := db.GetDB().Debug().Model(&models.Task{}).Where(" user_id = ?", username).Count(&total).Error; err != nil {
 		return nil, err
 	}
 	tasks := make([]*models.Task, 0)
-	if err := db.GetDB().Model(&models.Task{}).Offset((int(in.Page) - 1) * int(in.Page_size)).Limit(int(in.Page_size)).
+	if err := db.GetDB().Model(&models.Task{}).Where(" user_id = ?", username).Offset((int(in.Page) - 1) * int(in.Page_size)).Limit(int(in.Page_size)).
 		Find(&tasks).Error; err != nil {
 		return nil, err
 	}
