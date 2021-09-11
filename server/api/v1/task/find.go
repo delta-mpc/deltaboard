@@ -93,13 +93,13 @@ func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, e
 			Total: 0,
 		}}, nil
 	}
-	log.Info(posturl)
 	for idx, task := range tasks {
 		posturl += fmt.Sprintf("%d", task.NodeTaskId)
 		if idx < len(tasks)-1 {
 			posturl += "&task_ids="
 		}
 	}
+	log.Info(posturl)
 	resp, err := http.Get(posturl)
 	if err != nil {
 		return nil, err
