@@ -19,6 +19,7 @@ import (
 	"deltaboard-server/api/v1/response"
 	"deltaboard-server/config"
 	"deltaboard-server/config/db"
+	"deltaboard-server/config/log"
 	"deltaboard-server/models"
 	"encoding/json"
 	"fmt"
@@ -92,6 +93,7 @@ func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, e
 			Total: 0,
 		}}, nil
 	}
+	log.Info(posturl)
 	for idx, task := range tasks {
 		posturl += fmt.Sprintf("%d", task.NodeTaskId)
 		if idx < len(tasks)-1 {
