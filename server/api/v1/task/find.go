@@ -16,6 +16,7 @@
 package task
 
 import (
+	"bytes"
 	"deltaboard-server/api/v1/response"
 	"deltaboard-server/config"
 	"deltaboard-server/config/db"
@@ -23,6 +24,7 @@ import (
 	"deltaboard-server/models"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -104,8 +106,10 @@ func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, e
 	if err != nil {
 		return nil, err
 	}
+	respBytes, _ := io.ReadAll(resp.Body)
+	log.Info(string(respBytes))
 	respTasks := make([]*UserTask, 0)
-	err = json.NewDecoder(resp.Body).Decode(&respTasks)
+	err = json.NewDecoder(bytes.NewReader(respBytes)).Decode(&respTasks)
 	if err != nil {
 		return nil, err
 	}
