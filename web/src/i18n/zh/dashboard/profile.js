@@ -1,0 +1,16 @@
+export default {
+   'dashboard.profile.personal_information':'个人信息',
+   'dashboard.profile.name':'用户名',
+   'dashboard.profile.pwd':'密码',
+   'dashboard.profile.change_pwd':'修改密码',
+   'dashboard.profile.dashboard_api':'Dashboard API',
+   'dashboard.profile.copy':'复制',
+   'dashboard.profile.renew':'刷新',
+   'dashboard.profile.input_old_password':'请输入旧密码',
+   'dashboard.profile.input_new_password':'请输入新密码',
+   'dashboard.profile.repeat_new_password':'请再次输入新密码',
+   'dashboard.profile.change':'修改',
+   'dashboard.profile.address_copied':'API已复制',
+   'dashboard.profile.address_renewed':'API已刷新',
+   'dashboard.profile.confirm_renew_api':'更新API地址后，旧的API地址将失效，使用旧API地址的代码将无法正常运行，确定要更新吗？',
+}

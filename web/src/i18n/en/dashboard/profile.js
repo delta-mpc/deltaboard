@@ -1,0 +1,15 @@
+export default {
+   'dashboard.profile.personal_information':'Personal Information',
+   'dashboard.profile.name':'Name',
+   'dashboard.profile.pwd':'Password',
+   'dashboard.profile.change_pwd':'Change Password',
+   'dashboard.profile.dashboard_api':'Dashboard API',
+   'dashboard.profile.copy':'Copy',
+   'dashboard.profile.renew':'Renew',
+   'dashboard.profile.input_old_password':'Please input the old password',
+   'dashboard.profile.input_new_password':'Please input the new password',
+   'dashboard.profile.repeat_new_password':'Please repeat the new password',
+   'dashboard.profile.change':'Change',
+   'dashboard.profile.address_copied':'Address has been copied',
+   'dashboard.profile.confirm_renew_api':'As the old api will be nullified after renewing, codes using old api won\'t work as normal. Are you sure to renew dashboard api?',
+}
