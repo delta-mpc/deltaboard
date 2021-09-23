@@ -58,9 +58,6 @@
       "no-unused-vars": "off",
       "no-debugger": "off",
       "no-console": "off"
-    },
-    "globals": {
-      "resourcePath": true
     }
   },
   "browserslist": [

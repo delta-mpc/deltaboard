@@ -11,5 +11,5 @@ export default {
    'dashboard.profile.repeat_new_password':'Please repeat the new password',
    'dashboard.profile.change':'Change',
    'dashboard.profile.address_copied':'Address has been copied',
-   'dashboard.profile.confirm_renew_api':'As the old one will be nullified after renewing, codes using old api won\'t work as normal. Are you sure to renew dashboard api?',
+   'dashboard.profile.confirm_renew_api':'As the old api will be nullified after renewing, codes using old api won\'t work as normal. Are you sure to renew dashboard api?',
 }
