@@ -11,23 +11,24 @@ FROM node:12-alpine3.14 as webbuilder
 RUN mkdir -p /application/web
 
 WORKDIR /application/web
-ADD front/package.json package.json
+ADD web/package.json package.json
 
 RUN npm install 
 RUN npm audit fix
 
-ADD front/config.json config.json
-ADD front/public public
-ADD front/src src
-ADD front/.env .env
-ADD front/babel.config.js babel.config.js
-ADD front/vue.config.js vue.config.js
+ADD web/config.json config.json
+ADD web/public public
+ADD web/src src
+ADD web/.env .env
+ADD web/babel.config.js babel.config.js
+ADD web/vue.config.js vue.config.js
 
 RUN npm run build 
 
 FROM deltampc/detlaboard-base:dev
 # Create oauthenticator directory and put necessary files in it
-
+WORKDIR /application/installation
+RUN python3 -m pip install delta-task==0.1.2
 WORKDIR /application
 COPY --from=builder /application/main /application/main
 COPY --from=webbuilder /application/web/dist /application/web
@@ -61,13 +62,6 @@ ADD ./jupyter/ssl /application/ssl
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /application/web
-# ADD front/public public
-# ADD front/src src
-# ADD front/.env.development .env.development
-# ADD front/babel.config.js babel.config.js
-# ADD front/package.json package.json
-# ADD front/proxy.config.json proxy.config.json
-# ADD front/vue.config.js vue.config.js
 
 
 WORKDIR /app

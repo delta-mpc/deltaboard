@@ -5,9 +5,12 @@ server/data/mysql/db
 server/data/mysql/logs
 front/.env.development
 front/.env
-front/public/join_group.jpg
-front/public/post-regist.html
+web/.env.development
+web/.env
 home
+db/
+whls/
+whls_delta/
 server/config/config.yml
 # Binaries for programs and plugins
 *.exe

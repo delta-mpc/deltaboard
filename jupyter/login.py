@@ -42,7 +42,6 @@ class LogoutHandler(BaseHandler):
         Send a log message, clear some cookies, increment the logout counter.
         """
         self.log.info("User logged out: %s", name)
-        print('gogogog log out' + name )
         self.clear_login_cookie()
         self.statsd.incr('logout')
 
@@ -55,7 +54,7 @@ class LogoutHandler(BaseHandler):
         """
         await self.get_current_user()
         user = self.current_user
-        print(user)
+        self.log.info(user)
         if user:
             if self.shutdown_on_logout:
                 await self._shutdown_servers(user)
@@ -85,7 +84,7 @@ class LogoutHandler(BaseHandler):
         """Log the user out, call the custom action, forward the user
         to the logout page
         """
-        print('logging-out')
+        self.log.info('logging-out')
         await self.default_handle_logout()
         await self.handle_logout()
         await self.render_logout_page()
@@ -154,11 +153,11 @@ class LoginHandler(BaseHandler):
         auth_timer = self.statsd.timer('login.authenticate').start()
         user = await self.login_user(data)
         auth_timer.stop(send=False)
-        print(user)
+        self.log.info('user %s login',user)
         if user:
             # register current user for subsequent requests to user (e.g. logging the request)
             self._jupyterhub_user = user
-            print('get user!',user)
+            self.log.info('get user %s',user)
             self.redirect(self.get_next_url(user))
         else:
             html = await self._render(

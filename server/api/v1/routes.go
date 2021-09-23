@@ -15,7 +15,6 @@ import (
 func InitRoutes(r *fizz.Fizz) {
 
 	v1g := r.Group("v1", "ApiV1", "API version 1")
-
 	// user group
 	UserGroup(v1g)
 
@@ -24,6 +23,11 @@ func InitRoutes(r *fizz.Fizz) {
 	ConfigGroup(v1g)
 
 	NodeGroup(v1g)
+
+	r.POST("/submit/:token/v1/task", []fizz.OperationOption{
+		fizz.Summary("上传任务"),
+		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
+	}, tonic.Handler(task.Submit, 200))
 }
 
 func NodeGroup(g *fizz.RouterGroup) {
@@ -36,10 +40,10 @@ func NodeGroup(g *fizz.RouterGroup) {
 
 func TaskGroup(g *fizz.RouterGroup) {
 	taskGroup := g.Group("tasks", "task", "Account APIs")
-	taskGroup.POST("/:token/v1/task", []fizz.OperationOption{
-		fizz.Summary("上传任务"),
-		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
-	}, tonic.Handler(task.Submit, 200))
+	// taskGroup.POST("/:token/v1/task", []fizz.OperationOption{
+	// 	fizz.Summary("上传任务"),
+	// 	fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
+	// }, tonic.Handler(task.Submit, 200))
 
 	taskGroup.GET("/meta/:taskId", []fizz.OperationOption{
 		fizz.Summary("上传任务"),
