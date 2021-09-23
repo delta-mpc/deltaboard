@@ -1,0 +1,15 @@
+export default {
+   'common.login':'登录',
+   'common.please_input_your_name' :"请输入用户名",
+   'common.please_input_your_pwd': '请输入登录密码',
+   'common.please_repeat_your_pwd' :'请再次输入密码',
+   'common.password_mismatch':'两次密码输入不一致',
+   'common.account_login':'账户登录',
+   'common.regist_account' :'账户注册',
+   'common.regist' :'注册用户',
+   'common.password_no_less_than_5_digits' :'密码不能小于5位',
+   'common.please_input_validation_code':'请输入验证码',
+   'common.please_input_the_correct_email_addr':'请输入正确的邮箱',
+   'common.created_at':'创建日期',
+   'common.password':'密码',
+}

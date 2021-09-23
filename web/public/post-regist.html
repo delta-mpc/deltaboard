@@ -1,0 +1,55 @@
+<html>
+   <style>
+      a {
+         color:#999;
+         text-decoration: none;
+      }
+      a:hover {
+         color:#666;
+         text-decoration: underline;
+      }
+      p {
+         margin:0px
+      }
+   </style>
+   <body style="padding:20px 20%">
+       <h1 id="h_zh" style="margin:30px auto;width:150px;display:none">账号审核</h1>
+       <h1 id="h_en" style="margin:30px auto;width:500px;display:none">Account Check & Approve</h1>
+       <div style="width:800px;margin:0px auto;display:flex;align-items:center">
+         <div style="flex:1;margin-right:20px;">
+            <p id="p_zh" style="text-indent: 2rem;display:none">
+               由于做为演示系统的Delta Node计算能力有限，
+            并且针对Delta Task的执行环境隔离也还不完善，
+            因此在注册账号以后，
+            需要通过管理员人工审核后，
+            才能正常登录使用。
+            请扫码加入Delta微信交流群，
+            或者点击链接加入Slack，
+            并联系系统管理员通过审核。
+            </p>
+            <p id="p_en" style="text-indent: 2rem;display:none">
+               Because of the low computation capability on Delta Node demo version as well as the incomplet delta task execution environment,
+               we need to check and approve your account after you regist on our system. Please scan the mask to join wechat group of Delta or visit the link to join slack and then 
+               contact system administrator.
+            </p>
+            <div style="text-align:center;margin-top:20px;word-break: break-all;font-size:13px;">
+               <a href="https://join.slack.com/t/delta-mpc/shared_invite/zt-uaqm185x-52oCXcxoYvRlFwEoMUC8Tw" target="_blank">https://join.slack.com/t/delta-mpc/shared_invite/zt-uaqm185x-52oCXcxoYvRlFwEoMUC8Tw</a>
+            </div>
+          </div>
+          <div style="margin-left:20px">
+               <img style="width:150px;height:150px;margin:0px auto" src="/join_group.jpg"/>
+          </div>
+       </div>
+       <script>
+          var language = window.location.hash.replace(/\#/,'')
+          console.log(language)
+          if (language.indexOf('zh') > -1) {
+               document.querySelector('#p_zh').style.display = 'block'
+               document.querySelector('#h_zh').style.display = 'block'
+          } else {
+            document.querySelector('#p_en').style.display = 'block'
+            document.querySelector('#h_en').style.display = 'block'
+          }
+       </script>
+   </body>
+</html>
