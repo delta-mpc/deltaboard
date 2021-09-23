@@ -98,7 +98,6 @@ import { mapState } from "vuex";
 import V1UserAPI from "@/api/v1/users";
 import UserModel from "@/model/user";
 import SettingSection from "@/views/components/settingsection.vue";
-console.log(resourcePath)
 export default {
    name: "asset",
    components: {
@@ -107,9 +106,9 @@ export default {
    data() {
       const checkNewPass = (rule, value, callback) => {
          if (value.length < 5) {
-            callback(new Error("新密码不能小于5位"));
+            callback(new Error(this.$t('common.password_no_less_than_5_digits')));
          } else if (value !== this.passForm.newPass) {
-            callback(new Error("两次输入密码不一致"));
+            callback(new Error(this.$t('common.password_mismatch')));
          } else {
             callback();
          }
@@ -147,12 +146,12 @@ export default {
          this.$copyText(
             `${this.localUrl}/submit/${this.user.delta_token}`
          ).then((res) => {
-            this.$message("链接已复制");
+            this.$message(this.$t('dashboard.profile.address_copied'));
          });
       },
       renewLink() {
          this.$confirm(
-            `更新API地址后，旧的API地址将失效，使用旧API地址的代码将无法正常运行，确定要更新吗？`
+            this.$t('dashboard.profile.confirm_renew_api')
          ).then((res) => {
             V1UserAPI.renewDeltaToken(this.user.userId).then((res) => {
                UserModel.getMyUserInfo();
