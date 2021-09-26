@@ -1,6 +1,6 @@
 name: build docker image dev manually
 on:
-  workflow_dispatch::
+  workflow_dispatch:
     inputs:
       name:
         description: 'build manually trigger'
