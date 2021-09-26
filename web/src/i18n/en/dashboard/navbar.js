@@ -1,7 +1,7 @@
 export default {
    'dashboard.navbar.personal_profile':'Personal Profile',
-   'dashboard.navbar.logout':'Logout',
-   'dashboard.navbar.login/regist':'Login / Regist',
-   'dashboard.navbar.confirm_quit':'Do you want to quit ?',
-   'dashboard.navbar.quiting':'Quiting',
+   'dashboard.navbar.logout':'Sign out',
+   'dashboard.navbar.login/regist':'Sign in / Sign up',
+   'dashboard.navbar.confirm_quit':'Do you want to sign out ?',
+   'dashboard.navbar.quiting':'Signing out',
 }
