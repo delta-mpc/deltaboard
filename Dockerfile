@@ -38,7 +38,8 @@ COPY --from=pybuilder /whls /application/whls
 COPY --from=builder /application/main /application/main
 COPY --from=webbuilder /application/web/dist /application/web
 
-RUN apt-get install -y gettext sqlite3 nginx && \
+RUN apt-get update -y && \
+    apt-get install -y gettext sqlite3 nginx && \
     pip install --no-cache-dir whls/*.whl && \
     rm -rf whls && \
     mkdir /srv/oauthenticator && \
