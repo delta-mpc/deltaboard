@@ -26,6 +26,11 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
+      - name: gen env
+        run: |
+          mv ./web/.env.example ./web/.env
+        shell: bash
+
       - name: Docker build and push
         uses: docker/build-push-action@v2
         with:
