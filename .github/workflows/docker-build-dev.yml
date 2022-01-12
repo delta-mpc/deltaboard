@@ -22,6 +22,11 @@ jobs:
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
+      - name: gen env
+        run: |
+          mv ./web/.env.example ./web/.env
+        shell: bash
+
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
