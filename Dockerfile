@@ -25,13 +25,13 @@ ADD web/vue.config.js vue.config.js
 
 RUN npm run build 
 
-FROM jupyterhub/jupyterhub:1.4.2 as pybuilder
+FROM jupyterhub/jupyterhub:1.4.1 as pybuilder
 
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip wheel -w whls -r requirements.txt
 
-FROM jupyterhub/jupyterhub:1.4.2
+FROM jupyterhub/jupyterhub:1.4.1
 # Create oauthenticator directory and put necessary files in it
 
 WORKDIR /application
