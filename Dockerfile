@@ -27,14 +27,15 @@ RUN npm run build
 
 FROM jupyterhub/jupyterhub:1.4.2 as pybuilder
 
-WORKDIR /whls
-RUN pip wheel torch==1.8.2+cpu delta-task==0.3.0 jupyterlab==3.1.6 notebook==6.4.3 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
+WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip wheel -w whls -r requirements.txt
 
 FROM jupyterhub/jupyterhub:1.4.2
 # Create oauthenticator directory and put necessary files in it
 
 WORKDIR /application
-COPY --from=pybuilder /whls /application/whls
+COPY --from=pybuilder /app/whls /application/whls
 COPY --from=builder /application/main /application/main
 COPY --from=webbuilder /application/web/dist /application/web
 
