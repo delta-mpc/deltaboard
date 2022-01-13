@@ -2,6 +2,7 @@ PyYAML==6.0
 jupyterlab==3.1.6
 notebook==6.4.3
 delta-task==0.3.0
+oauthenticator==14.2.0
 
 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
 torch==1.8.2+cpu
