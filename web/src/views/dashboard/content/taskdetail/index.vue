@@ -31,10 +31,11 @@
             {{$t('dashboard.taskdetail.task_logs')}}
          </div>
          <div class="task-logs" v-infinite-scroll="loadTaskLog" style="overflow:auto">
-             <div v-for="itm,index in taskLogData" :key="index">
-                  <span class="date">{{itm.created_at / 1000 | second2Date}}</span>
-                  <span>{{itm.message}}</span>
-               </div>
+            <div v-for="itm,index in taskLogData" :key="index">
+               <span class="date">{{itm.created_at / 1000 | second2Date}}</span>
+               <span>{{itm.message}}</span>
+               <span v-if="itm.tx_hash">{{itm.tx_hash}}</span>
+            </div>
          </div>
       </div>
    </div>
@@ -75,7 +76,7 @@ export default {
       },
       init() {
          this.page = 1;
-         this.loadTaskLog();
+         // this.loadTaskLog();
          this.loadTaskMeta();
       },
       loadTaskMeta() {
