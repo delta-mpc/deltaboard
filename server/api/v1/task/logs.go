@@ -29,6 +29,7 @@ import (
 type TaskLog struct {
 	CreatedAt int64  `json:"created_at"`
 	Message   string `json:"message"`
+	TxHash    string `json:"tx_hash"`
 }
 
 type TaskLogInput struct {
