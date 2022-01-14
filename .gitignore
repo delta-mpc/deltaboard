@@ -35,3 +35,5 @@ main
 server/deploy
 docker-compose copy.yml
 .env
+
+node/**/*

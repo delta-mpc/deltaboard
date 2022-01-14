@@ -1,6 +1,7 @@
 module deltaboard-server
 
 go 1.14
+
 require (
 	github.com/ethereum/go-ethereum v1.9.25
 	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2
