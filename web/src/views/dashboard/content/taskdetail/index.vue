@@ -11,7 +11,7 @@
         <el-descriptions-item
           :label="$t('common.created_at')"
           :labelStyle="labelStyle"
-          >{{ taskLogMetaData.created_at || 0 | second2Date }}
+          >{{ (taskLogMetaData.created_at / 1000) || 0 | second2Date }}
         </el-descriptions-item>
         <el-descriptions-item
           :label="$t('dashboard.taskdetail.creator')"
