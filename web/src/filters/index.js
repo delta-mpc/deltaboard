@@ -7,10 +7,7 @@ dayjs.extend(timeZone);
 
 const filters = {
   second2Date: (sec) => {
-    const tz = dayjs.tz.guess();
-    console.log(tz);
     return dayjs(sec * 1000).utc(true).local().format("YYYY-MM-DD HH:mm:ss");
-
   },
   second2YearMonth: (sec) => {
     return dayjs(sec * 1000).utc(true).local().format("YYYY-MM")
