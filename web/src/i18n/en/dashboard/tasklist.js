@@ -1,4 +1,5 @@
 export default {
+   'dashboard.tasklist.task_id': 'Task ID',
    'dashboard.tasklist.task_name':'Task Name',
    'dashboard.tasklist.task_type':'Type',
    'dashboard.tasklist.creator_node':'Creator Node',

@@ -1,4 +1,5 @@
 export default {
+   'dashboard.tasklist.task_id': '任务ID',
    'dashboard.tasklist.task_name':'任务名称',
    'dashboard.tasklist.task_type':'任务类型',
    'dashboard.tasklist.creator_node':'创建节点',
