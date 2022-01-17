@@ -1,20 +1,27 @@
+import * as dayjs from "dayjs";
+import * as utc from "dayjs/plugin/utc";
+import * as timeZone from "dayjs/plugin/timezone";
 
-import format from 'date-fns/format'
-import {zhCN} from 'date-fns/locale'
+dayjs.extend(utc);
+dayjs.extend(timeZone);
+
 const filters = {
   second2Date: (sec) => {
-    return format(sec * 1000, 'yyyy-MM-dd HH:mm:ss')
+    const tz = dayjs.tz.guess();
+    console.log(tz);
+    return dayjs(sec * 1000).utc(true).local().format("YYYY-MM-DD HH:mm:ss");
+
   },
   second2YearMonth: (sec) => {
-    return format(sec * 1000, 'yyyy-MM')
+    return dayjs(sec * 1000).utc(true).local().format("YYYY-MM")
   },
   second2ChineseYearMonth: (sec) => {
-    return format(sec * 1000, 'yyyy年MM月dd日 E 中国标准时间 a hh:mm:ss',{locale:zhCN})
+    return dayjs(sec * 1000).utc(true).tz("Asia/Shanghai").format("YYYY年MM月DD日 E 中国标准时间 a hh:mm:ss")
   },
   privacyPhoneNum: (num) => {
-    var reg = /^(\d{3})\d{4}(\d{4})$/
+    var reg = /^(\d{3})\d{4}(\d{4})$/;
     return num.replace(reg, "$1****$2");
-  }
-}
+  },
+};
 // Object.assign(filters,modules)
-export default filters
+export default filters;
