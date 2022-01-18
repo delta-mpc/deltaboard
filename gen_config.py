@@ -1,10 +1,10 @@
 import yaml 
 import os
-from pathlib import Path
 
-if not Path('/app/app_config/config.yaml').exists():
-   os.makedirs("/app/app_config",exist_ok=True)
+if not os.path.exists("/app/db"):
    os.makedirs("/app/db",exist_ok=True)
+if not os.path.exists('/app/app_config/config.yaml'):
+   os.makedirs("/app/app_config",exist_ok=True)
    defaultData = dict(
       db = dict(
          driver = '',
