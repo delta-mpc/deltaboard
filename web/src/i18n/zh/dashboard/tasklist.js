@@ -7,5 +7,6 @@ export default {
    'dashboard.tasklist.status':'状态',
    'dashboard.tasklist.pending':'等待运行',
    'dashboard.tasklist.running':'运行中',
-   'dashboard.tasklist.finished':'完成'
+   'dashboard.tasklist.finished':'完成',
+   'dashboard.tasklist.error':'异常'
 }

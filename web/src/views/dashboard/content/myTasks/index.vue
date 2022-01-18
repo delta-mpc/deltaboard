@@ -25,6 +25,9 @@
                      <el-tag type="success" v-else-if="row.status == $appGlobal.constants.TASK_STATUS_RUNNING">
                         {{$t('dashboard.tasklist.running')}}
                      </el-tag>
+                     <el-tag type="danger" v-else-if="row.status == $appGlobal.constants.TASK_STATUS_ERROR">
+                        {{$t('dashboard.tasklist.error')}}
+                     </el-tag>
                      <el-tag type="info" v-else>
                         {{$t('dashboard.tasklist.finished')}}
                      </el-tag>

@@ -55,9 +55,10 @@ Object.keys(filters).forEach((key) => {
 Vue.prototype.$message = ElementUI.Message
 Vue.prototype.$appGlobal = {
    constants:{
-      TASK_STATUS_PENDING:'INIT',
+      TASK_STATUS_PENDING:'PENDING',
       TASK_STATUS_RUNNING:'RUNNING',
       TASK_STATUS_FINISHED:'FINISHED',
+      TASK_STATUS_ERROR:'ERROR',
       USER_APPROVE_STATUS_REGISTED:1,
       USER_APPROV_STATUS_APPROVED:2
    }
