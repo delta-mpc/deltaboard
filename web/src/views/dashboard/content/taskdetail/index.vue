@@ -47,6 +47,14 @@
           >
             {{ $t("dashboard.taskdetail.running") }}
           </el-tag>
+          <el-tag
+            type="danger"
+            v-else-if="
+              taskLogMetaData.status == $appGlobal.constants.TASK_STATUS_ERROR
+            "
+          >
+            {{ $t("dashboard.taskdetail.error") }}
+          </el-tag>
           <el-tag type="info" v-else>
             {{ $t("dashboard.taskdetail.finished") }}
           </el-tag>
