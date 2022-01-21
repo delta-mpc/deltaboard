@@ -158,10 +158,10 @@ export default {
             });
          }
          if(this.activeName == 'approval') {
-            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.management.page,this.management.page_size).then((res) => {
+            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.approval.page,this.approval.page_size).then((res) => {
                let lst = res.list.filter((itm)=>this['approval']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
                this['approval']['tableData'].push(...lst);
-               this.management.page += 1
+               this.approval.page += 1
             });
          }
       },

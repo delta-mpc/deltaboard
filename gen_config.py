@@ -1,6 +1,5 @@
 import yaml 
 import os
-
 if not os.path.exists("/app/db"):
    os.makedirs("/app/db",exist_ok=True)
 if not os.path.exists('/app/app_config/config.yaml'):
