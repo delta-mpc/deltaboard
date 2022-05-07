@@ -9,6 +9,6 @@ export default {
    'dashboard.taskdetail.running':'Running',
    'dashboard.taskdetail.finished':'Finished',
    'dashboard.taskdetail.error':'Error',
-   'dashboard.taskdetail.download_weights':'Download Weights',
+   'dashboard.taskdetail.download_result':'Download Result',
    'dashboard.taskdetail.task_logs':'Task Logs',
 }

@@ -9,6 +9,6 @@ export default {
    'dashboard.taskdetail.running':'运行中',
    'dashboard.taskdetail.finished':'完成',
    'dashboard.taskdetail.error':'异常',
-   'dashboard.taskdetail.download_weights':'下载权重',
+   'dashboard.taskdetail.download_result':'下载结果',
    'dashboard.taskdetail.task_logs':'任务日志',
 }

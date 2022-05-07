@@ -66,7 +66,7 @@ func TaskGroup(g *fizz.RouterGroup) {
 	}, tonic.Handler(task.FindUserTasks, 200))
 
 	taskGroup.GET("/result/:task_id", []fizz.OperationOption{
-		fizz.Summary("下载权重"),
+		fizz.Summary("下载结果"),
 		fizz.Response("400", "exception", response.ValidationErrorResponse{}, nil),
 	}, tonic.Handler(task.DownloadTaskResult, 200))
 }

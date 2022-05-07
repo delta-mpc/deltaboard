@@ -71,7 +71,7 @@
         v-if="taskLogMetaData.status == 'FINISHED'"
         @click.stop="downloadWeights"
       >
-        {{ $t("dashboard.taskdetail.download_weights") }}
+        {{ $t("dashboard.taskdetail.download_result") }}
       </el-button>
       <div class="el-descriptions__title task-log-title">
         {{ $t("dashboard.taskdetail.task_logs") }}
