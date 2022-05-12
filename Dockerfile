@@ -47,7 +47,6 @@ RUN apt-get update -y && \
     mkdir /srv/ipython && \
     mkdir /srv/ipython/examples && \
     mkdir /root/.jupyter
-ADD ./jupyter/delta_example.ipynb /srv/ipython/examples/delta_example.ipynb
 COPY ./jupyter/examples  /srv/ipython/examples
 ADD ./jupyter/jupyter_jupyterlab_server_config.py /application/jupyter_jupyterlab_server_config.py
 WORKDIR /srv/oauthenticator
