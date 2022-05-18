@@ -33,9 +33,9 @@ type TaskLog struct {
 }
 
 type TaskLogInput struct {
-	TaskId    int64 `json:"task_id" form:"task_id" validate:"required" description:"The task id"`
-	Page      int64 `json:"page" form:"page" description:"The task page dd"`
-	Page_size int64 `json:"page_size" form:"page_size" description:"The task page size"`
+	TaskId int64 `json:"task_id" form:"task_id" validate:"required" description:"The task id"`
+	Start  int64 `json:"start" form:"start" description:"The task log start id"`
+	Limit  int64 `json:"limit" form:"limit" description:"The task log query limit size"`
 }
 
 type TaskLogResponse struct {
@@ -46,9 +46,9 @@ type TaskLogResponse struct {
 func GetTaskLogs(ctx *gin.Context, in *TaskLogInput) (*TaskLogResponse, error) {
 	node_addr := config.GetConfig().Delta_Node_Addr
 	taskId := fmt.Sprintf("%d", in.TaskId)
-	page := fmt.Sprintf("%d", in.Page)
-	page_size := fmt.Sprintf("%d", in.Page_size)
-	posturl := node_addr + "/v1/task/logs?task_id=" + taskId + "&page=" + page + "&page_size=" + page_size
+	start := fmt.Sprintf("%d", in.Start)
+	limit := fmt.Sprintf("%d", in.Limit)
+	posturl := node_addr + "/v1/task/logs?task_id=" + taskId + "&start=" + start + "&limit=" + limit
 	client := &http.Client{Timeout: time.Duration(20) * time.Second}
 	resp, err := client.Get(posturl)
 	if err != nil {

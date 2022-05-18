@@ -113,8 +113,8 @@ export default {
     return {
       taskLogMetaData: {},
       taskLogData: [],
-      page: 1,
-      page_size: 60,
+      logStart: 0,
+      logLimit: 60,
       labelStyle: {
         display: "flex",
         alignItems: "center",
@@ -129,7 +129,7 @@ export default {
       );
     },
     init() {
-      this.page = 1;
+      this.log_start = 0;
       // this.loadTaskLog();
       this.loadTaskMeta();
     },
@@ -140,10 +140,11 @@ export default {
     },
     loadTaskLog() {
       console.log(`load task log page ${this.page}`);
-      V1TaskAPI.getTaskLogs(this.currentTaskId, this.page, this.page_size).then(
+      V1TaskAPI.getTaskLogs(this.currentTaskId, this.logStart, this.logLimit).then(
         (res) => {
           this.taskLogData = this.taskLogData.concat(res);
-          this.page += 1;
+          let finalLogData = res[res.length - 1];
+          this.log_start = finalLogData.id + 1;
           console.log(`load task log complete, page increase to ${this.page}`);
         }
       );
