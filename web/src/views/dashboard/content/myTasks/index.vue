@@ -91,7 +91,7 @@ export default {
         this.$router.push({path:`task/${row.id}`})
      },
      onOpened(){
-        this.taskLogPage.page = 1
+        this.taskLogPage.start = 0
         this.loadTaskLog()
         this.loadTaskMeta()
      },  

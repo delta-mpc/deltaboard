@@ -129,7 +129,7 @@ export default {
       );
     },
     init() {
-      this.log_start = 0;
+      this.logStart = 0;
       // this.loadTaskLog();
       this.loadTaskMeta();
     },
@@ -144,7 +144,7 @@ export default {
         (res) => {
           this.taskLogData = this.taskLogData.concat(res);
           let finalLogData = res[res.length - 1];
-          this.log_start = finalLogData.id + 1;
+          this.logStart = finalLogData.id + 1;
           console.log(`load task log complete, page increase to ${this.page}`);
         }
       );
