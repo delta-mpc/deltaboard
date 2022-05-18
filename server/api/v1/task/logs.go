@@ -27,6 +27,7 @@ import (
 )
 
 type TaskLog struct {
+	ID        int64  `json:"id"`
 	CreatedAt int64  `json:"created_at"`
 	Message   string `json:"message"`
 	TxHash    string `json:"tx_hash"`
