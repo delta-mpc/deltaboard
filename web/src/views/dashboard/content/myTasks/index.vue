@@ -67,8 +67,8 @@ export default {
          taskLogMetaData:{},
          taskLogData:[],
          currentTaskId:null,
-         page:1,
-         page_size:60
+         start: 0,
+         limit: 60
       }
     };
   },
@@ -91,7 +91,7 @@ export default {
         this.$router.push({path:`task/${row.id}`})
      },
      onOpened(){
-        this.taskLogPage.page = 1
+        this.taskLogPage.start = 0
         this.loadTaskLog()
         this.loadTaskMeta()
      },  
@@ -128,12 +128,13 @@ export default {
      },
      loadTaskLog(){
         V1TaskAPI.getTaskLogs(this.taskLogPage.currentTaskId,
-            this.taskLogPage.page,
-            this.taskLogPage.page_size).then((res)=>{
+            this.taskLogPage.start,
+            this.taskLogPage.limit).then((res)=>{
             this.taskLogPage.taskLogData = this.taskLogPage.taskLogData.concat(res);
-            console.log(this.taskLogPage.taskLogData)
-            this.taskLogPage.page += 1
-         })
+            console.log(this.taskLogPage.taskLogData);
+            let finalLogData = res[res.length - 1];
+            this.taskLogPage.start = finalLogData.id + 1;
+      })
      }
   }
 };
