@@ -34,13 +34,14 @@ type Task struct {
 	Task_id int64 `json:"task_id"`
 }
 type UserTask struct {
-	ID          int64  `json:"id"`
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Creator     string `json:"creator"`
-	Status      string `json:"status"`
-	CreatedAt   int64  `json:"created_at"`
-	CreatorName string `json:"creator_name"`
+	ID           int64  `json:"id"`
+	Name         string `json:"name"`
+	Type         string `json:"type"`
+	Creator      string `json:"creator"`
+	Status       string `json:"status"`
+	CreatedAt    int64  `json:"created_at"`
+	CreatorName  string `json:"creator_name"`
+	EnableVerify bool   `json:"enable_verify"`
 }
 
 type AllTasks struct {
