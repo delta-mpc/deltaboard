@@ -57,13 +57,13 @@
           </el-tag>
           <el-tag
             type="info"
-            v-else-if="$appGlobal.constants.TASK_STATUS_FINISHED"
+            v-else-if="taskLogMetaData.status == $appGlobal.constants.TASK_STATUS_FINISHED"
           >
             {{ $t("dashboard.taskdetail.finished") }}
           </el-tag>
           <el-tag
             type="info"
-            v-else-if="$appGlobal.constants.TASK_STATUS_CONFIRMED"
+            v-else-if="taskLogMetaData.status == $appGlobal.constants.TASK_STATUS_CONFIRMED"
           >
             {{ $t("dashboard.taskdetail.confirmed") }}
           </el-tag>
@@ -77,7 +77,7 @@
       <el-button
         size="medium"
         type="primary"
-        v-if="resultReady"
+        v-if="taskLogMetaData.status == 'FINISHED' || taskLogMetaData.status == 'CONFIRMED'"
         @click.stop="downloadWeights"
       >
         {{ $t("dashboard.taskdetail.download_result") }}
@@ -117,13 +117,6 @@ export default {
     }),
     currentTaskId() {
       return this.$route.params.task_id;
-    },
-    resultReady() {
-      if (this.taskLogMetaData.enableVerify) {
-        return this.taskLogMetaData.status == this.$appGlobal.constants.TASK_STATUS_CONFIRMED;
-      } else {
-        return this.taskLogMetaData.status == this.$appGlobal.constants.TASK_STATUS_FINISHED;
-      }
     },
   },
   data() {
