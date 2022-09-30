@@ -8,6 +8,7 @@ export default {
    'dashboard.taskdetail.pending':'Pending',
    'dashboard.taskdetail.running':'Running',
    'dashboard.taskdetail.finished':'Finished',
+   'dashboard.taskdetail.confirmed':'CONFIRMED',
    'dashboard.taskdetail.error':'Error',
    'dashboard.taskdetail.download_result':'Download Result',
    'dashboard.taskdetail.task_logs':'Task Logs',
