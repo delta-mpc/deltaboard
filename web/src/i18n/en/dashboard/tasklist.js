@@ -8,5 +8,6 @@ export default {
    'dashboard.tasklist.pending':'Pending',
    'dashboard.tasklist.running':'Running',
    'dashboard.tasklist.finished':'Finished',
+   'dashboard.tasklist.confirmed':'Confirmed',
    'dashboard.tasklist.error':'Error'
 }

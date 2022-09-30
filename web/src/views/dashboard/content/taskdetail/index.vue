@@ -11,7 +11,7 @@
         <el-descriptions-item
           :label="$t('common.created_at')"
           :labelStyle="labelStyle"
-          >{{ (taskLogMetaData.created_at / 1000) || 0 | second2Date }}
+          >{{ taskLogMetaData.created_at / 1000 || 0 | second2Date }}
         </el-descriptions-item>
         <el-descriptions-item
           :label="$t('dashboard.taskdetail.creator')"
@@ -55,8 +55,17 @@
           >
             {{ $t("dashboard.taskdetail.error") }}
           </el-tag>
-          <el-tag type="info" v-else>
+          <el-tag
+            type="info"
+            v-else-if="$appGlobal.constants.TASK_STATUS_FINISHED"
+          >
             {{ $t("dashboard.taskdetail.finished") }}
+          </el-tag>
+          <el-tag
+            type="info"
+            v-else-if="$appGlobal.constants.TASK_STATUS_CONFIRMED"
+          >
+            {{ $t("dashboard.taskdetail.confirmed") }}
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item
@@ -68,7 +77,7 @@
       <el-button
         size="medium"
         type="primary"
-        v-if="taskLogMetaData.status == 'FINISHED'"
+        v-if="resultReady"
         @click.stop="downloadWeights"
       >
         {{ $t("dashboard.taskdetail.download_result") }}
@@ -83,10 +92,11 @@
       >
         <div v-for="(itm, index) in taskLogData" :key="index">
           <div class="content">
-            {{ (itm.created_at / 1000) | second2Date }} &nbsp;&nbsp; {{ itm.message }}
+            {{ (itm.created_at / 1000) | second2Date }} &nbsp;&nbsp;
+            {{ itm.message }}
           </div>
-          <div class="content" v-if="itm.tx_hash"
-            >tx hash:
+          <div class="content" v-if="itm.tx_hash">
+            tx hash:
             <a target="_blank" :href="txUrl(itm.tx_hash)">{{ itm.tx_hash }}</a>
           </div>
         </div>
@@ -107,6 +117,13 @@ export default {
     }),
     currentTaskId() {
       return this.$route.params.task_id;
+    },
+    resultReady() {
+      if (this.taskLogMetaData.enableVerify) {
+        return this.taskLogMetaData.status == this.$appGlobal.constants.TASK_STATUS_CONFIRMED;
+      } else {
+        return this.taskLogMetaData.status == this.$appGlobal.constants.TASK_STATUS_FINISHED;
+      }
     },
   },
   data() {
@@ -140,14 +157,16 @@ export default {
     },
     loadTaskLog() {
       console.log(`load task log page ${this.page}`);
-      V1TaskAPI.getTaskLogs(this.currentTaskId, this.logStart, this.logLimit).then(
-        (res) => {
-          this.taskLogData = this.taskLogData.concat(res);
-          let finalLogData = res[res.length - 1];
-          this.logStart = finalLogData.id + 1;
-          console.log(`load task log complete, page increase to ${this.page}`);
-        }
-      );
+      V1TaskAPI.getTaskLogs(
+        this.currentTaskId,
+        this.logStart,
+        this.logLimit
+      ).then((res) => {
+        this.taskLogData = this.taskLogData.concat(res);
+        let finalLogData = res[res.length - 1];
+        this.logStart = finalLogData.id + 1;
+        console.log(`load task log complete, page increase to ${this.page}`);
+      });
     },
     txUrl(txHash) {
       return `https://explorer.deltampc.com/tx/${txHash}/internal-transactions`;

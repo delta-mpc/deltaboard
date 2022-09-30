@@ -28,8 +28,11 @@
                      <el-tag type="danger" v-else-if="row.status == $appGlobal.constants.TASK_STATUS_ERROR">
                         {{$t('dashboard.tasklist.error')}}
                      </el-tag>
-                     <el-tag type="info" v-else>
+                     <el-tag type="info" v-else-if="row.status == $appGlobal.constants.TASK_STATUS_FINISHED">
                         {{$t('dashboard.tasklist.finished')}}
+                     </el-tag>
+                     <el-tag type="info" v-else-if="row.status == $appGlobal.constants.TASK_STATUS_CONFIRMED">
+                        {{$t('dashboard.tasklist.confirmed')}}
                      </el-tag>
                   </template>
                </el-table-column>
