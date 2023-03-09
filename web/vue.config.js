@@ -9,7 +9,7 @@ if (process.env.VUE_APP_VERSION) {
 }
 const proxyConfig = {
    "/v1": {
-     "target":"https://api.board.deltampc.com"
+     "target":"http://localhost:8080"
    },
    "^/hub":{
       "target":"https://api.board.deltampc.com",
@@ -38,7 +38,7 @@ module.exports = {
     devServer:{
       port:jsonConfig['port'],
       proxy:proxyConfig,
-        https: true
+        https: false
     },
     pwa:{
       name: 'Deltaboard',
