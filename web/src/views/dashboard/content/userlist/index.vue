@@ -84,12 +84,14 @@ export default {
          management:{
             tableData:[],
             page_size:12,
-            page:1
+            page:1,
+            sort: 0,
          },
          approval:{
             tableData:[],
             page_size:12,
-            page:1
+            page:1,
+            sort: 1,
          },
          capsTooltip: false,
          loading: false,
@@ -135,7 +137,7 @@ export default {
          this.$confirm(this.$t('dashboard.userlist.approve_user',{name:user.name})).then((res) => {
             V1UserAPI.approveUser(user.id).then((res) => {
                this.$message(this.$t('dashboard.userlist.user_approved'));
-                this.approval.tableData = this.approval.tableData.filter((itm)=>itm.id != user.id)
+               this.approval.tableData = this.approval.tableData.filter((itm)=>itm.id != user.id)
                // this.load();
             });
          });
@@ -150,15 +152,15 @@ export default {
          });
       },
       load() {
-        if(this.activeName == 'management') {
-           V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROV_STATUS_APPROVED,this.management.page,this.management.page_size).then((res) => {
+         if(this.activeName == 'management') {
+            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROV_STATUS_APPROVED,this.management.page,this.management.page_size, this.management.sort).then((res) => {
                let lst = res.list.filter((itm)=>this['management']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
                this['management']['tableData'].push(...lst);
                this.management.page += 1
             });
          }
          if(this.activeName == 'approval') {
-            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.approval.page,this.approval.page_size).then((res) => {
+            V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.approval.page,this.approval.page_size, this.approval.sort).then((res) => {
                let lst = res.list.filter((itm)=>this['approval']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
                this['approval']['tableData'].push(...lst);
                this.approval.page += 1
@@ -205,8 +207,8 @@ export default {
       max-height calc(100vh - 240px)
       overflow:auto
       &::-webkit-scrollbar {
-        width: 0px;
-        background-color: #e5e5e5;
+         width: 0px;
+         background-color: #e5e5e5;
       }
    }
 }

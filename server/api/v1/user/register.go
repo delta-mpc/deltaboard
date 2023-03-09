@@ -56,6 +56,7 @@ type FetchUserInput struct {
 	ApproveStatus int8  `json:"approve_status" form:"approve_status"`
 	Page          int64 `json:"page" form:"page"`
 	PageSize      int64 `json:"page_size" form:"page_size"`
+	Sort          int8  `json:"sort" form:"sort" validate:"gte=0,lte=1" description:"结果的顺序。0-ASC,1-DESC"`
 }
 
 type FetchRegistedUserResponse struct {
@@ -162,7 +163,13 @@ func FetchUser(ctx *gin.Context, in *FetchUserInput) (*FetchRegistedUserResponse
 	}
 	users := make([]*models.User, 0)
 	if total > 0 {
-		if err := db.GetDB().Model(&models.User{}).Where("apprv_status = ? ", in.ApproveStatus).
+		var order string
+		if in.Sort == 0 {
+			order = "id asc"
+		} else {
+			order = "id desc"
+		}
+		if err := db.GetDB().Model(&models.User{}).Where("apprv_status = ? ", in.ApproveStatus).Order(order).
 			Limit(int(in.PageSize)).Offset(int((in.Page - 1) * in.PageSize)).Find(&users).Error; err != nil {
 			return nil, err
 		}

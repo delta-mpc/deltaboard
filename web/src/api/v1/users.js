@@ -5,8 +5,8 @@ export default {
    register(username, password) {
       return v1.post('/users/tokens', {'user_name': username, 'password': password})
    },
-   fetchUser(apprv_status,pageID,pageSize) {
-      return v1.get('/users/approve_status', {params:{approve_status:apprv_status,page: pageID, page_size: pageSize}})
+   fetchUser(apprv_status,pageID,pageSize,sort) {
+      return v1.get('/users/approve_status', {params:{approve_status:apprv_status,page: pageID, page_size: pageSize, sort: sort}})
    },
    approveUser(userId) {
       return v1.post(`/users/approve/${userId}`)

@@ -18,6 +18,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	glog "log"
 	"os"
 	"time"
@@ -52,15 +53,6 @@ func InitDB(appConfig *config.AppConfig) (err error) {
 		}
 		return nil
 	}
-	sqlDB, err := sql.Open(appConfig.Db.Driver, appConfig.Db.ConnectionString)
-	if err != nil {
-		log.Error("InitDB sql.Open error:" + err.Error())
-		return err
-	}
-	sqlDB.SetMaxIdleConns(20)
-	sqlDB.SetMaxOpenConns(50)
-	sqlDB.SetConnMaxLifetime(5 * time.Second)
-
 	newLogger := logger.New(
 		glog.New(os.Stdout, "\r\n", glog.LstdFlags), // io writer
 		logger.Config{
@@ -71,12 +63,30 @@ func InitDB(appConfig *config.AppConfig) (err error) {
 		},
 	)
 
-	db, err = gorm.Open(mysql.New(mysql.Config{Conn: sqlDB}),
-		&gorm.Config{Logger: newLogger})
+	if appConfig.Db.Driver == "mysql" {
+		sqlDB, err := sql.Open(appConfig.Db.Driver, appConfig.Db.ConnectionString)
+		if err != nil {
+			log.Error("InitDB sql.Open error:" + err.Error())
+			return err
+		}
+		sqlDB.SetMaxIdleConns(20)
+		sqlDB.SetMaxOpenConns(50)
+		sqlDB.SetConnMaxLifetime(5 * time.Second)
 
-	if err != nil {
-		log.Error("InitDB Failed:" + err.Error())
-		return err
+		db, err = gorm.Open(mysql.New(mysql.Config{Conn: sqlDB}),
+			&gorm.Config{Logger: newLogger})
+		if err != nil {
+			log.Error("InitDB Failed:" + err.Error())
+			return err
+		}
+	} else if appConfig.Db.Driver == "sqlite" {
+		db, err = gorm.Open(sqlite.Open(appConfig.Db.ConnectionString), &gorm.Config{Logger: newLogger})
+		if err != nil {
+			log.Error("InitDB Failed:" + err.Error())
+			return err
+		}
+	} else {
+		return fmt.Errorf("unknown db driver type %s", appConfig.Db.Driver)
 	}
 
 	// Set default database charset to utf8mb4
