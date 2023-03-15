@@ -25,24 +25,17 @@ ADD web/vue.config.js vue.config.js
 
 RUN npm run build 
 
-FROM jupyterhub/jupyterhub:1.4.2 as pybuilder
-
-WORKDIR /app
-COPY requirements.txt /app/requirements.txt
-RUN pip wheel -w whls -r requirements.txt
-
 FROM jupyterhub/jupyterhub:1.4.2
 # Create oauthenticator directory and put necessary files in it
 
 WORKDIR /application
-COPY --from=pybuilder /app/whls /application/whls
+COPY requirements.txt /application/requirements.txt
 COPY --from=builder /application/main /application/main
 COPY --from=webbuilder /application/web/dist /application/web
 
 RUN apt-get update -y && \
     apt-get install -y gettext sqlite3 nginx && \
-    pip install --no-cache-dir whls/*.whl && \
-    rm -rf whls && \
+    pip install --no-cache-dir -r requirements.txt && \
     mkdir /srv/oauthenticator && \
     mkdir /srv/ipython && \
     mkdir /srv/ipython/examples && \
