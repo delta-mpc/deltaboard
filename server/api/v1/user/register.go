@@ -165,9 +165,9 @@ func FetchUser(ctx *gin.Context, in *FetchUserInput) (*FetchRegistedUserResponse
 	if total > 0 {
 		var order string
 		if in.Sort == 0 {
-			order = "id asc"
+			order = "created_at asc"
 		} else {
-			order = "id desc"
+			order = "created_at desc"
 		}
 		if err := db.GetDB().Model(&models.User{}).Where("apprv_status = ? ", in.ApproveStatus).Order(order).
 			Limit(int(in.PageSize)).Offset(int((in.Page - 1) * in.PageSize)).Find(&users).Error; err != nil {
