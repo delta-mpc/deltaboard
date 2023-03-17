@@ -1,6 +1,6 @@
 {
   "name": "deltaboard-web",
-  "version": "0.8.2-alpha2",
+  "version": "0.8.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
