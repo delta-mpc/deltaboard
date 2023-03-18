@@ -65,20 +65,12 @@ type FindTaskResponse struct {
 	Data *AllTasks `json:"data"`
 }
 
-func fillUserTasks(usertasks []*UserTask) {
-	for _, user_task := range usertasks {
-		u_task := &models.Task{
-			NodeTaskId: user_task.ID,
-		}
-		if err := db.GetDB().Find(u_task, u_task).Error; err != nil {
-			continue
-		}
-		user_task.CreatorName = u_task.Creator
-	}
-}
-
 func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, error) {
 	username := in.UserId
+	user := models.User{}
+	if err := db.GetDB().Select("id", "name").Where("id = ?", username).First(&user).Error; err != nil {
+		return nil, err
+	}
 	var total int64
 	if err := db.GetDB().Debug().Model(&models.Task{}).Where(" user_id = ?", username).Count(&total).Error; err != nil {
 		return nil, err
@@ -114,7 +106,9 @@ func FindUserTasks(ctx *gin.Context, in *GetUserTaskInput) (*FindTaskResponse, e
 	if err != nil {
 		return nil, err
 	}
-	fillUserTasks(respTasks)
+	for _, task := range respTasks {
+		task.CreatorName = user.Name
+	}
 	AllTasks := &AllTasks{
 		Tasks: respTasks,
 		Total: int(total),
