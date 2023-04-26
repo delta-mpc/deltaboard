@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link :to="{ name: 'playground' }">
-      <img class="logo" :src="require('@/assets/logo.svg')"/>
+      <span class="logo">Crynux</span>
     </router-link>
     <div class="right-menu">
       <el-menu
