@@ -42,9 +42,7 @@ module.exports = {
     },
     pwa:{
       name: 'Deltaboard',
-      iconPaths:{
-         favicon32:'img/icons/favicon.ico',favicon16:'img/icons/favicon.ico',maskIcon:'img/icons/favicon.ico'
-      }
+      iconPaths: null,
     },
     configureWebpack: {
         devtool: 'source-map',
