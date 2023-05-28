@@ -162,7 +162,7 @@ export default {
       });
     },
     txUrl(txHash) {
-      return `https://explorer.deltampc.com/tx/${txHash}/internal-transactions`;
+      return `https://block-explorer.crynux.ai/tx/${txHash}/internal-transactions`;
     },
   },
   beforeRouteEnter(to, from, next) {
