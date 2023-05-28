@@ -6,7 +6,7 @@
       :default-active="barActiveIndex"
       background-color="#f5f8fa"
       text-color="#606266"
-      active-text-color="#7DD0D7"
+      active-text-color="#09AAFF"
       :collapse="isCollapse"
     >
     <el-menu-item class="sidebar-menu-item" ref="1" index="1" @click="sideItemClicked">
