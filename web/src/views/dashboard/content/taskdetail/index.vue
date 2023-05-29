@@ -125,8 +125,9 @@ export default {
     const timer = setInterval(() => {
       if (
         this.taskLogMetaData.status ===
-          $appGlobal.constants.TASK_STATUS_PENDING ||
-        this.taskLogMetaData.status === $appGlobal.constants.TASK_STATUS_RUNNING
+          this.$appGlobal.constants.TASK_STATUS_PENDING ||
+        this.taskLogMetaData.status ===
+          this.$appGlobal.constants.TASK_STATUS_RUNNING
       ) {
         this.loadTaskMeta();
         this.loadTaskLog();
