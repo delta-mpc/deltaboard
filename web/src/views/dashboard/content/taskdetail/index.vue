@@ -122,7 +122,7 @@ import V1TaskAPI from "@/api/v1/tasks";
 export default {
   name: "playground",
   mounted() {
-    const timer = setInterval(() => {
+    this.loadTimer = setInterval(() => {
       if (
         this.taskLogMetaData.status ===
           this.$appGlobal.constants.TASK_STATUS_PENDING ||
@@ -132,7 +132,7 @@ export default {
         this.loadTaskMeta();
         this.loadTaskLog();
       } else {
-        clearInterval(timer);
+        clearInterval(this.loadTimer);
       }
     }, 2000);
   },
@@ -146,6 +146,7 @@ export default {
   },
   data() {
     return {
+      loadTimer: null,
       taskLogMetaData: {},
       taskLogData: [],
       logStart: 0,
@@ -191,7 +192,9 @@ export default {
           this.logStart = finalLogData.id + 1;
         }
         this.logLoading = false;
-        console.log(`load task log complete, start increase to ${this.logStart}`);
+        console.log(
+          `load task log complete, start increase to ${this.logStart}`
+        );
       });
     },
     txUrl(txHash) {
@@ -202,6 +205,12 @@ export default {
     next((vm) => {
       vm.init();
     });
+  },
+  beforeRouteLeave(to, from) {
+    if (this.loadTimer) {
+      clearInterval(this.loadTimer);
+    }
+    return true;
   },
 };
 </script>
