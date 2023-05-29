@@ -121,26 +121,7 @@ import { mapState } from "vuex";
 import V1TaskAPI from "@/api/v1/tasks";
 export default {
   name: "playground",
-  mounted() {
-    this.loadTimer = setInterval(() => {
-      if (
-        this.taskLogMetaData.status ===
-          this.$appGlobal.constants.TASK_STATUS_PENDING ||
-        this.taskLogMetaData.status ===
-          this.$appGlobal.constants.TASK_STATUS_RUNNING
-      ) {
-        this.loadTaskMeta();
-        this.loadTaskLog();
-      } else {
-        clearInterval(this.loadTimer);
-      }
-    }, 2000);
-  },
-  unmounted() {
-    if (this.loadTimer) {
-      clearInterval(this.loadTimer);
-    }
-  },
+  mounted() {},
   computed: {
     ...mapState({
       user: (state) => state.user,
@@ -170,13 +151,26 @@ export default {
         "_blank"
       );
     },
-    init() {
+    async init() {
       this.logStart = 0;
       // this.loadTaskLog();
-      this.loadTaskMeta();
+      await this.loadTaskMeta();
+      this.loadTimer = setInterval(async () => {
+        if (
+          this.taskLogMetaData.status ===
+            this.$appGlobal.constants.TASK_STATUS_PENDING ||
+          this.taskLogMetaData.status ===
+            this.$appGlobal.constants.TASK_STATUS_RUNNING
+        ) {
+          await this.loadTaskMeta();
+          await this.loadTaskLog();
+        } else {
+          clearInterval(this.loadTimer);
+        }
+      }, 10000);
     },
     loadTaskMeta() {
-      V1TaskAPI.getTaskMeta(this.currentTaskId).then((res) => {
+      return V1TaskAPI.getTaskMeta(this.currentTaskId).then((res) => {
         this.taskLogMetaData = res.tasks ? res.tasks[0] : [];
       });
     },
@@ -186,7 +180,7 @@ export default {
       }
       console.log(`load task log from ${this.logStart}`);
       this.logLoading = true;
-      V1TaskAPI.getTaskLogs(
+      return V1TaskAPI.getTaskLogs(
         this.currentTaskId,
         this.logStart,
         this.logLimit
@@ -210,6 +204,13 @@ export default {
     next((vm) => {
       vm.init();
     });
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.loadTimer) {
+      clearInterval(this.loadTimer);
+      this.loadTimer = null;
+    }
+    next();
   },
 };
 </script>
