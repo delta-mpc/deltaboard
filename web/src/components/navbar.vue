@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link :to="{ name: 'playground' }">
-      <span class="logo">Crynux</span>
+      <span class="logo">Cyrnux Developer Console</span>
     </router-link>
     <div class="right-menu">
       <el-menu
