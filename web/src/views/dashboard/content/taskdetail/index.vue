@@ -85,21 +85,22 @@
       <div class="el-descriptions__title task-log-title">
         {{ $t("dashboard.taskdetail.task_logs") }}
       </div>
-      <div
-        class="task-logs"
-        v-infinite-scroll="loadTaskLog"
-        infinite-scroll-disabled="logLoading"
-        infinite-scroll-distance="50"
-        style="overflow: auto"
-      >
-        <div v-for="(itm, index) in taskLogData" :key="index">
-          <div class="content">
-            {{ (itm.created_at / 1000) | second2Date }} &nbsp;&nbsp;
-            {{ itm.message }}
-          </div>
-          <div class="content" v-if="itm.tx_hash">
-            tx hash:
-            <a target="_blank" :href="txUrl(itm.tx_hash)">{{ itm.tx_hash }}</a>
+      <div class="task-logs-background">
+        <div
+          class="task-logs"
+          v-infinite-scroll="loadTaskLog"
+          infinite-scroll-disabled="logLoading"
+          infinite-scroll-distance="50"
+        >
+          <div v-for="(itm, index) in taskLogData" :key="index">
+            <div class="content">
+              {{ (itm.created_at / 1000) | second2Date }} &nbsp;&nbsp;
+              {{ itm.message }}
+            </div>
+            <div class="content" v-if="itm.tx_hash">
+              tx hash:
+              <a target="_blank" :href="txUrl(itm.tx_hash)">{{ itm.tx_hash }}</a>
+            </div>
           </div>
         </div>
       </div>
@@ -202,39 +203,47 @@ export default {
   margin-bottom: 20px;
 }
 
-.task-logs {
+.task-logs-background {
+  padding: 0px;
   height: 600px;
   background: rgb(24, 48, 85);
-  overflow: auto;
-  padding: 20px;
   box-sizing: border-box;
 
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    background-color: #e5e5e5;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #b7b7b7;
-    border-radius: 3px;
-  }
-
-  div {
+  .task-logs {
+    height: auto;
+    max-height: 100%; 
     background: rgb(24, 48, 85);
-    border-radius: 3px;
+    overflow: auto;
+    padding: 20px;
+    box-sizing: border-box;
 
-    .content {
-      width: 100%;
-      font-size: 14px;
-      direction: ltr;
-      color: rgb(230, 236, 241);
-      tab-size: 2;
-      list-style: none;
-      text-align: left;
-      font-family: 'Source Code Pro', Consolas, Menlo, Monaco, Courier, monospace;
-      line-height: 1.4;
-      word-spacing: normal;
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: #e5e5e5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #b7b7b7;
+      border-radius: 3px;
+    }
+
+    div {
+      background: rgb(24, 48, 85);
+      border-radius: 3px;
+
+      .content {
+        width: 100%;
+        font-size: 14px;
+        direction: ltr;
+        color: rgb(230, 236, 241);
+        tab-size: 2;
+        list-style: none;
+        text-align: left;
+        font-family: 'Source Code Pro', Consolas, Menlo, Monaco, Courier, monospace;
+        line-height: 1.4;
+        word-spacing: normal;
+      }
     }
   }
 }
