@@ -95,6 +95,7 @@ export default {
          },
          capsTooltip: false,
          loading: false,
+         userListLoading: false,
          showAddUser: false,
          activeName: "management",
          registForm: {
@@ -153,17 +154,21 @@ export default {
       },
       load() {
          if(this.activeName == 'management') {
+            this.userListLoading = true;
             V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROV_STATUS_APPROVED,this.management.page,this.management.page_size, this.management.sort).then((res) => {
                let lst = res.list.filter((itm)=>this['management']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
                this['management']['tableData'].push(...lst);
                this.management.page += 1
+               this.userListLoading = false;
             });
          }
          if(this.activeName == 'approval') {
+            this.userListLoading = true;
             V1UserAPI.fetchUser(this.$appGlobal.constants.USER_APPROVE_STATUS_REGISTED,this.approval.page,this.approval.page_size, this.approval.sort).then((res) => {
                let lst = res.list.filter((itm)=>this['approval']['tableData'].findIndex((data)=>data.id == itm.id) < 0)
                this['approval']['tableData'].push(...lst);
                this.approval.page += 1
+               this.userListLoading = false;
             });
          }
       },

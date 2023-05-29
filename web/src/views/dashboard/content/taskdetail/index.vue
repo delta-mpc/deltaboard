@@ -88,6 +88,8 @@
       <div
         class="task-logs"
         v-infinite-scroll="loadTaskLog"
+        infinite-scroll-disabled="logLoading"
+        infinite-scroll-distance="10"
         style="overflow: auto"
       >
         <div v-for="(itm, index) in taskLogData" :key="index">
@@ -125,6 +127,7 @@ export default {
       taskLogData: [],
       logStart: 0,
       logLimit: 60,
+      logLoading: false,
       labelStyle: {
         display: "flex",
         alignItems: "center",
@@ -150,6 +153,7 @@ export default {
     },
     loadTaskLog() {
       console.log(`load task log page ${this.page}`);
+      this.logLoading = true;
       V1TaskAPI.getTaskLogs(
         this.currentTaskId,
         this.logStart,
@@ -158,6 +162,7 @@ export default {
         this.taskLogData = this.taskLogData.concat(res);
         let finalLogData = res[res.length - 1];
         this.logStart = finalLogData.id + 1;
+        this.logLoading = false;
         console.log(`load task log complete, page increase to ${this.page}`);
       });
     },
