@@ -57,13 +57,19 @@
           </el-tag>
           <el-tag
             type="info"
-            v-else-if="taskLogMetaData.status == $appGlobal.constants.TASK_STATUS_FINISHED"
+            v-else-if="
+              taskLogMetaData.status ==
+                $appGlobal.constants.TASK_STATUS_FINISHED
+            "
           >
             {{ $t("dashboard.taskdetail.finished") }}
           </el-tag>
           <el-tag
             type="info"
-            v-else-if="taskLogMetaData.status == $appGlobal.constants.TASK_STATUS_CONFIRMED"
+            v-else-if="
+              taskLogMetaData.status ==
+                $appGlobal.constants.TASK_STATUS_CONFIRMED
+            "
           >
             {{ $t("dashboard.taskdetail.confirmed") }}
           </el-tag>
@@ -77,7 +83,10 @@
       <el-button
         size="medium"
         type="primary"
-        v-if="taskLogMetaData.status == 'FINISHED' || taskLogMetaData.status == 'CONFIRMED'"
+        v-if="
+          taskLogMetaData.status == 'FINISHED' ||
+            taskLogMetaData.status == 'CONFIRMED'
+        "
         @click.stop="downloadWeights"
       >
         {{ $t("dashboard.taskdetail.download_result") }}
@@ -112,7 +121,20 @@ import { mapState } from "vuex";
 import V1TaskAPI from "@/api/v1/tasks";
 export default {
   name: "playground",
-  mounted() {},
+  mounted() {
+    const timer = setInterval(() => {
+      if (
+        this.taskLogMetaData.status ===
+          $appGlobal.constants.TASK_STATUS_PENDING ||
+        this.taskLogMetaData.status === $appGlobal.constants.TASK_STATUS_RUNNING
+      ) {
+        this.loadTaskMeta();
+        this.loadTaskLog();
+      } else {
+        clearInterval(timer);
+      }
+    }, 2000);
+  },
   computed: {
     ...mapState({
       user: (state) => state.user,
@@ -152,6 +174,9 @@ export default {
       });
     },
     loadTaskLog() {
+      if (this.logLoading) {
+        return;
+      }
       console.log(`load task log page ${this.page}`);
       this.logLoading = true;
       V1TaskAPI.getTaskLogs(
