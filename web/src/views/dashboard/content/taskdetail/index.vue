@@ -178,7 +178,7 @@ export default {
       if (this.logLoading) {
         return;
       }
-      console.log(`load task log page ${this.page}`);
+      console.log(`load task log from ${this.logStart}`);
       this.logLoading = true;
       V1TaskAPI.getTaskLogs(
         this.currentTaskId,
@@ -186,10 +186,12 @@ export default {
         this.logLimit
       ).then((res) => {
         this.taskLogData = this.taskLogData.concat(res);
-        let finalLogData = res[res.length - 1];
-        this.logStart = finalLogData.id + 1;
+        if (res.length > 0) {
+          let finalLogData = res[res.length - 1];
+          this.logStart = finalLogData.id + 1;
+        }
         this.logLoading = false;
-        console.log(`load task log complete, page increase to ${this.page}`);
+        console.log(`load task log complete, start increase to ${this.logStart}`);
       });
     },
     txUrl(txHash) {
