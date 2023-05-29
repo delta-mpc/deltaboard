@@ -136,6 +136,11 @@ export default {
       }
     }, 2000);
   },
+  unmounted() {
+    if (this.loadTimer) {
+      clearInterval(this.loadTimer);
+    }
+  },
   computed: {
     ...mapState({
       user: (state) => state.user,
@@ -205,12 +210,6 @@ export default {
     next((vm) => {
       vm.init();
     });
-  },
-  beforeRouteLeave(to, from) {
-    if (this.loadTimer) {
-      clearInterval(this.loadTimer);
-    }
-    return true;
   },
 };
 </script>
