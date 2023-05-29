@@ -89,7 +89,7 @@
         class="task-logs"
         v-infinite-scroll="loadTaskLog"
         infinite-scroll-disabled="logLoading"
-        infinite-scroll-distance="10"
+        infinite-scroll-distance="50"
         style="overflow: auto"
       >
         <div v-for="(itm, index) in taskLogData" :key="index">

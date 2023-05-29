@@ -6,7 +6,7 @@
                <div class="btn-ctn">
                   <el-button size="medium" type="primary" @click="showAddUser = true">{{$t('dashboard.userlist.add_user')}}</el-button>
                </div>
-               <div class="table-ctn" v-infinite-scroll="load">
+               <div class="table-ctn" v-infinite-scroll="load" infinite-scroll-disabled="userListLoading" infinite-scroll-distance="50">
                   <el-table :data="management.tableData" header-row-class-name='header-row'>
                      <el-table-column :label="$t('dashboard.userlist.user_name')" prop="name"></el-table-column>
                      <el-table-column prop="created_at" :label="$t('common.created_at')">
@@ -21,7 +21,7 @@
                </div>
             </el-tab-pane>
             <el-tab-pane v-if="config.public_registration" :label="$t('dashboard.userlist.check&approve')" name="approval">
-               <div class="table-ctn" v-infinite-scroll="load">
+               <div class="table-ctn" v-infinite-scroll="load" infinite-scroll-disabled="userListLoading" infinite-scroll-distance="50">
                   <el-table :data="approval.tableData" header-row-class-name='header-row'>
                      <el-table-column :label="$t('dashboard.userlist.user_name')" prop="name"></el-table-column>
                      <el-table-column prop="created_at" :label="$t('common.created_at')">
