@@ -13,23 +13,13 @@ const resources = (lang) => {
 }
 Vue.use(VueI18n)
 
-import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import ElementLocale from 'element-ui/lib/locale'
 
-var language = (navigator.browserLanguage || navigator.language).toLowerCase();
-var localeLang = '';
-if (language.indexOf('zh') > -1) {
-    localeLang = 'zh'
-} else {
-    localeLang = 'en'
-}
 const i18n = new VueI18n({
-    locale: localeLang,    // 语言标识
-    // locale: 'zh',    // 语言标识
-    fallbackLocale: 'zh',
+    locale: 'en',    // 语言标识
+    fallbackLocale: 'en',
     messages: {
-        zh: Object.assign(resources('zh'), zhLocale),
         en: Object.assign(resources('en'), enLocale)
     }
 })
